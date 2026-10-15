@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = 'Software engineer fullstack. Aplicaciones y herramientas pequeñas.' } =
+  Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#311e70" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <a class="brand" href="/">{site.name}</a>
+        <nav>
+          <a href="/#proyectos">Proyectos</a>
+          <a href="/#experiencia">Experiencia</a>
+          <a href="/#contacto">Contacto</a>
+        </nav>
+      </header>
+      <main><slot /></main>
+      <footer>
+        © {new Date().getFullYear()} {site.name} ·{' '}
+        <a href={site.github}>GitHub</a> ·{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </footer>
+    </div>
+  </body>
+</html>

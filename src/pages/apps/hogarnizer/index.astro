@@ -1,0 +1,38 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { site } from '../../../data/site';
+---
+<Base
+  title="Hogarnizer"
+  description="App para organizar un hogar compartido: tareas con puntos de esfuerzo, lista de la compra, gastos y notas."
+>
+  <div class="hero">
+    <p class="role">Proyecto · En construcción</p>
+    <h1>Hogarnizer</h1>
+    <p class="lead">
+      La app para organizar un hogar compartido: repartir las tareas de forma justa con puntos de
+      esfuerzo, hacer la lista de la compra entre todos, llevar los gastos y compartir notas.
+    </p>
+    <a class="btn" href={site.appUrl}>Abrir la app web</a>
+    <a class="btn secondary" href="/">Volver</a>
+  </div>
+
+  <section>
+    <h2>Qué hace</h2>
+    <div class="cards">
+      <div class="card"><h3>Tareas</h3><p>Rotación semanal y puntos según el esfuerzo de cada tarea.</p></div>
+      <div class="card"><h3>Compra</h3><p>Una lista compartida que se convierte en gasto al terminarla.</p></div>
+      <div class="card"><h3>Gastos</h3><p>Quién ha pagado qué y quién debe a quién.</p></div>
+      <div class="card"><h3>Notas</h3><p>Avisos y recordatorios para toda la casa.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Información legal</h2>
+    <ul class="links">
+      <li><a href="/apps/hogarnizer/privacidad">Política de privacidad</a></li>
+      <li><a href="/apps/hogarnizer/soporte">Soporte</a></li>
+      <li><a href="/apps/hogarnizer/eliminar-cuenta">Cómo borrar tu cuenta</a></li>
+    </ul>
+  </section>
+</Base>

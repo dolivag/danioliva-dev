@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, projects, experience, studies } from '../data/site';
+---
+<Base>
+  <div class="hero">
+    <p class="role">{site.role}</p>
+    <h1>Hola, soy {site.name}.</h1>
+    <p class="lead">
+      Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
+      herramientas pequeñas que hacen el día a día un poco más fácil.
+    </p>
+    <a class="btn" href="#proyectos">Ver proyectos</a>
+    <a class="btn secondary" href="#contacto">Contacto</a>
+  </div>
+
+  <section id="proyectos">
+    <h2>Proyectos</h2>
+    <div class="cards">
+      {projects.map((p) =>
+        p.href ? (
+          <a class="card" href={p.href}>
+            <h3>{p.name}{p.status && <span class="tag">{p.status}</span>}</h3>
+            <p>{p.description}</p>
+            {p.stack && <div class="meta">{p.stack}</div>}
+          </a>
+        ) : (
+          <div class="card">
+            <h3>{p.name}{p.status && <span class="tag">{p.status}</span>}</h3>
+            <p>{p.description}</p>
+            {p.stack && <div class="meta">{p.stack}</div>}
+          </div>
+        ),
+      )}
+    </div>
+  </section>
+
+  <section id="experiencia">
+    <h2>Experiencia</h2>
+    {experience.map((e) => (
+      <div class="item">
+        <div class="row">
+          <h3>{e.role} · {e.company}</h3>
+          <span class="when">{e.period}</span>
+        </div>
+        <p>{e.description}</p>
+      </div>
+    ))}
+  </section>
+
+  <section id="estudios">
+    <h2>Estudios</h2>
+    {studies.map((s) => (
+      <div class="item">
+        <h3>{s.school}</h3>
+        <p>{s.title}</p>
+      </div>
+    ))}
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <ul class="links">
+      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      <li><a href={site.github}>GitHub · dolivag</a></li>
+    </ul>
+  </section>
+</Base>

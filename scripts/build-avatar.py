@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Convierte art/avatar-source.png (el pixel art reescalado) en un sprite limpio de 92x92.
+"""Convierte art/avatar-source.png (500x500, estilo pixel art pero suavizado) en un sprite limpio
+de 200x200 con paleta cerrada.
 
-1. Reduce la imagen a 96 colores (para conservar también el verde de la planta).
-2. Para cada celda de la cuadrícula de 92x92 (el tamaño de píxel del dibujo, unos 4,35 px) se
-   queda con el color más frecuente del centro de la celda: bordes nítidos.
-3. Los azules del fondo se unifican y se hacen transparentes: el círculo azul lo pone el CSS.
+1. Reduce la imagen a 48 colores.
+2. Para cada celda de 2,5 px se queda con el color más frecuente del centro: bordes nítidos.
+3. Limpieza: un píxel que no coincide con ninguno de sus 8 vecinos (resto del suavizado) toma el
+   color más común a su alrededor. Los muy claros (brillos de los ojos, dientes) se respetan.
+4. Los azules del fondo se hacen transparentes: el círculo azul lo pone el CSS.
 
 Uso: python3 scripts/build-avatar.py   (necesita Pillow)
 """
@@ -14,15 +16,48 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
-GRID = 92
-BG = (31, 93, 192)
+GRID = 200
+COLORS = 48
 
-src = Image.open(ROOT / "art" / "avatar-source.png").convert("RGBA")
-flat = Image.new("RGBA", src.size, BG + (255,))
-flat.alpha_composite(src)
-pal = flat.convert("RGB").quantize(colors=96, method=Image.MEDIANCUT, dither=Image.NONE)
+src = Image.open(ROOT / "art" / "avatar-source.png").convert("RGB")
+pal = src.quantize(colors=COLORS, method=Image.MEDIANCUT, dither=Image.NONE)
 idx = pal.load()
-colors = pal.getpalette()
+palette = pal.getpalette()
+W, H = src.size
+
+grid = [[0] * GRID for _ in range(GRID)]
+cell = W / GRID
+for gy in range(GRID):
+    for gx in range(GRID):
+        votes = Counter()
+        for y in range(int((gy + 0.25) * cell), int((gy + 0.75) * cell) + 1):
+            for x in range(int((gx + 0.25) * cell), int((gx + 0.75) * cell) + 1):
+                votes[idx[min(x, W - 1), min(y, H - 1)]] += 1
+        grid[gy][gx] = votes.most_common(1)[0][0]
+
+
+def color(k):
+    return tuple(palette[k * 3 : k * 3 + 3])
+
+
+def luminance(k):
+    r, g, b = color(k)
+    return 0.299 * r + 0.587 * g + 0.114 * b
+
+
+for _ in range(2):
+    fixed = 0
+    nxt = [row[:] for row in grid]
+    for y in range(1, GRID - 1):
+        for x in range(1, GRID - 1):
+            k = grid[y][x]
+            around = [grid[y + dy][x + dx] for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dx or dy]
+            if k in around or luminance(k) > 200:
+                continue
+            nxt[y][x] = Counter(around).most_common(1)[0][0]
+            fixed += 1
+    grid = nxt
+    print("píxeles sueltos corregidos:", fixed)
 
 
 def is_bg(c):
@@ -32,19 +67,11 @@ def is_bg(c):
 
 out = Image.new("RGBA", (GRID, GRID), (0, 0, 0, 0))
 o = out.load()
-cell = src.size[0] / GRID
-for gy in range(GRID):
-    for gx in range(GRID):
-        votes = Counter()
-        x0, y0 = int((gx + 0.2) * cell), int((gy + 0.2) * cell)
-        x1, y1 = max(x0 + 1, int((gx + 0.8) * cell)), max(y0 + 1, int((gy + 0.8) * cell))
-        for y in range(y0, y1):
-            for x in range(x0, x1):
-                votes[idx[x, y]] += 1
-        k = votes.most_common(1)[0][0]
-        c = tuple(colors[k * 3 : k * 3 + 3])
-        o[gx, gy] = (0, 0, 0, 0) if is_bg(c) else c + (255,)
+for y in range(GRID):
+    for x in range(GRID):
+        c = color(grid[y][x])
+        o[x, y] = (0, 0, 0, 0) if is_bg(c) else c + (255,)
 
 dest = ROOT / "public" / "avatar" / "avatar.png"
-out.save(dest)
-print("escrito", dest, len(out.getcolors(10000)), "colores")
+out.save(dest, optimize=True)
+print("escrito", dest, len(out.getcolors(100000)), "colores")

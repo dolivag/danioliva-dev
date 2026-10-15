@@ -3,7 +3,7 @@
 <div class="avatar" data-state="hero" aria-hidden="true">
   <div class="bubble" id="avatar-bubble"></div>
   <div class="face">
-    <canvas id="avatar-canvas" width="64" height="64"></canvas>
+    <canvas id="avatar-canvas" width="200" height="200"></canvas>
   </div>
 </div>
 
@@ -12,11 +12,7 @@
 
   const canvas = document.getElementById('avatar-canvas') as HTMLCanvasElement | null;
   const bubble = document.getElementById('avatar-bubble');
-  if (canvas && bubble) {
-    const sprite = new Image();
-    sprite.onload = () => startAvatar(canvas, sprite, bubble);
-    sprite.src = '/avatar/avatar.png';
-  }
+  if (canvas && bubble) startAvatar(canvas, bubble);
 </script>
 
 <style>
@@ -40,7 +36,7 @@
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
-    background: #1f5dc0;
+    background: #1b5ccf;
     box-shadow:
       0 0 0 3px var(--bg),
       0 0 0 5px var(--accent),

@@ -104,6 +104,23 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   }),
 };
 
+/**
+ * Miradas disponibles y hacia dónde apuntan (x: izquierda -1 / derecha 1; y: arriba -1 / abajo 1,
+ * vistas desde la pantalla de quien visita). Solo se usan las que existan en avatar.json.
+ */
+const GAZES: Record<string, [number, number]> = {
+  'ojos-arriba-izq': [-1, -1],
+  'ojos-arriba': [0, -1],
+  'ojos-arriba-der': [1, -1],
+  'ojos-izq': [-1, 0],
+  'ojos-der': [1, 0],
+  'ojos-abajo': [0, 1],
+  'ojos-pantalla': [-1, 1], // abajo y a la izquierda
+  'ojos-reojo': [1, 1], // abajo y a la derecha
+};
+const FOLLOW_MS = 4000; // sin mover el cursor este tiempo, vuelve a lo suyo
+const DEAD_ZONE = 0.16; // cursor casi encima: mira de frente
+
 function load(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
@@ -130,6 +147,22 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
   canvas.width = meta.size;
   canvas.height = meta.size;
 
+  // Cursor: normalizado respecto a la cabeza (de -1 a 1) mientras se mueve.
+  const gazes = Object.entries(GAZES).filter(([n]) => n in meta.pieces);
+  const cursor = { x: 0, y: 0, at: -Infinity };
+  addEventListener(
+    'pointermove',
+    (e) => {
+      const r = canvas.getBoundingClientRect();
+      const hx = r.left + r.width * 0.59; // la cabeza, dentro del lienzo
+      const hy = r.top + r.height * 0.3;
+      cursor.x = Math.max(-1, Math.min(1, (e.clientX - hx) / (innerWidth * 0.4)));
+      cursor.y = Math.max(-1, Math.min(1, (e.clientY - hy) / (innerHeight * 0.4)));
+      cursor.at = performance.now();
+    },
+    { passive: true },
+  );
+
   let state: AvatarState = 'hero';
   let since = 0;
   let tick = 0;
@@ -142,8 +175,25 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
       ? STATES[state](0, -100, false)
       : STATES[state](t, since, t <= blinkUntil);
     let on = pose.pieces;
+    let [hx, hy] = pose.head;
+    // Si el cursor se ha movido hace poco, la cabeza se vuelve un poco hacia él y los ojos lo miran.
+    if (!reduced && performance.now() - cursor.at < FOLLOW_MS) {
+      hx += Math.round(cursor.x * 8);
+      hy += Math.round(cursor.y * 5);
+      const len = Math.hypot(cursor.x, cursor.y);
+      const eyesShut = on.includes('ojos-cerrados');
+      on = on.filter((p) => !(p in GAZES));
+      if (!eyesShut && len > DEAD_ZONE && gazes.length) {
+        let best = gazes[0][0];
+        let bestDot = -Infinity;
+        for (const [name, [gx, gy]] of gazes) {
+          const dot = (cursor.x * gx + cursor.y * gy) / (Math.hypot(gx, gy) * len);
+          if (dot > bestDot) [best, bestDot] = [name, dot];
+        }
+        on = [...on, best];
+      }
+    }
     if (t <= surpriseUntil) on = [...on.filter((p) => !p.startsWith('boca')), 'boca-o'];
-    const [hx, hy] = pose.head;
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);

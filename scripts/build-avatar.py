@@ -34,7 +34,14 @@ PINK = np.array([221, 44, 142], float)  # el fondo de la ilustración
 PIECES = {
     "ojos-cerrados": ((470, 240, 650, 345), True),
     "ojos-reojo": ((470, 240, 650, 345), True),
-    "ojos-pantalla": ((470, 240, 650, 345), True),  # mira hacia el portátil
+    "ojos-pantalla": ((470, 240, 650, 345), True),  # mira hacia abajo y a la izquierda
+    # Miradas que sigue el cursor (solo se generan las que tengan imagen en art/avatar/):
+    "ojos-arriba-izq": ((470, 240, 650, 345), True),
+    "ojos-arriba": ((470, 240, 650, 345), True),
+    "ojos-arriba-der": ((470, 240, 650, 345), True),
+    "ojos-izq": ((470, 240, 650, 345), True),
+    "ojos-der": ((470, 240, 650, 345), True),
+    "ojos-abajo": ((470, 240, 650, 345), True),
     "cejas-fruncidas": ((470, 240, 650, 320), True),
     "boca-sonrisa-cerrada": ((480, 345, 650, 480), True),
     "boca-seria": ((480, 345, 650, 480), True),
@@ -129,6 +136,9 @@ def main():
     # --- Piezas
     meta = {"size": SIZE, "pieces": {}}
     for name, ((x0, y0, x1, y1), on_head) in PIECES.items():
+        if not (ART / f"{name}.jpg").exists():
+            print("sin imagen (se omite):", name)
+            continue
         var = load(f"{name}.jpg")
         diff = np.sqrt(((var - base) ** 2).sum(2)) > 45
         region = np.zeros_like(diff)

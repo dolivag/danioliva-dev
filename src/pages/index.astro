@@ -1,18 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import HeadHero from '../components/HeadHero.astro';
 import { site, projects, experience, studies } from '../data/site';
 ---
 <Base>
-  <div class="hero">
-    <p class="role">{site.role}</p>
-    <h1>Hola, soy {site.name}.</h1>
-    <p class="lead">
-      Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
-      herramientas pequeñas que hacen el día a día un poco más fácil.
-    </p>
-    <a class="btn" href="#proyectos">Ver proyectos</a>
-    <a class="btn secondary" href="#contacto">Contacto</a>
-  </div>
+  <HeadHero />
 
   <section id="proyectos">
     <h2>Proyectos</h2>

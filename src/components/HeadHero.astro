@@ -1,0 +1,85 @@
+---
+import { existsSync } from 'node:fs';
+import { site } from '../data/site';
+
+// El escaneo (public/models/head.glb) es opcional: sin él se dibuja una cabeza provisional.
+const model = existsSync('public/models/head.glb') ? '/models/head.glb' : undefined;
+---
+<section class="hero3d" aria-labelledby="titulo">
+  <canvas id="head-canvas" aria-hidden="true" data-model={model}></canvas>
+  <div class="copy">
+    <p class="role">{site.role}</p>
+    <h1 id="titulo">Hola, soy {site.name}.</h1>
+    <p class="lead">
+      Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
+      herramientas pequeñas que hacen el día a día un poco más fácil.
+    </p>
+    <a class="btn light" href="#proyectos">Ver proyectos</a>
+    <a class="btn ghost" href="#contacto">Contacto</a>
+  </div>
+</section>
+
+<script>
+  const canvas = document.getElementById('head-canvas') as HTMLCanvasElement | null;
+  if (canvas) {
+    // Se carga cuando el navegador está libre: el texto aparece primero y three.js después.
+    const load = () =>
+      import('../scripts/head').then(async ({ startHead }) => {
+        const ok = await startHead(canvas);
+        if (ok) canvas.classList.add('ready');
+      });
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 1500 });
+    else setTimeout(load, 200);
+  }
+</script>
+
+<style>
+  .hero3d {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    margin: 8px 0 0;
+    /* Más ancho que el texto de la página: sale del contenedor de 760 px. */
+    width: min(1120px, calc(100vw - 32px));
+    margin-left: 50%;
+    transform: translateX(-50%);
+    min-height: 600px;
+    background:
+      radial-gradient(60% 70% at 78% 45%, #2a1d63 0%, transparent 70%),
+      linear-gradient(160deg, #14111f 0%, #1c1538 100%);
+    color: #f2f0f7;
+    display: grid;
+    align-items: center;
+  }
+  canvas {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 58%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  canvas.ready { opacity: 1; }
+  .copy {
+    position: relative;
+    z-index: 1;
+    max-width: 30em;
+    padding: 48px 44px;
+    pointer-events: none;
+  }
+  .copy a { pointer-events: auto; }
+  .role { color: #4fd1da; font-weight: 600; margin: 0 0 12px; letter-spacing: 0.02em; }
+  h1 { color: #fff; }
+  .lead { color: #c9c4da; font-size: 20px; margin: 20px 0 28px; max-width: 24em; }
+  .btn.light { background: #fff; color: #311e70; }
+  .btn.light:hover { color: #311e70; }
+  .btn.ghost { background: rgba(255, 255, 255, 0.12); color: #fff; }
+  .btn.ghost:hover { color: #fff; }
+
+  @media (max-width: 760px) {
+    .hero3d { display: block; min-height: 0; }
+    canvas { position: relative; display: block; width: 100%; height: 340px; }
+    .copy { padding: 0 22px 32px; }
+    .lead { font-size: 18px; }
+  }
+</style>

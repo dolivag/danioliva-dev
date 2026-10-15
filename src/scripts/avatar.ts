@@ -35,6 +35,8 @@ const JOKES = [
 const steam = (t: number) => [[], ['vapor-2'], ['vapor-3']][Math.floor(t / 4) % 3];
 /** Tecleo: las manos alternan cada `every` fotogramas. */
 const typing = (t: number, every: number) => (Math.floor(t / every) % 2 ? ['manos'] : []);
+/** Mirada al teclear: a la pantalla del portátil (o parpadeando). */
+const onScreen = (blink: boolean) => [blink ? 'ojos-cerrados' : 'ojos-pantalla'];
 /** La cabeza sube y baja `px` píxeles con un periodo de `period` fotogramas. */
 const bob = (t: number, period: number, px = 3): [number, number] => [
   0,
@@ -46,7 +48,7 @@ const bob = (t: number, period: number, px = 3): [number, number] => [
  * estado (para gestos que solo pasan al llegar, como el saludo) y `blink` si toca parpadear.
  */
 const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => Pose> = {
-  // Portada: saluda al llegar; luego sonríe, teclea a ratos y echa miradas de reojo.
+  // Portada: saluda al llegar; luego sonríe, teclea a ratos y echa miradas de reojo (al visitante).
   hero: (t, since, blink) => {
     const waving = t - since < 16;
     const eyes = blink ? ['ojos-cerrados'] : t % 70 >= 50 ? ['ojos-reojo'] : [];
@@ -55,7 +57,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   },
   // Proyectos: tecleando a ritmo normal.
   projects: (t, _s, blink) => ({
-    pieces: [...steam(t), ...typing(t, 2), ...(blink ? ['ojos-cerrados'] : [])],
+    pieces: [...steam(t), ...typing(t, 2), ...onScreen(blink)],
     head: bob(t, 8),
   }),
   // Experiencia: concentrado y acercándose a la pantalla a ratos.
@@ -67,7 +69,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
         ...typing(t, 1),
         'cejas-fruncidas',
         'boca-seria',
-        ...(blink ? ['ojos-cerrados'] : []),
+        ...onScreen(blink),
       ],
       head: lean ? [-14, 12 + (t % 4 < 2 ? 0 : 2)] : bob(t, 10),
     };
@@ -79,7 +81,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
       ...typing(t, 3),
       'boca-sonrisa-cerrada',
       'birrete',
-      ...(blink ? ['ojos-cerrados'] : []),
+      ...onScreen(blink),
     ],
     head: bob(t, 18),
   }),
@@ -97,7 +99,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   },
   // Hogarnizer: inclinado hacia la pantalla, tecleando rápido.
   hogarnizer: (t, _s, blink) => ({
-    pieces: [...steam(t), ...typing(t, 1), 'cejas-fruncidas', ...(blink ? ['ojos-cerrados'] : [])],
+    pieces: [...steam(t), ...typing(t, 1), 'cejas-fruncidas', ...onScreen(blink)],
     head: [-14, 12 + (t % 2) * 2],
   }),
 };

@@ -34,6 +34,7 @@ PINK = np.array([221, 44, 142], float)  # el fondo de la ilustración
 PIECES = {
     "ojos-cerrados": ((470, 240, 650, 345), True),
     "ojos-reojo": ((470, 240, 650, 345), True),
+    "ojos-pantalla": ((470, 240, 650, 345), True),  # mira hacia el portátil
     "cejas-fruncidas": ((470, 240, 650, 320), True),
     "boca-sonrisa-cerrada": ((480, 345, 650, 480), True),
     "boca-seria": ((480, 345, 650, 480), True),

@@ -6,15 +6,17 @@ import { site } from '../../../data/site';
   title="Hogarnizer"
   description="App para organizar un hogar compartido: tareas con puntos de esfuerzo, lista de la compra, gastos y notas."
 >
-  <div class="hero">
+  <div class="hero" data-avatar="hogarnizer">
     <p class="role">Proyecto · En construcción</p>
     <h1>Hogarnizer</h1>
     <p class="lead">
       La app para organizar un hogar compartido: repartir las tareas de forma justa con puntos de
       esfuerzo, hacer la lista de la compra entre todos, llevar los gastos y compartir notas.
     </p>
-    <a class="btn" href={site.appUrl}>Abrir la app web</a>
-    <a class="btn secondary" href="/">Volver</a>
+    <div class="actions">
+      <a class="btn" href={site.appUrl}>Abrir la app web</a>
+      <a class="btn secondary" href="/">Volver</a>
+    </div>
   </div>
 
   <section>

@@ -3,18 +3,20 @@ import Base from '../layouts/Base.astro';
 import { site, projects, experience, studies } from '../data/site';
 ---
 <Base>
-  <div class="hero">
+  <div class="hero" data-avatar="hero">
     <p class="role">{site.role}</p>
     <h1>Hola, soy {site.name}.</h1>
     <p class="lead">
       Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
       herramientas pequeñas que hacen el día a día un poco más fácil.
     </p>
-    <a class="btn" href="#proyectos">Ver proyectos</a>
-    <a class="btn secondary" href="#contacto">Contacto</a>
+    <div class="actions">
+      <a class="btn" href="#proyectos">Ver proyectos</a>
+      <a class="btn secondary" href="#contacto">Contacto</a>
+    </div>
   </div>
 
-  <section id="proyectos">
+  <section id="proyectos" data-avatar="projects">
     <h2>Proyectos</h2>
     <div class="cards">
       {projects.map((p) =>
@@ -35,7 +37,7 @@ import { site, projects, experience, studies } from '../data/site';
     </div>
   </section>
 
-  <section id="experiencia">
+  <section id="experiencia" data-avatar="experience">
     <h2>Experiencia</h2>
     {experience.map((e) => (
       <div class="item">
@@ -48,7 +50,7 @@ import { site, projects, experience, studies } from '../data/site';
     ))}
   </section>
 
-  <section id="estudios">
+  <section id="estudios" data-avatar="studies">
     <h2>Estudios</h2>
     {studies.map((s) => (
       <div class="item">
@@ -58,7 +60,7 @@ import { site, projects, experience, studies } from '../data/site';
     ))}
   </section>
 
-  <section id="contacto">
+  <section id="contacto" data-avatar="contact">
     <h2>Contacto</h2>
     <ul class="links">
       <li><a href={`mailto:${site.email}`}>{site.email}</a></li>

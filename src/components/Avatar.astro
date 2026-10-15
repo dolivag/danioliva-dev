@@ -1,0 +1,115 @@
+---
+---
+<div class="avatar" data-state="hero" aria-hidden="true">
+  <div class="bubble" id="avatar-bubble"></div>
+  <div class="face">
+    <canvas id="avatar-canvas" width="64" height="64"></canvas>
+  </div>
+</div>
+
+<script>
+  import { startAvatar } from '../scripts/avatar';
+
+  const canvas = document.getElementById('avatar-canvas') as HTMLCanvasElement | null;
+  const bubble = document.getElementById('avatar-bubble');
+  if (canvas && bubble) {
+    const sprite = new Image();
+    sprite.onload = () => startAvatar(canvas, sprite, bubble);
+    sprite.src = '/avatar/avatar.png';
+  }
+</script>
+
+<style>
+  .avatar {
+    --size: 84px;
+    position: fixed;
+    z-index: 20;
+    width: var(--size);
+    height: var(--size);
+    right: 18px;
+    bottom: 18px;
+    cursor: pointer;
+    transition:
+      width 0.7s cubic-bezier(0.3, 0.8, 0.2, 1),
+      height 0.7s cubic-bezier(0.3, 0.8, 0.2, 1),
+      right 0.7s cubic-bezier(0.3, 0.8, 0.2, 1),
+      bottom 0.7s cubic-bezier(0.3, 0.8, 0.2, 1);
+  }
+  .face {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #1f5dc0;
+    box-shadow:
+      0 0 0 3px var(--bg),
+      0 0 0 5px var(--accent),
+      0 10px 28px rgba(20, 17, 31, 0.35);
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+
+  /* Portada: el avatar es grande, junto al titular. */
+  .avatar[data-state='hero'] {
+    --size: clamp(180px, 30vw, 290px);
+    right: max(18px, calc((100vw - 760px) / 2));
+    bottom: calc(50vh - var(--size) / 2);
+  }
+
+  .bubble {
+    position: absolute;
+    right: calc(100% - 24px);
+    bottom: calc(100% - 8px);
+    transform: translateY(6px);
+    max-width: 220px;
+    width: max-content;
+    background: var(--text);
+    color: var(--bg);
+    font: 600 13px/1.3 var(--sans);
+    padding: 8px 12px;
+    border-radius: 12px 12px 4px 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+  .bubble:global(.show) {
+    opacity: 1;
+    transform: none;
+  }
+  .avatar[data-state='hero'] .bubble {
+    font-size: 15px;
+    right: 50%;
+    bottom: calc(100% + 4px);
+    border-radius: 12px 12px 12px 4px;
+  }
+
+  @media (max-width: 800px) {
+    .avatar {
+      --size: 64px;
+      right: 12px;
+      bottom: 12px;
+    }
+    .avatar[data-state='hero'] .bubble {
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .avatar[data-state='hero'] {
+      --size: 168px;
+      right: calc(50vw - var(--size) / 2);
+      bottom: calc(100svh - 130px - var(--size));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .avatar,
+    .bubble {
+      transition: none;
+    }
+  }
+</style>

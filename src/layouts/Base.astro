@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
+import Avatar from '../components/Avatar.astro';
 
 interface Props {
   title?: string;
@@ -19,6 +20,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#311e70" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   </head>
@@ -39,5 +41,6 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </footer>
     </div>
+    <Avatar />
   </body>
 </html>

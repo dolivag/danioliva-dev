@@ -57,7 +57,18 @@ h1 { font-size: clamp(38px, 8vw, 60px); letter-spacing: -1px; font-weight: 700; 
 h2 { font-size: 28px; letter-spacing: -0.4px; font-weight: 600; margin-bottom: 20px; }
 h3 { font-size: 20px; font-weight: 600; }
 
-.hero { padding: 56px 0 32px; }
+.hero { padding: 56px 0 32px; min-height: 74vh; display: flex; flex-direction: column; justify-content: center; }
+.hero > * { max-width: 26em; }
+.hero h1 { max-width: 7.2em; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.hero .btn { margin-right: 0; }
+@media (max-width: 800px) {
+  .hero { padding-top: 250px; justify-content: flex-start; min-height: 0; }
+  .hero h1 { max-width: none; }
+  footer { padding-bottom: 100px; }
+}
+section { scroll-margin-top: 12px; }
+main { padding-bottom: 80px; }
 .hero .role { color: var(--accent-2); font-weight: 600; margin: 0 0 12px; letter-spacing: 0.02em; }
 .hero p.lead { font-size: 20px; color: var(--muted); max-width: 34em; margin: 20px 0 28px; }
 

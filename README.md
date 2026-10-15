@@ -22,15 +22,15 @@ redirecciones, definidas en `astro.config.mjs`, para que estas URL no cambien nu
 
 ## Avatar animado
 
-El avatar en pixel art que acompaña al visitante (`src/components/Avatar.astro` y
-`src/scripts/avatar.ts`) se compone en un canvas de 200x200 a partir de capas y piezas de
-expresión, y cambia de gesto según la sección (`data-avatar` en cada sección).
+El avatar que acompaña al visitante (`src/components/Avatar.astro` y `src/scripts/avatar.ts`) se
+compone en un canvas: la escena (todo menos la cabeza), la cabeza y piezas que cambian una sola zona
+(ojos, cejas, boca, birrete, manos, saludo, vapor). Cambia de gesto según la sección
+(`data-avatar` en cada sección) y al hacer clic.
 
-Las imágenes de partida están en `art/avatar/` (la base y variantes hechas con Gemini, todas con el
-mismo encuadre). `python3 scripts/build-avatar.py` (Pillow y numpy) genera `public/avatar/`:
+Las imágenes de partida están en `art/avatar/` (1024x1024, hechas con Gemini a partir de
+`base.jpg`, todas con el mismo encuadre y fondo rosa). `python3 scripts/build-avatar.py` (Pillow
+con WebP y numpy) genera `public/avatar/`: `escena.webp`, `cabeza.webp`, `piezas/*.webp` y
+`avatar.json` con la posición de cada pieza.
 
-- capas: `fondo`, `cuerpo`, `cabeza`, `primer-plano` (cabeza y primer plano, sobre fondo magenta);
-- piezas: solo la zona que cambia cada variante (`ojos-*`, `cejas-*`, `boca-*`, `birrete`).
-
-Para un gesto nuevo: pedir a Gemini la base con solo esa zona cambiada, guardarla en `art/avatar/`,
-añadir su zona en `PIECES` del script y usarla en `STATES` de `avatar.ts`.
+Para un gesto nuevo: pedir a Gemini la base con solo esa zona cambiada, guardarla en
+`art/avatar/`, añadir su zona en `PIECES` del script y usarla en `STATES` de `avatar.ts`.

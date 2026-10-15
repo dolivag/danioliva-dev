@@ -1,35 +1,24 @@
 /**
- * Avatar animado. Se compone en un canvas de 200x200 a partir de capas (fondo, cuerpo, cabeza y
- * primer plano) y piezas de expresión (ojos, cejas, boca, birrete), todas con el mismo encuadre:
- * las genera scripts/build-avatar.py desde art/avatar/.
+ * Avatar animado. Se compone en un canvas a partir de la escena (todo menos la cabeza), la cabeza y
+ * piezas que cambian una sola zona (ojos, boca, birrete, manos, saludo, vapor). Todo sale de
+ * scripts/build-avatar.py, que deja en /avatar/avatar.json el tamaño y la posición de cada pieza.
  *
- * Cada estado (uno por sección) dice qué piezas se ponen y cómo se mueve la cabeza. El tamaño y el
- * sitio (grande en la portada, pequeño en la esquina) los pone el CSS.
+ * Cada estado (uno por sección) dice qué piezas se ven en cada fotograma y dónde va la cabeza.
+ * El tamaño y el sitio (grande en la portada, pequeño en la esquina) los pone el CSS.
  */
 
-const SIZE = 200;
-const TICK_MS = 120;
+const TICK_MS = 110;
 
-const LAYERS = ['fondo', 'cuerpo', 'cabeza', 'primer-plano'] as const;
-const PIECES = [
-  'ojos-cerrados',
-  'ojos-pantalla',
-  'cejas-fruncidas',
-  'boca-sonrisa-cerrada',
-  'boca-seria',
-  'boca-o',
-  'birrete',
-] as const;
-
-type Piece = (typeof PIECES)[number];
-type Pose = { pieces: Piece[]; head: [number, number] };
+type PieceMeta = { x: number; y: number; head: boolean };
+type Meta = { size: number; pieces: Record<string, PieceMeta> };
+type Pose = { pieces: string[]; head: [number, number] };
 
 export type AvatarState = 'hero' | 'projects' | 'experience' | 'studies' | 'contact' | 'hogarnizer';
 
 export const BUBBLES: Record<AvatarState, string> = {
   hero: '¡Hola! Soy Daniel.',
   projects: 'Cosas que he construido.',
-  experience: 'Concentrado, como en el trabajo.',
+  experience: 'Modo concentración.',
   studies: 'Siempre aprendiendo.',
   contact: '¿Hablamos?',
   hogarnizer: 'Picando código a tope.',
@@ -39,46 +28,77 @@ const JOKES = [
   'Compilando…',
   'En mi máquina funciona.',
   'git push --force (es broma).',
-  '¡Eh! Eso hacía cosquillas.',
+  '¡Eh! Que me desconcentras.',
+];
+
+/** Vapor del café: tres formas que se van turnando. */
+const steam = (t: number) => [[], ['vapor-2'], ['vapor-3']][Math.floor(t / 4) % 3];
+/** Tecleo: las manos alternan cada `every` fotogramas. */
+const typing = (t: number, every: number) => (Math.floor(t / every) % 2 ? ['manos'] : []);
+/** La cabeza sube y baja `px` píxeles con un periodo de `period` fotogramas. */
+const bob = (t: number, period: number, px = 3): [number, number] => [
+  0,
+  t % period < period / 2 ? 0 : px,
 ];
 
 /**
- * Qué hace cada estado en el fotograma `t` (un fotograma cada TICK_MS).
- * `beat` alterna para el tecleo; `blink` dice si toca parpadear.
+ * Qué se ve en el fotograma `t` de cada estado. `since` es el fotograma en que se entró en el
+ * estado (para gestos que solo pasan al llegar, como el saludo) y `blink` si toca parpadear.
  */
-const STATES: Record<AvatarState, (t: number, blink: boolean) => Pose> = {
-  // Portada: mira a quien visita y sonríe; de vez en cuando echa un vistazo a la pantalla.
-  hero: (t, blink) => ({
-    pieces: blink ? ['ojos-cerrados'] : t % 60 >= 44 ? ['ojos-pantalla'] : [],
-    head: [0, t % 16 < 8 ? 0 : 1],
+const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => Pose> = {
+  // Portada: saluda al llegar; luego sonríe, teclea a ratos y echa miradas de reojo.
+  hero: (t, since, blink) => {
+    const waving = t - since < 16;
+    const eyes = blink ? ['ojos-cerrados'] : t % 70 >= 50 ? ['ojos-reojo'] : [];
+    const hands = waving ? (Math.floor(t / 3) % 2 ? ['saludo'] : []) : typing(t, 3);
+    return { pieces: [...steam(t), ...hands, ...eyes], head: bob(t, 18) };
+  },
+  // Proyectos: tecleando a ritmo normal.
+  projects: (t, _s, blink) => ({
+    pieces: [...steam(t), ...typing(t, 2), ...(blink ? ['ojos-cerrados'] : [])],
+    head: bob(t, 8),
   }),
-  // Proyectos: tecleando a ritmo normal, mirando la pantalla.
-  projects: (t, blink) => ({
-    pieces: [blink ? 'ojos-cerrados' : 'ojos-pantalla'],
-    head: [0, t % 6 < 3 ? 0 : 1],
-  }),
-  // Experiencia: concentrado, con el ceño fruncido; se acerca a la pantalla a ratos.
-  experience: (t, blink) => {
-    const lean = t % 50 >= 30;
+  // Experiencia: concentrado y acercándose a la pantalla a ratos.
+  experience: (t, _s, blink) => {
+    const lean = t % 60 >= 30;
     return {
-      pieces: [blink ? 'ojos-cerrados' : 'ojos-pantalla', 'cejas-fruncidas', 'boca-seria'],
-      head: lean ? [2, 3 + (t % 4 < 2 ? 0 : 1)] : [0, t % 10 < 5 ? 0 : 1],
+      pieces: [
+        ...steam(t),
+        ...typing(t, 1),
+        'cejas-fruncidas',
+        'boca-seria',
+        ...(blink ? ['ojos-cerrados'] : []),
+      ],
+      head: lean ? [-14, 12 + (t % 4 < 2 ? 0 : 2)] : bob(t, 10),
     };
   },
-  // Estudios: con el birrete puesto y media sonrisa.
-  studies: (t, blink) => ({
-    pieces: [...(blink ? (['ojos-cerrados'] as Piece[]) : []), 'boca-sonrisa-cerrada', 'birrete'],
-    head: [0, t % 16 < 8 ? 0 : 1],
+  // Estudios: con el birrete y media sonrisa.
+  studies: (t, _s, blink) => ({
+    pieces: [
+      ...steam(t),
+      ...typing(t, 3),
+      'boca-sonrisa-cerrada',
+      'birrete',
+      ...(blink ? ['ojos-cerrados'] : []),
+    ],
+    head: bob(t, 18),
   }),
-  // Contacto: mira de frente y sonríe.
-  contact: (t, blink) => ({
-    pieces: blink ? ['ojos-cerrados'] : [],
-    head: [0, t % 14 < 7 ? 0 : 1],
-  }),
+  // Contacto: deja de teclear, saluda y mira de reojo a quien visita.
+  contact: (t, since, blink) => {
+    const waving = (t - since) % 60 < 16;
+    return {
+      pieces: [
+        ...steam(t),
+        ...(waving && Math.floor(t / 3) % 2 ? ['saludo'] : []),
+        ...(blink ? ['ojos-cerrados'] : ['ojos-reojo']),
+      ],
+      head: bob(t, 18),
+    };
+  },
   // Hogarnizer: inclinado hacia la pantalla, tecleando rápido.
-  hogarnizer: (t, blink) => ({
-    pieces: [blink ? 'ojos-cerrados' : 'ojos-pantalla', 'cejas-fruncidas'],
-    head: [2, 3 + (t % 2)],
+  hogarnizer: (t, _s, blink) => ({
+    pieces: [...steam(t), ...typing(t, 1), 'cejas-fruncidas', ...(blink ? ['ojos-cerrados'] : [])],
+    head: [-14, 12 + (t % 2) * 2],
   }),
 };
 
@@ -94,39 +114,44 @@ function load(src: string) {
 export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  ctx.imageSmoothingEnabled = false;
   const root = canvas.closest('.avatar') as HTMLElement | null;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const [layers, pieces] = await Promise.all([
-    Promise.all(LAYERS.map((n) => load(`/avatar/${n}.png`))),
-    Promise.all(PIECES.map((n) => load(`/avatar/piezas/${n}.png`))),
+  const meta: Meta = await (await fetch('/avatar/avatar.json')).json();
+  const names = Object.keys(meta.pieces);
+  const [scene, head, ...images] = await Promise.all([
+    load('/avatar/escena.webp'),
+    load('/avatar/cabeza.webp'),
+    ...names.map((n) => load(`/avatar/piezas/${n}.webp`)),
   ]);
-  const [bg, body, head, front] = layers;
-  const piece = Object.fromEntries(PIECES.map((n, i) => [n, pieces[i]])) as Record<
-    Piece,
-    HTMLImageElement
-  >;
+  const piece = Object.fromEntries(names.map((n, i) => [n, images[i]]));
+  canvas.width = meta.size;
+  canvas.height = meta.size;
 
   let state: AvatarState = 'hero';
+  let since = 0;
   let tick = 0;
   let blinkUntil = -1;
-  let nextBlink = 20;
+  let nextBlink = 25;
   let surpriseUntil = -1;
 
   function draw(t: number) {
-    const blink = t <= blinkUntil;
-    const pose = reduced ? STATES[state](0, false) : STATES[state](t, blink);
-    let { pieces: on } = pose;
+    const pose = reduced
+      ? STATES[state](0, -100, false)
+      : STATES[state](t, since, t <= blinkUntil);
+    let on = pose.pieces;
     if (t <= surpriseUntil) on = [...on.filter((p) => !p.startsWith('boca')), 'boca-o'];
     const [hx, hy] = pose.head;
-    ctx!.clearRect(0, 0, SIZE, SIZE);
-    ctx!.drawImage(bg, 0, 0);
-    // El cuerpo respira despacio: una fila arriba y abajo.
-    ctx!.drawImage(body, 0, !reduced && t % 24 >= 12 ? 1 : 0);
-    ctx!.drawImage(head, hx, hy);
-    for (const p of on) ctx!.drawImage(piece[p], hx, hy);
-    ctx!.drawImage(front, 0, 0);
+    const c = ctx!;
+    c.clearRect(0, 0, meta.size, meta.size);
+    c.drawImage(scene, 0, 0);
+    // Primero lo que va fuera de la cabeza (manos, vapor…), luego la cabeza y sus piezas.
+    for (const p of on) if (!meta.pieces[p].head) c.drawImage(piece[p], meta.pieces[p].x, meta.pieces[p].y);
+    c.drawImage(head, hx, hy);
+    for (const p of on) {
+      const m = meta.pieces[p];
+      if (m.head) c.drawImage(piece[p], m.x + hx, m.y + hy);
+    }
   }
 
   let hideTimer: number | undefined;
@@ -140,6 +165,7 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
   function setState(next: AvatarState) {
     if (next === state && tick > 0) return;
     state = next;
+    since = tick;
     root?.setAttribute('data-state', next);
     say(BUBBLES[next], next === 'hero' ? 5200 : 4200);
     draw(tick);
@@ -167,7 +193,7 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
   addEventListener('scroll', update, { passive: true });
 
   root?.addEventListener('click', () => {
-    surpriseUntil = tick + 8;
+    surpriseUntil = tick + 10;
     say(JOKES[Math.floor(Math.random() * JOKES.length)], 2600);
     draw(tick);
   });
@@ -180,7 +206,7 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     tick++;
     if (tick >= nextBlink) {
       blinkUntil = tick + 1;
-      nextBlink = tick + 25 + Math.floor(Math.random() * 30);
+      nextBlink = tick + 30 + Math.floor(Math.random() * 35);
     }
     draw(tick);
   }, TICK_MS);

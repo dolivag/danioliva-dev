@@ -114,10 +114,9 @@ const GAZES: Record<string, [number, number]> = {
   'ojos-arriba-der': [1, -1],
   'ojos-izq': [-1, 0],
   'ojos-der': [1, 0],
-  'ojos-camara': [1, -0.3], // a quien visita: con la cabeza girada, es mirar hacia la derecha
+  'ojos-camara': [1, 0.2], // a quien visita: con la cabeza girada, es mirar hacia la derecha
   'ojos-abajo': [0, 1],
   'ojos-pantalla': [-1, 1], // abajo y a la izquierda
-  'ojos-reojo': [1, 1], // abajo y a la derecha
 };
 const FOLLOW_MS = 4000; // sin mover el cursor este tiempo, vuelve a lo suyo
 const DEAD_ZONE = 0.16; // cursor casi encima: mira de frente
@@ -183,7 +182,9 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
       hy += Math.round(cursor.y * 5);
       const len = Math.hypot(cursor.x, cursor.y);
       const eyesShut = on.includes('ojos-cerrados');
-      on = on.filter((p) => !(p in GAZES));
+      on = on.filter((p) => !(p in GAZES) && p !== 'ojos-reojo');
+      // Con el cursor justo encima, te mira a ti (a cámara).
+      if (!eyesShut && len <= DEAD_ZONE && 'ojos-camara' in meta.pieces) on = [...on, 'ojos-camara'];
       if (!eyesShut && len > DEAD_ZONE && gazes.length) {
         let best = gazes[0][0];
         let bestDot = -Infinity;

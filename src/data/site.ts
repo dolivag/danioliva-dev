@@ -30,7 +30,7 @@ export const projects = [
   {
     name: 'DuoMeteo',
     status: '',
-    description: 'Proyecto personal.',
+    description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
     href: '',
   },

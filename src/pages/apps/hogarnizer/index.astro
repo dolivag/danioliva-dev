@@ -7,9 +7,23 @@ import { site } from '../../../data/site';
   description="App para organizar un hogar compartido: tareas con puntos de esfuerzo, lista de la compra, gastos y notas."
 >
   <div class="hero" data-avatar="hogarnizer">
-    <p class="role">Proyecto · En construcción</p>
-    <h1>Hogarnizer</h1>
-    <p class="lead">
+    <h1 data-fit>
+      <span class="line l1">Hogarnizer</span>
+    </h1>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        {[0, 1].map(() => (
+          <span>
+            {['En construcción', 'Expo', 'React Native', 'Supabase', 'Tareas', 'Compra', 'Gastos', 'Notas'].map((m) => (<><span>{m}</span><b>+</b></>))}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="col intro" data-avatar="hogarnizer">
+    <span class="label">H.<em>/</em> Proyecto · En construcción</span>
+    <p class="big">
       La app para organizar un hogar compartido: repartir las tareas de forma justa con puntos de
       esfuerzo, hacer la lista de la compra entre todos, llevar los gastos y compartir notas.
     </p>
@@ -19,18 +33,18 @@ import { site } from '../../../data/site';
     </div>
   </div>
 
-  <section>
-    <h2>Qué hace</h2>
-    <div class="cards">
-      <div class="card"><h3>Tareas</h3><p>Rotación semanal y puntos según el esfuerzo de cada tarea.</p></div>
-      <div class="card"><h3>Compra</h3><p>Una lista compartida que se convierte en gasto al terminarla.</p></div>
-      <div class="card"><h3>Gastos</h3><p>Quién ha pagado qué y quién debe a quién.</p></div>
-      <div class="card"><h3>Notas</h3><p>Avisos y recordatorios para toda la casa.</p></div>
+  <section class="col" data-avatar="hogarnizer">
+    <h2>Qué  hace</h2>
+    <div class="facts">
+      <div class="fact"><h3>Tareas</h3><p>Rotación semanal y puntos según el esfuerzo de cada tarea.</p></div>
+      <div class="fact"><h3>Compra</h3><p>Una lista compartida que se convierte en gasto al terminarla.</p></div>
+      <div class="fact"><h3>Gastos</h3><p>Quién ha pagado qué y quién debe a quién.</p></div>
+      <div class="fact"><h3>Notas</h3><p>Avisos y recordatorios para toda la casa.</p></div>
     </div>
   </section>
 
-  <section>
-    <h2>Información legal</h2>
+  <section class="col" data-avatar="hogarnizer">
+    <h2>Legal</h2>
     <ul class="links">
       <li><a href="/apps/hogarnizer/privacidad">Política de privacidad</a></li>
       <li><a href="/apps/hogarnizer/soporte">Soporte</a></li>

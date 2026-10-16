@@ -6,6 +6,18 @@ export const site = {
   appUrl: 'https://hogarnizer.danioliva.dev',
 };
 
+/** Palabras de la cinta bajo el nombre. */
+export const marquee = [
+  'Software engineer',
+  'Fullstack',
+  'Angular',
+  'NestJS',
+  'React Native',
+  'Automatización',
+  'CI/CD',
+  'Apps pequeñas',
+];
+
 export const projects = [
   {
     name: 'Hogarnizer',

@@ -35,6 +35,8 @@ const JOKES = [
 const steam = (t: number) => [[], ['vapor-2'], ['vapor-3']][Math.floor(t / 4) % 3];
 /** Tecleo: las manos alternan cada `every` fotogramas. */
 const typing = (t: number, every: number) => (Math.floor(t / every) % 2 ? ['manos'] : []);
+/** Mirada al teclear: a la pantalla del portátil (o parpadeando). */
+const onScreen = (blink: boolean) => [blink ? 'ojos-cerrados' : 'ojos-pantalla'];
 /** La cabeza sube y baja `px` píxeles con un periodo de `period` fotogramas. */
 const bob = (t: number, period: number, px = 3): [number, number] => [
   0,
@@ -46,7 +48,7 @@ const bob = (t: number, period: number, px = 3): [number, number] => [
  * estado (para gestos que solo pasan al llegar, como el saludo) y `blink` si toca parpadear.
  */
 const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => Pose> = {
-  // Portada: saluda al llegar; luego sonríe, teclea a ratos y echa miradas de reojo.
+  // Portada: saluda al llegar; luego sonríe, teclea a ratos y echa miradas de reojo (al visitante).
   hero: (t, since, blink) => {
     const waving = t - since < 16;
     const eyes = blink ? ['ojos-cerrados'] : t % 70 >= 50 ? ['ojos-reojo'] : [];
@@ -55,7 +57,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   },
   // Proyectos: tecleando a ritmo normal.
   projects: (t, _s, blink) => ({
-    pieces: [...steam(t), ...typing(t, 2), ...(blink ? ['ojos-cerrados'] : [])],
+    pieces: [...steam(t), ...typing(t, 2), ...onScreen(blink)],
     head: bob(t, 8),
   }),
   // Experiencia: concentrado y acercándose a la pantalla a ratos.
@@ -67,7 +69,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
         ...typing(t, 1),
         'cejas-fruncidas',
         'boca-seria',
-        ...(blink ? ['ojos-cerrados'] : []),
+        ...onScreen(blink),
       ],
       head: lean ? [-14, 12 + (t % 4 < 2 ? 0 : 2)] : bob(t, 10),
     };
@@ -79,7 +81,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
       ...typing(t, 3),
       'boca-sonrisa-cerrada',
       'birrete',
-      ...(blink ? ['ojos-cerrados'] : []),
+      ...onScreen(blink),
     ],
     head: bob(t, 18),
   }),
@@ -97,10 +99,27 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   },
   // Hogarnizer: inclinado hacia la pantalla, tecleando rápido.
   hogarnizer: (t, _s, blink) => ({
-    pieces: [...steam(t), ...typing(t, 1), 'cejas-fruncidas', ...(blink ? ['ojos-cerrados'] : [])],
+    pieces: [...steam(t), ...typing(t, 1), 'cejas-fruncidas', ...onScreen(blink)],
     head: [-14, 12 + (t % 2) * 2],
   }),
 };
+
+/**
+ * Miradas disponibles y hacia dónde apuntan (x: izquierda -1 / derecha 1; y: arriba -1 / abajo 1,
+ * vistas desde la pantalla de quien visita). Solo se usan las que existan en avatar.json.
+ */
+const GAZES: Record<string, [number, number]> = {
+  'ojos-arriba-izq': [-1, -1],
+  'ojos-arriba': [0, -1],
+  'ojos-arriba-der': [1, -1],
+  'ojos-izq': [-1, 0],
+  'ojos-der': [1, 0],
+  'ojos-camara': [1, 0.2], // a quien visita: con la cabeza girada, es mirar hacia la derecha
+  'ojos-abajo': [0, 1],
+  'ojos-pantalla': [-1, 1], // abajo y a la izquierda
+};
+const FOLLOW_MS = 4000; // sin mover el cursor este tiempo, vuelve a lo suyo
+const DEAD_ZONE = 0.16; // cursor casi encima: mira de frente
 
 function load(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -128,6 +147,22 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
   canvas.width = meta.size;
   canvas.height = meta.size;
 
+  // Cursor: normalizado respecto a la cabeza (de -1 a 1) mientras se mueve.
+  const gazes = Object.entries(GAZES).filter(([n]) => n in meta.pieces);
+  const cursor = { x: 0, y: 0, at: -Infinity };
+  addEventListener(
+    'pointermove',
+    (e) => {
+      const r = canvas.getBoundingClientRect();
+      const hx = r.left + r.width * 0.59; // la cabeza, dentro del lienzo
+      const hy = r.top + r.height * 0.3;
+      cursor.x = Math.max(-1, Math.min(1, (e.clientX - hx) / (innerWidth * 0.4)));
+      cursor.y = Math.max(-1, Math.min(1, (e.clientY - hy) / (innerHeight * 0.4)));
+      cursor.at = performance.now();
+    },
+    { passive: true },
+  );
+
   let state: AvatarState = 'hero';
   let since = 0;
   let tick = 0;
@@ -140,8 +175,27 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
       ? STATES[state](0, -100, false)
       : STATES[state](t, since, t <= blinkUntil);
     let on = pose.pieces;
+    let [hx, hy] = pose.head;
+    // Si el cursor se ha movido hace poco, la cabeza se vuelve un poco hacia él y los ojos lo miran.
+    if (!reduced && performance.now() - cursor.at < FOLLOW_MS) {
+      hx += Math.round(cursor.x * 8);
+      hy += Math.round(cursor.y * 5);
+      const len = Math.hypot(cursor.x, cursor.y);
+      const eyesShut = on.includes('ojos-cerrados');
+      on = on.filter((p) => !(p in GAZES) && p !== 'ojos-reojo');
+      // Con el cursor justo encima, te mira a ti (a cámara).
+      if (!eyesShut && len <= DEAD_ZONE && 'ojos-camara' in meta.pieces) on = [...on, 'ojos-camara'];
+      if (!eyesShut && len > DEAD_ZONE && gazes.length) {
+        let best = gazes[0][0];
+        let bestDot = -Infinity;
+        for (const [name, [gx, gy]] of gazes) {
+          const dot = (cursor.x * gx + cursor.y * gy) / (Math.hypot(gx, gy) * len);
+          if (dot > bestDot) [best, bestDot] = [name, dot];
+        }
+        on = [...on, best];
+      }
+    }
     if (t <= surpriseUntil) on = [...on.filter((p) => !p.startsWith('boca')), 'boca-o'];
-    const [hx, hy] = pose.head;
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);

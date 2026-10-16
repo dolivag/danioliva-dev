@@ -1,14 +1,36 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, projects, experience, studies } from '../data/site';
+import { site, marquee, projects, experience, studies } from '../data/site';
+
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+const items = [...marquee, ...marquee];
 ---
 <Base>
   <div class="hero" data-avatar="hero">
-    <p class="role">{site.role}</p>
-    <h1>Hola, soy {site.name}.</h1>
-    <p class="lead">
+    <h1 data-fit>
+      <span class="line l1">Daniel</span>
+      <span class="line l2">Oliva</span>
+    </h1>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        {[0, 1].map(() => (
+          <span>
+            {marquee.map((m) => (<><span>{m}</span><b>+</b></>))}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="col intro" data-avatar="hero">
+    <span class="label">D.<em>/</em> {site.role}</span>
+    <p class="big">
       Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
       herramientas pequeñas que hacen el día a día un poco más fácil.
+    </p>
+    <p>
+      Trabajo con Angular, Node.js, NestJS, React y React Native, y me encargo también de
+      herramientas de automatización y CI/CD. Fuera del trabajo construyo mis propios proyectos.
     </p>
     <div class="actions">
       <a class="btn" href="#proyectos">Ver proyectos</a>
@@ -16,55 +38,48 @@ import { site, projects, experience, studies } from '../data/site';
     </div>
   </div>
 
-  <section id="proyectos" data-avatar="projects">
+  <section class="col" id="proyectos" data-avatar="projects">
     <h2>Proyectos</h2>
-    <div class="cards">
-      {projects.map((p) =>
-        p.href ? (
-          <a class="card" href={p.href}>
-            <h3>{p.name}{p.status && <span class="tag">{p.status}</span>}</h3>
-            <p>{p.description}</p>
-            {p.stack && <div class="meta">{p.stack}</div>}
-          </a>
-        ) : (
-          <div class="card">
-            <h3>{p.name}{p.status && <span class="tag">{p.status}</span>}</h3>
-            <p>{p.description}</p>
-            {p.stack && <div class="meta">{p.stack}</div>}
+    {projects.map((p, i) => {
+      const Tag = p.href ? 'a' : 'div';
+      return (
+        <Tag class="proj" href={p.href || undefined}>
+          <div class="meta">
+            {(p.stack ? p.stack.split(' · ') : ['Proyecto personal']).map((t) => (<span>{t}</span>))}
+            {p.href && <span class="plus">+</span>}
           </div>
-        ),
-      )}
-    </div>
+          <div class="name"><sup>{pad(i)}</sup>{p.name}{p.status && <span class="status">{p.status}</span>}</div>
+          <p>{p.description}</p>
+        </Tag>
+      );
+    })}
   </section>
 
-  <section id="experiencia" data-avatar="experience">
+  <section class="col" id="experiencia" data-avatar="experience">
     <h2>Experiencia</h2>
     {experience.map((e) => (
-      <div class="item">
-        <div class="row">
-          <h3>{e.role} · {e.company}</h3>
-          <span class="when">{e.period}</span>
-        </div>
+      <div class="entry">
+        <span class="when">{e.period}</span>
+        <h3>{e.role} <span>/</span> {e.company}</h3>
         <p>{e.description}</p>
       </div>
     ))}
   </section>
 
-  <section id="estudios" data-avatar="studies">
+  <section class="col" id="estudios" data-avatar="studies">
     <h2>Estudios</h2>
     {studies.map((s) => (
-      <div class="item">
+      <div class="entry">
+        <span class="when">{s.title.match(/\((.*?)\)/)?.[1] ?? ''}</span>
         <h3>{s.school}</h3>
-        <p>{s.title}</p>
+        <p>{s.title.replace(/\s*\(.*?\)/, '')}</p>
       </div>
     ))}
   </section>
 
-  <section id="contacto" data-avatar="contact">
+  <section class="col" id="contacto" data-avatar="contact">
     <h2>Contacto</h2>
-    <ul class="links">
-      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-      <li><a href={site.github}>GitHub · dolivag</a></li>
-    </ul>
+    <a class="contact-link" href={`mailto:${site.email}`}><small>Escríbeme</small>{site.email}</a>
+    <a class="contact-link" href={site.github}><small>Código</small>GitHub / dolivag</a>
   </section>
 </Base>

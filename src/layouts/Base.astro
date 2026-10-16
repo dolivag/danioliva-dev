@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { site } from '../data/site';
 import Avatar from '../components/Avatar.astro';
+import PixelBg from '../components/PixelBg.astro';
 
 interface Props {
   title?: string;
@@ -21,18 +22,25 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#311e70" />
+    <meta name="theme-color" content="#b7bb82" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1f2312" media="(prefers-color-scheme: dark)" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   </head>
   <body>
+    <PixelBg />
     <div class="wrap">
       <header class="top">
-        <a class="brand" href="/">{site.name}</a>
-        <nav>
+        <a class="brand" href="/" aria-label={site.name}>D<span>.</span>O</a>
+        <nav class="pill" aria-label="Principal">
+          <a href="/">Índice</a>
           <a href="/#proyectos">Proyectos</a>
           <a href="/#experiencia">Experiencia</a>
           <a href="/#contacto">Contacto</a>
         </nav>
+        <div class="social">
+          <a href={site.github}>GitHub</a>
+          <a href={`mailto:${site.email}`}>Email</a>
+        </div>
       </header>
       <main><slot /></main>
       <footer>
@@ -42,5 +50,27 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
       </footer>
     </div>
     <Avatar />
+
+    <script>
+      // El nombre llena el ancho de la pantalla: se ajusta el tamaño a la línea más larga.
+      const fit = () => {
+        document.querySelectorAll<HTMLElement>('[data-fit]').forEach((group) => {
+          const lines = Array.from(group.querySelectorAll<HTMLElement>('.line'));
+          const available = group.clientWidth;
+          let widest = 1;
+          for (const line of lines) {
+            line.style.fontSize = '100px';
+            line.style.display = 'inline-block';
+            widest = Math.max(widest, line.getBoundingClientRect().width);
+            line.style.display = '';
+          }
+          const size = (100 * available) / widest;
+          for (const line of lines) line.style.fontSize = `${Math.floor(size * 10) / 10}px`;
+        });
+      };
+      fit();
+      document.fonts?.ready.then(fit);
+      addEventListener('resize', fit);
+    </script>
   </body>
 </html>

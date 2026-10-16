@@ -16,6 +16,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
 <html lang="es">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
@@ -30,7 +31,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <PixelBg />
     <div class="wrap">
       <header class="top">
-        <a class="brand" href="/" aria-label={site.name}>D<span>.</span>O</a>
+        <a class="brand" href="/" aria-label={site.name}>&lt;D<span>.</span>O/&gt;</a>
         <nav class="pill" aria-label="Principal">
           <a href="/">Índice</a>
           <a href="/#proyectos">Proyectos</a>
@@ -52,7 +53,31 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <Avatar />
 
     <script>
-      // El nombre llena el ancho de la pantalla: se ajusta el tamaño a la línea más larga.
+      const root = document.documentElement;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1. El nombre gigante: cada línea en una máscara y cada letra en su propio trozo, para que
+      //    suban desde abajo una detrás de otra.
+      document.querySelectorAll<HTMLElement>('[data-fit]').forEach((group) => {
+        group.querySelectorAll<HTMLElement>('.line').forEach((line, row) => {
+          const text = line.textContent ?? '';
+          line.setAttribute('aria-label', text);
+          line.innerHTML = Array.from(text)
+            .map((ch, i) => `<span class="letter" aria-hidden="true" style="--r:${row};--i:${i}">${ch}</span>`)
+            .join('');
+          const mask = document.createElement('span');
+          mask.className = 'row';
+          line.replaceWith(mask);
+          mask.append(line);
+        });
+      });
+
+      // 2. Los títulos de sección: también suben desde una máscara.
+      document.querySelectorAll<HTMLElement>('section > h2').forEach((h2) => {
+        h2.innerHTML = `<span class="mask"><span class="inner">${h2.innerHTML}</span></span>`;
+      });
+
+      // 3. El nombre llena el ancho de la pantalla: se ajusta el tamaño a la línea más larga.
       const fit = () => {
         document.querySelectorAll<HTMLElement>('[data-fit]').forEach((group) => {
           const lines = Array.from(group.querySelectorAll<HTMLElement>('.line'));
@@ -69,8 +94,39 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
         });
       };
       fit();
-      document.fonts?.ready.then(fit);
       addEventListener('resize', fit);
+
+      // 4. Entrada: cuando la tipografía está lista arranca el nombre y, justo después, el resto de
+      //    elementos van apareciendo escalonados (los de más abajo, al llegar a ellos con el scroll).
+      const REVEAL =
+        'header.top > *, .marquee, .intro > *, .proj, .entry, .fact, .contact-link, ul.links li, section > h2, footer';
+      let started = false;
+      const start = () => {
+        if (started) return;
+        started = true;
+        fit();
+        requestAnimationFrame(() => {
+          root.classList.add('ready');
+          if (reduced) return;
+          let first = true;
+          const io = new IntersectionObserver(
+            (entries) => {
+              const visible = entries.filter((e) => e.isIntersecting);
+              visible.forEach((e, i) => {
+                (e.target as HTMLElement).style.transitionDelay = `${(first ? 0.75 : 0) + i * 0.09}s`;
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              });
+              if (visible.length) first = false;
+            },
+            { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+          );
+          document.querySelectorAll(REVEAL).forEach((el) => io.observe(el));
+        });
+      };
+      if (reduced) root.classList.add('ready');
+      (document.fonts?.ready ?? Promise.resolve()).then(start);
+      setTimeout(start, 2500); // por si la tipografía tarda
     </script>
   </body>
 </html>

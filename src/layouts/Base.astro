@@ -96,6 +96,35 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
       fit();
       addEventListener('resize', fit);
 
+      // 3b. Pasada la portada, la píldora del menú crece y se vuelve de cristal.
+      const pill = document.querySelector<HTMLElement>('nav.pill');
+      const hero = document.querySelector<HTMLElement>('.hero');
+      let limit = 80;
+      let ticking = false;
+      const measure = () => {
+        limit = hero ? hero.offsetTop + hero.offsetHeight - 140 : 80;
+      };
+      const mark = () => {
+        pill?.classList.toggle('scrolled', scrollY > limit);
+        ticking = false;
+      };
+      measure();
+      mark();
+      addEventListener(
+        'scroll',
+        () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(mark);
+          }
+        },
+        { passive: true },
+      );
+      addEventListener('resize', () => {
+        measure();
+        mark();
+      });
+
       // 4. Entrada: cuando la tipografía está lista arranca el nombre y, justo después, el resto de
       //    elementos van apareciendo escalonados (los de más abajo, al llegar a ellos con el scroll).
       const REVEAL =

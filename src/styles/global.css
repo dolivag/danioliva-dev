@@ -243,6 +243,8 @@ ul.links a:hover { color: var(--accent-text); }
 
 footer { padding: 40px 0 56px; border-top: 1px solid var(--line); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 56px; }
 footer a { text-decoration: none; }
+/* En escritorio el selector de tema va fijo abajo a la izquierda (≈70 px): el pie deja sitio para que nunca lo tape. */
+@media (min-width: 1000px) { footer { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
 
 /* ---- Pantallas grandes: el contenido en una columna, el avatar a la derecha ---- */
 @media (min-width: 1000px) {

@@ -1,39 +1,37 @@
 @import '@fontsource-variable/archivo/wdth.css';
 
 :root {
-  --bg: #dccdb2; /* arena */
-  --tile-a: #e2d4bb;
-  --tile-b: #d6c6aa;
-  --tile-c: #dccdb2;
-  --glow: 255, 250, 238; /* color de los cuadros que se encienden al pasar el cursor */
-  --text: #26195f; /* tinta: el morado de la marca, oscurecido */
-  --muted: #4d4480;
-  --accent: #e0601a; /* acento como RELLENO (burbuja, botón, etiquetas) */
-  --accent-text: #b8431a; /* acento como TEXTO: más oscuro, para que contraste con el fondo */
-  --accent-2: #26195f;
-  --line: rgba(38, 25, 95, 0.55);
-  --on-accent: #fff6e8;
-  --pill: rgba(38, 25, 95, 0.82);
-  --pill-text: #eadfc9;
+  --bg: #b7bb82; /* verde oliva claro */
+  --tile-a: #c1c48d;
+  --tile-b: #abb076;
+  --tile-c: #b7bb82;
+  --glow: 236, 240, 200; /* color de los cuadros que se encienden al pasar el cursor */
+  --text: #0b1f4d; /* azul marino: 7,9:1 sobre el fondo */
+  --muted: #25396f;
+  --accent: #f0b52e; /* mostaza como RELLENO (burbuja, botón, etiquetas) */
+  --accent-text: #7a4b00; /* mostaza oscura como TEXTO pequeño (3,7:1 sobre el fondo) */
+  --line: rgba(11, 31, 77, 0.55);
+  --on-accent: #0b1f4d;
+  --pill: rgba(11, 31, 77, 0.9);
+  --pill-text: #e9edd2;
   --font: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15112b;
-    --tile-a: #1b1735;
-    --tile-b: #120f26;
-    --tile-c: #15112b;
-    --glow: 120, 96, 220;
-    --text: #eadfc9;
-    --muted: #b9afc9;
-    --accent: #ff8a3d;
-    --accent-text: #ff8a3d;
-    --accent-2: #eadfc9;
-    --line: rgba(234, 223, 201, 0.5);
-    --on-accent: #15112b;
-    --pill: rgba(234, 223, 201, 0.14);
-    --pill-text: #eadfc9;
+    --bg: #1f2312; /* oliva muy oscuro */
+    --tile-a: #272c18;
+    --tile-b: #181b0e;
+    --tile-c: #1f2312;
+    --glow: 190, 200, 120;
+    --text: #d6e3ff; /* azul claro */
+    --muted: #a9bbdc;
+    --accent: #f0b52e;
+    --accent-text: #f0b52e; /* sobre oscuro la mostaza sí contrasta (9:1) */
+    --line: rgba(214, 227, 255, 0.4);
+    --on-accent: #0b1f4d;
+    --pill: rgba(214, 227, 255, 0.14);
+    --pill-text: #e9edd2;
   }
 }
 
@@ -200,3 +198,7 @@ footer a { text-decoration: none; }
   .marquee .track { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* Párrafos: tipografía de lectura, menos ancha que los títulos y los rótulos. */
+.intro p, .proj p, .entry p, .fact p { font-stretch: 100%; font-weight: 450; font-size: 16px; line-height: 1.5; }
+.intro p.big { font-stretch: 112%; font-weight: 600; font-size: 19px; }

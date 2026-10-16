@@ -94,13 +94,19 @@
       --size: clamp(340px, min(36vw, 62vh), 540px);
       bottom: 0;
     }
-    .bubble,
-    .avatar[data-state='hero'] .bubble {
+    .bubble {
       right: auto;
       left: 4%;
       bottom: 78%;
       font-size: 15px;
       border-radius: 12px 12px 12px 4px;
+    }
+    /* En la portada va a la izquierda de él, bajo la cinta, para no tapar el nombre. */
+    .avatar[data-state='hero'] .bubble {
+      left: auto;
+      right: 96%;
+      bottom: 24%;
+      border-radius: 12px 12px 4px 12px;
     }
   }
 

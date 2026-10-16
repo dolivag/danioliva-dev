@@ -34,3 +34,19 @@ con WebP y numpy) genera `public/avatar/`: `escena.webp`, `cabeza.webp`, `piezas
 
 Para un gesto nuevo: pedir a Gemini la base con solo esa zona cambiada, guardarla en
 `art/avatar/`, añadir su zona en `PIECES` del script y usarla en `STATES` de `avatar.ts`.
+
+## Capturas de los proyectos
+
+Las capturas salen solas: basta con dejar imágenes en `public/proyectos/<proyecto>/`, con nombres
+`1.webp`, `2.webp`… (también `.png`, `.jpg` o `.avif`). Se ordenan por número. Sin imágenes no se
+pinta nada.
+
+| Carpeta | Marco | Qué | Medida orientativa |
+| --- | --- | --- | --- |
+| `hogarnizer` | móvil | hasta 3 en la portada y 4 en su página | vertical, unos 1170×2532 |
+| `duometeo` | navegador | 1 | apaisada, unos 1600×1000 |
+| `trasteo` | móvil | hasta 3 | vertical |
+
+Para pesar poco: exportar a **WebP** (calidad 80) y que cada imagen no pase de unos 150 KB. Para
+Hogarnizer, usar la cuenta de demostración de la app (`supabase/demo/cuenta-revision.sql` en su
+repo): son datos ficticios.

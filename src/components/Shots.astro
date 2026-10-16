@@ -1,0 +1,52 @@
+---
+import { shotsOf } from '../lib/shots';
+
+interface Props {
+  slug: string;
+  /** 'phone': marco de móvil (capturas verticales). 'browser': ventana de navegador (capturas anchas). */
+  kind?: 'phone' | 'browser';
+  alt: string;
+  /** Máximo de capturas que se enseñan. */
+  max?: number;
+}
+const { slug, kind = 'phone', alt, max = 4 } = Astro.props;
+const shots = shotsOf(slug).slice(0, max);
+---
+{shots.length > 0 && (
+  <div class:list={['shots', kind]} data-count={shots.length}>
+    {shots.map((src, i) => (
+      <figure class="shot" style={`--i:${i}`}>
+        {kind === 'browser' && (
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        )}
+        <img src={src} alt={`${alt} (${i + 1} de ${shots.length})`} loading="lazy" decoding="async" />
+      </figure>
+    ))}
+  </div>
+)}
+
+<style is:global>
+  .shots { display: flex; gap: 14px; margin: 18px 0 6px; align-items: flex-start; }
+  .shots.phone .shot { flex: 1 1 0; max-width: 150px; aspect-ratio: 9 / 19.5; }
+  .shots.browser { flex-direction: column; }
+  .shots.browser .shot { width: 100%; }
+  .shot {
+    margin: 0; overflow: hidden; background: var(--bg); color: var(--text);
+    border: 3px solid var(--text); border-radius: 22px;
+    box-shadow: 6px 6px 0 var(--text);
+  }
+  .shots.browser .shot { border-radius: 12px; }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .shots.browser .shot img { height: auto; }
+  .shot .bar { display: flex; gap: 5px; padding: 8px 10px; border-bottom: 3px solid var(--text); background: var(--accent); }
+  .shot .bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--text); display: block; }
+  .shots.phone .shot:nth-child(even) { translate: 0 14px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .shots .shot { opacity: 0; translate: 0 26px; transition: opacity 0.8s ease, translate 1s var(--ease); transition-delay: calc(var(--i) * 0.12s); }
+    .js .shots.in .shot { opacity: 1; translate: 0 0; }
+    .js .shots.phone.in .shot:nth-child(even) { translate: 0 14px; }
+  }
+  @media (max-width: 999px) {
+    .shots.phone .shot { max-width: none; }
+  }
+</style>

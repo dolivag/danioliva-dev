@@ -21,6 +21,8 @@ export const marquee = [
 export const projects = [
   {
     name: 'Hogarnizer',
+    slug: 'hogarnizer',
+    kind: 'phone',
     status: 'En construcción',
     description:
       'App para organizar un hogar compartido: tareas con puntos de esfuerzo, lista de la compra, gastos y notas.',
@@ -29,6 +31,8 @@ export const projects = [
   },
   {
     name: 'DuoMeteo',
+    slug: 'duometeo',
+    kind: 'browser',
     status: '',
     description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
@@ -36,6 +40,8 @@ export const projects = [
   },
   {
     name: 'Trasteo',
+    slug: 'trasteo',
+    kind: 'phone',
     status: 'En construcción',
     description: 'Mantén tus cosas en orden y encuéntralas fácilmente.',
     stack: '',

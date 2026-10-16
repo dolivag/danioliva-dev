@@ -1,6 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { site } from '../../../data/site';
+import Shots from '../../../components/Shots.astro';
 ---
 <Base
   title="Hogarnizer"
@@ -34,7 +35,8 @@ import { site } from '../../../data/site';
   </div>
 
   <section class="col" data-avatar="hogarnizer">
-    <h2>Qué  hace</h2>
+    <h2>Qué hace</h2>
+    <Shots slug="hogarnizer" kind="phone" alt="Capturas de Hogarnizer" max={4} />
     <div class="facts">
       <div class="fact"><h3>Tareas</h3><p>Rotación semanal y puntos según el esfuerzo de cada tarea.</p></div>
       <div class="fact"><h3>Compra</h3><p>Una lista compartida que se convierte en gasto al terminarla.</p></div>

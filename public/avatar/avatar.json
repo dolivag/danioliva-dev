@@ -21,6 +21,16 @@
       "y": 233,
       "head": true
     },
+    "ojos-arriba": {
+      "x": 487,
+      "y": 233,
+      "head": true
+    },
+    "ojos-izq": {
+      "x": 486,
+      "y": 233,
+      "head": true
+    },
     "ojos-camara": {
       "x": 487,
       "y": 233,

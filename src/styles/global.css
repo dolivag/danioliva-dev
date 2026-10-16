@@ -14,7 +14,7 @@
   --on-accent: #0b1f4d;
   --pill: rgba(11, 31, 77, 0.9);
   --pill-text: #e9edd2;
-  --glass-bg: rgba(238, 242, 206, 0.58);
+  --glass-bg: rgba(238, 242, 206, 0.74);
   --glass-line: rgba(255, 255, 255, 0.55);
   --glass-shadow: rgba(11, 31, 77, 0.2);
   --glass-sep: rgba(11, 31, 77, 0.25);
@@ -40,7 +40,7 @@
     --on-accent: #0b1f4d;
     --pill: rgba(214, 227, 255, 0.14);
     --pill-text: #e9edd2;
-    --glass-bg: rgba(214, 227, 255, 0.16);
+    --glass-bg: rgba(214, 227, 255, 0.24);
     --glass-line: rgba(214, 227, 255, 0.28);
     --glass-shadow: rgba(0, 0, 0, 0.5);
     --glass-sep: rgba(214, 227, 255, 0.25);
@@ -62,7 +62,7 @@
   --on-accent: #0b1f4d;
   --pill: rgba(214, 227, 255, 0.14);
   --pill-text: #e9edd2;
-  --glass-bg: rgba(214, 227, 255, 0.16);
+  --glass-bg: rgba(214, 227, 255, 0.24);
   --glass-line: rgba(214, 227, 255, 0.28);
   --glass-shadow: rgba(0, 0, 0, 0.5);
   --glass-sep: rgba(214, 227, 255, 0.25);
@@ -119,7 +119,7 @@ nav.pill {
   display: flex; align-items: center; gap: 4px;
   padding: 11px 20px; border-radius: 999px;
   background: var(--pill); color: var(--pill-text);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em;
 }
 nav.pill a { text-decoration: none; padding: 0 9px; border-right: 1px solid rgba(234, 223, 201, 0.25); line-height: 1; }
@@ -157,7 +157,7 @@ nav.pill a { transition: color 0.2s ease, padding 0.55s cubic-bezier(0.19, 1, 0.
 nav.pill.scrolled {
   top: 16px; padding: 16px 30px; font-size: 14px;
   background: var(--glass-bg); color: var(--text); border-color: var(--glass-line);
-  backdrop-filter: blur(24px) saturate(1.7); -webkit-backdrop-filter: blur(24px) saturate(1.7);
+  backdrop-filter: blur(42px) saturate(1.8);
   box-shadow: 0 10px 34px var(--glass-shadow), inset 0 1px 0 var(--glass-line);
 }
 nav.pill.scrolled a { padding: 0 13px; border-right-color: var(--glass-sep); }
@@ -315,7 +315,7 @@ footer a { text-decoration: none; }
   position: fixed; z-index: 40; left: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   gap: 4px; padding: 5px; border-radius: 999px;
   background: var(--glass-bg); border: 1px solid var(--glass-line);
-  backdrop-filter: blur(24px) saturate(1.7); -webkit-backdrop-filter: blur(24px) saturate(1.7);
+  backdrop-filter: blur(42px) saturate(1.8);
   box-shadow: 0 10px 34px var(--glass-shadow), inset 0 1px 0 var(--glass-line);
   color: var(--text);
 }
@@ -332,4 +332,12 @@ footer a { text-decoration: none; }
 @media (prefers-reduced-motion: no-preference) {
   .js .theme-group { opacity: 0; translate: 0 16px; transition: opacity 0.8s ease 1.3s, translate 1s var(--ease) 1.3s; }
   .js.ready .theme-group { opacity: 1; translate: 0 0; }
+}
+
+/* Safari antiguo (≤ 17) solo entiende el desenfoque con prefijo. Va aparte, en un @supports, porque
+   si se escribe junto a la versión normal el compilador de CSS se queda solo con la del prefijo y
+   Chrome y Firefox se quedan sin desenfoque. */
+@supports (-webkit-backdrop-filter: blur(1px)) and (not (backdrop-filter: blur(1px))) {
+  nav.pill { -webkit-backdrop-filter: blur(10px); }
+  nav.pill.scrolled, .theme-group { -webkit-backdrop-filter: blur(42px) saturate(1.8); }
 }

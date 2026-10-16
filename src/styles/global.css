@@ -19,11 +19,14 @@
   --glass-shadow: rgba(11, 31, 77, 0.2);
   --glass-sep: rgba(11, 31, 77, 0.25);
   --glass-hover: #7a4b00;
+  color-scheme: light;
   --font: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Tema oscuro: el del sistema, salvo que la persona haya elegido uno (data-theme en <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
     --bg: #1f2312; /* oliva muy oscuro */
     --tile-a: #272c18;
     --tile-b: #181b0e;
@@ -43,6 +46,27 @@
     --glass-sep: rgba(214, 227, 255, 0.25);
     --glass-hover: #f0b52e;
   }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #1f2312; /* oliva muy oscuro */
+  --tile-a: #272c18;
+  --tile-b: #181b0e;
+  --tile-c: #1f2312;
+  --glow: 190, 200, 120;
+  --text: #d6e3ff; /* azul claro */
+  --muted: #a9bbdc;
+  --accent: #f0b52e;
+  --accent-text: #f0b52e; /* sobre oscuro la mostaza sí contrasta (9:1) */
+  --line: rgba(214, 227, 255, 0.4);
+  --on-accent: #0b1f4d;
+  --pill: rgba(214, 227, 255, 0.14);
+  --pill-text: #e9edd2;
+  --glass-bg: rgba(214, 227, 255, 0.16);
+  --glass-line: rgba(214, 227, 255, 0.28);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+  --glass-sep: rgba(214, 227, 255, 0.25);
+  --glass-hover: #f0b52e;
 }
 
 * { box-sizing: border-box; }
@@ -99,7 +123,25 @@ nav.pill {
   font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em;
 }
 nav.pill a { text-decoration: none; padding: 0 9px; border-right: 1px solid rgba(234, 223, 201, 0.25); line-height: 1; }
-nav.pill a:last-child { border-right: 0; }
+nav.pill a:last-of-type { border-right: 0; }
+nav.pill .theme {
+  display: inline-grid; place-items: center; width: 1.9em; height: 1.9em; margin: -0.5em -0.7em -0.5em 0.3em;
+  border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; padding: 0;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+nav.pill .theme:hover { background: rgba(255, 255, 255, 0.16); color: var(--accent); transform: rotate(-18deg); }
+nav.pill.scrolled .theme:hover { background: rgba(255, 255, 255, 0.32); color: var(--glass-hover); }
+nav.pill .theme:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+nav.pill .theme svg { width: 1.15em; height: 1.15em; display: block; }
+@media (min-width: 1000px) { nav.pill .theme { display: none; } }
+/* Se enseña el icono del tema al que se pasaría: luna en claro, sol en oscuro. */
+nav.pill .theme .sun { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) nav.pill .theme .sun { display: block; }
+  :root:not([data-theme='light']) nav.pill .theme .moon { display: none; }
+}
+:root[data-theme='dark'] nav.pill .theme .sun { display: block; }
+:root[data-theme='dark'] nav.pill .theme .moon { display: none; }
 nav.pill a:hover, nav.pill a.active { color: var(--accent); }
 
 /* Pasada la portada: la píldora crece y se vuelve de cristal translúcido. */
@@ -212,8 +254,8 @@ footer a { text-decoration: none; }
 @media (max-width: 999px) {
   nav.pill { padding: 9px 12px; top: 10px; font-size: 10.5px; }
   nav.pill a { padding: 0 7px; }
-  nav.pill.scrolled { top: 10px; padding: 13px 18px; font-size: 12px; }
-  nav.pill.scrolled a { padding: 0 9px; }
+  nav.pill.scrolled { top: 10px; padding: 12px 12px; font-size: 11px; }
+  nav.pill.scrolled a { padding: 0 7px; }
   nav.pill a:first-child { display: none; }
   .intro p, .about p { text-align: left; hyphens: manual; }
   .social { display: none; }
@@ -265,4 +307,29 @@ footer a { text-decoration: none; }
   .js .in:not(h2) { opacity: 1; translate: 0 0; }
   .js .hero .marquee { translate: 0 0; } /* la cinta solo aparece en fundido (ocupa todo el ancho) */
   .js .marquee.in { opacity: 1; }
+}
+
+/* ---- Selector de tema (escritorio): claro / oscuro / sistema, en cristal, abajo a la izquierda ---- */
+.theme-group {
+  display: none;
+  position: fixed; z-index: 40; left: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  gap: 4px; padding: 5px; border-radius: 999px;
+  background: var(--glass-bg); border: 1px solid var(--glass-line);
+  backdrop-filter: blur(24px) saturate(1.7); -webkit-backdrop-filter: blur(24px) saturate(1.7);
+  box-shadow: 0 10px 34px var(--glass-shadow), inset 0 1px 0 var(--glass-line);
+  color: var(--text);
+}
+.theme-group button {
+  display: grid; place-items: center; width: 34px; height: 34px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer;
+  opacity: 0.7; transition: background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+.theme-group button:hover { opacity: 1; }
+.theme-group button[aria-pressed='true'] { background: var(--text); color: var(--bg); opacity: 1; }
+.theme-group button:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.theme-group svg { width: 17px; height: 17px; display: block; }
+@media (min-width: 1000px) { .js .theme-group { display: flex; } }
+@media (prefers-reduced-motion: no-preference) {
+  .js .theme-group { opacity: 0; translate: 0 16px; transition: opacity 0.8s ease 1.3s, translate 1s var(--ease) 1.3s; }
+  .js.ready .theme-group { opacity: 1; translate: 0 0; }
 }

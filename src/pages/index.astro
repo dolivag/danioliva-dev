@@ -43,7 +43,12 @@ const items = [...marquee, ...marquee];
     {projects.map((p, i) => {
       const Tag = p.href ? 'a' : 'div';
       return (
-        <Tag class="proj" href={p.href || undefined}>
+        <Tag
+          class="proj"
+          href={p.href || undefined}
+          target={p.href?.startsWith('http') ? '_blank' : undefined}
+          rel={p.href?.startsWith('http') ? 'noopener' : undefined}
+        >
           <div class="meta">
             {(p.stack ? p.stack.split(' · ') : ['Proyecto personal']).map((t) => (<span>{t}</span>))}
             {p.href && <span class="plus">+</span>}

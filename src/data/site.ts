@@ -32,12 +32,12 @@ export const projects = [
     status: '',
     description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
-    href: '',
+    href: 'https://duometeo.vercel.app/',
   },
   {
     name: 'Trasteo',
     status: 'En construcción',
-    description: 'Proyecto personal.',
+    description: 'Mantén tus cosas en orden y encuéntralas fácilmente.',
     stack: '',
     href: '',
   },
@@ -54,7 +54,7 @@ export const experience = [
   {
     company: 'Vanadys',
     role: 'Consultor asociado',
-    period: 'Antes',
+    period: 'Julio 2022 – enero 2024',
     description: 'Consultoría en proyectos con Avaloq.',
   },
 ];
@@ -62,7 +62,7 @@ export const experience = [
 export const studies = [
   {
     school: 'Universitat Oberta de Catalunya',
-    title: 'Grado (graduado en 2024)',
+    title: 'Grado en Ingeniería Informática, especialidad en Ingeniería del Software (Graduado en 2024)',
   },
   {
     school: 'IT Academy',

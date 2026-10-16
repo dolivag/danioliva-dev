@@ -114,6 +114,7 @@ const GAZES: Record<string, [number, number]> = {
   'ojos-arriba-der': [1, -1],
   'ojos-izq': [-1, 0],
   'ojos-der': [1, 0],
+  'ojos-camara': [1, -0.3], // a quien visita: con la cabeza girada, es mirar hacia la derecha
   'ojos-abajo': [0, 1],
   'ojos-pantalla': [-1, 1], // abajo y a la izquierda
   'ojos-reojo': [1, 1], // abajo y a la derecha

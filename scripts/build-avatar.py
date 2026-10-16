@@ -41,6 +41,7 @@ PIECES = {
     "ojos-arriba-der": ((470, 240, 650, 345), True),
     "ojos-izq": ((470, 240, 650, 345), True),
     "ojos-der": ((470, 240, 650, 345), True),
+    "ojos-camara": ((470, 240, 650, 345), True),
     "ojos-abajo": ((470, 240, 650, 345), True),
     "cejas-fruncidas": ((470, 240, 650, 320), True),
     "boca-sonrisa-cerrada": ((480, 345, 650, 480), True),

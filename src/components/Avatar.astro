@@ -52,6 +52,7 @@
 
   .bubble {
     position: absolute;
+    z-index: 1; /* el lienzo lleva `filter` y, si no, tapa la burbuja */
     right: 62%;
     bottom: 78%;
     transform: translateY(6px);
@@ -80,14 +81,32 @@
     border-radius: 12px 12px 12px 4px;
   }
 
-  @media (max-width: 800px) {
+  /* Pantallas grandes: grande y fijo a la derecha en todas las secciones (no se encoge a la esquina). */
+  @media (min-width: 1000px) {
+    .avatar,
+    .avatar[data-state] {
+      --size: clamp(400px, min(46vw, 82vh), 680px);
+      right: max(0px, calc((100vw - 1180px) / 2 - 24px));
+      bottom: calc(50vh - var(--size) / 2);
+    }
+    .bubble,
+    .avatar[data-state='hero'] .bubble {
+      right: auto;
+      left: 4%;
+      bottom: 78%;
+      font-size: 15px;
+      border-radius: 12px 12px 12px 4px;
+    }
+  }
+
+  @media (max-width: 999px) {
     .avatar {
-      --size: 104px;
-      right: 4px;
+      --size: 150px;
+      right: 2px;
       bottom: 2px;
     }
     .avatar[data-state='hero'] {
-      --size: 260px;
+      --size: min(300px, 78vw);
       right: calc(50vw - var(--size) / 2);
       bottom: calc(100svh - 70px - var(--size));
     }

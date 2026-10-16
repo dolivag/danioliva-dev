@@ -16,15 +16,21 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Tema elegido antes (si lo hay): se aplica antes de pintar para que no haya parpadeo.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#b7bb82" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1f2312" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#b7bb82" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   </head>
   <body>
@@ -37,6 +43,10 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
           <a href="/#proyectos">Proyectos</a>
           <a href="/#experiencia">Experiencia</a>
           <a href="/#contacto">Contacto</a>
+          <button class="theme" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Tema claro / oscuro">
+            <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" /></svg>
+            <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
+          </button>
         </nav>
         <div class="social">
           <a href={site.github}>GitHub</a>
@@ -49,6 +59,17 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
         <a href={site.github}>GitHub</a> ·{' '}
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </footer>
+    </div>
+    <div class="theme-group" role="group" aria-label="Tema de la web">
+      <button type="button" data-mode="light" aria-pressed="false" aria-label="Tema claro" title="Claro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
+      </button>
+      <button type="button" data-mode="dark" aria-pressed="false" aria-label="Tema oscuro" title="Oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" /></svg>
+      </button>
+      <button type="button" data-mode="system" aria-pressed="false" aria-label="Tema del sistema" title="Sistema">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
+      </button>
     </div>
     <Avatar />
 
@@ -95,6 +116,71 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
       };
       fit();
       addEventListener('resize', fit);
+
+      // 2b. Tema: «claro», «oscuro» o «sistema» (por defecto). Lo elegido se guarda en el navegador.
+      const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+      const resolved = () =>
+        root.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const mode = () => root.dataset.theme ?? 'system';
+      const applyTheme = () => {
+        const dark = resolved() === 'dark';
+        themeColor?.setAttribute('content', dark ? '#1f2312' : '#b7bb82');
+        document
+          .querySelectorAll<HTMLElement>('.theme-group [data-mode]')
+          .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode())));
+        document.querySelector('.theme')?.setAttribute('aria-pressed', String(dark));
+        dispatchEvent(new Event('themechange'));
+      };
+      const setMode = (next: string) => {
+        if (next === 'system') {
+          delete root.dataset.theme;
+        } else {
+          root.dataset.theme = next;
+        }
+        try {
+          if (next === 'system') localStorage.removeItem('theme');
+          else localStorage.setItem('theme', next);
+        } catch {}
+        applyTheme();
+      };
+      document.querySelectorAll<HTMLElement>('.theme-group [data-mode]').forEach((b) => {
+        b.addEventListener('click', () => setMode(b.dataset.mode ?? 'system'));
+      });
+      // Móvil: un solo botón dentro de la píldora que alterna claro / oscuro.
+      document
+        .querySelector('.theme')
+        ?.addEventListener('click', () => setMode(resolved() === 'dark' ? 'light' : 'dark'));
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+      applyTheme();
+
+      // 3b. Pasada la portada, la píldora del menú crece y se vuelve de cristal.
+      const pill = document.querySelector<HTMLElement>('nav.pill');
+      const hero = document.querySelector<HTMLElement>('.hero');
+      let limit = 80;
+      let ticking = false;
+      const measure = () => {
+        limit = hero ? hero.offsetTop + hero.offsetHeight - 140 : 80;
+      };
+      const mark = () => {
+        pill?.classList.toggle('scrolled', scrollY > limit);
+        ticking = false;
+      };
+      measure();
+      mark();
+      addEventListener(
+        'scroll',
+        () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(mark);
+          }
+        },
+        { passive: true },
+      );
+      addEventListener('resize', () => {
+        measure();
+        mark();
+      });
 
       // 4. Entrada: cuando la tipografía está lista arranca el nombre y, justo después, el resto de
       //    elementos van apareciendo escalonados (los de más abajo, al llegar a ellos con el scroll).

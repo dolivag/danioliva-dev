@@ -100,10 +100,12 @@
       );
     }
     addEventListener('resize', resize);
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    // Al cambiar de tema (el del sistema o el botón del menú) se vuelven a leer los colores.
+    const repaint = () => {
       readColors();
       draw();
-    });
+    };
+    addEventListener('themechange', repaint);
     resize();
   }
 </script>

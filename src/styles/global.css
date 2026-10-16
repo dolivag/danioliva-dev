@@ -8,7 +8,8 @@
   --glow: 255, 250, 238; /* color de los cuadros que se encienden al pasar el cursor */
   --text: #26195f; /* tinta: el morado de la marca, oscurecido */
   --muted: #4d4480;
-  --accent: #e0601a; /* naranja: lo único que llama */
+  --accent: #e0601a; /* acento como RELLENO (burbuja, botón, etiquetas) */
+  --accent-text: #b8431a; /* acento como TEXTO: más oscuro, para que contraste con el fondo */
   --accent-2: #26195f;
   --line: rgba(38, 25, 95, 0.55);
   --on-accent: #fff6e8;
@@ -27,6 +28,7 @@
     --text: #eadfc9;
     --muted: #b9afc9;
     --accent: #ff8a3d;
+    --accent-text: #ff8a3d;
     --accent-2: #eadfc9;
     --line: rgba(234, 223, 201, 0.5);
     --on-accent: #15112b;
@@ -49,7 +51,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-underline-offset: 3px; }
-a:hover { color: var(--accent); }
+a:hover { color: var(--accent-text); }
 ::selection { background: var(--accent); color: var(--on-accent); }
 
 /* Display: negrita extra ancha y en mayúsculas. */
@@ -76,7 +78,7 @@ header.top {
   font-stretch: 125%; font-weight: 900; font-size: 26px; text-decoration: none;
   letter-spacing: -0.04em; line-height: 1;
 }
-.brand span { color: var(--accent); }
+.brand span { color: var(--accent-text); }
 .social { display: flex; gap: 14px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
 .social a { text-decoration: none; }
 
@@ -106,12 +108,12 @@ nav.pill a:hover, nav.pill a.active { color: var(--accent); }
 }
 .marquee .track { display: inline-flex; gap: 0; animation: slide 38s linear infinite; }
 .marquee .track span { display: inline-flex; align-items: center; gap: 0; }
-.marquee .track b { font-weight: 500; padding: 0 28px; color: var(--accent); font-size: 18px; line-height: 0; }
+.marquee .track b { font-weight: 500; padding: 0 28px; color: var(--accent-text); font-size: 18px; line-height: 0; }
 @keyframes slide { to { transform: translateX(-50%); } }
 
 .intro { padding: 56px 0 24px; }
 .label { display: block; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
-.label em { color: var(--accent); font-style: normal; }
+.label em { color: var(--accent-text); font-style: normal; }
 .intro p, .about p { text-align: justify; hyphens: auto; margin: 0 0 16px; max-width: 34em; font-size: 15px; line-height: 1.42; }
 .intro p.big { font-size: 19px; line-height: 1.3; font-weight: 600; }
 
@@ -129,25 +131,25 @@ section { padding: 72px 0 24px; scroll-margin-top: 20px; }
 section > h2 {
   font-size: clamp(34px, 5.2vw, 76px); letter-spacing: 0.04em; margin-bottom: 34px;
 }
-section > h2 i { font-style: normal; color: var(--accent); }
+section > h2 i { font-style: normal; color: var(--accent-text); }
 
 .rule { border-top: 1px solid var(--line); }
 
 /* Proyectos */
 .proj { display: block; padding: 18px 0 26px; border-top: 1px solid var(--line); text-decoration: none; }
 .proj .meta { display: flex; gap: 22px; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
-.proj .meta .plus { margin-left: auto; color: var(--accent); font-size: 18px; line-height: 0.8; }
+.proj .meta .plus { margin-left: auto; color: var(--accent-text); font-size: 18px; line-height: 0.8; }
 .proj .name { font-stretch: 125%; font-weight: 800; font-size: clamp(26px, 3vw, 40px); line-height: 1; letter-spacing: -0.01em; }
 .proj .name sup { font-size: 12px; font-weight: 600; vertical-align: top; margin-right: 10px; letter-spacing: 0; }
-.proj .status { display: inline-block; vertical-align: middle; margin-left: 12px; padding: 4px 10px; border: 1.5px solid var(--accent); color: var(--accent); border-radius: 999px; font-size: 10.5px; font-stretch: 112%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.proj .status { display: inline-block; vertical-align: middle; margin-left: 12px; padding: 4px 10px; border: 1.5px solid var(--accent-text); color: var(--accent-text); border-radius: 999px; font-size: 10.5px; font-stretch: 112%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 .proj p { margin: 12px 0 0; color: var(--muted); max-width: 32em; }
-a.proj:hover .name { color: var(--accent); }
+a.proj:hover .name { color: var(--accent-text); }
 
 /* Experiencia y estudios */
 .entry { display: grid; grid-template-columns: 11.5em 1fr; gap: 6px 22px; padding: 18px 0 22px; border-top: 1px solid var(--line); }
 .entry .when { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 4px; }
 .entry h3 { font-size: clamp(19px, 2vw, 26px); }
-.entry h3 span { color: var(--accent); }
+.entry h3 span { color: var(--accent-text); }
 .entry p { margin: 8px 0 0; color: var(--muted); max-width: 32em; grid-column: 2; }
 
 /* Contacto */
@@ -157,7 +159,7 @@ a.proj:hover .name { color: var(--accent); }
   padding: 18px 0; border-top: 1px solid var(--line);
 }
 .contact-link small { display: block; font-size: 11.5px; font-weight: 500; font-stretch: 112%; letter-spacing: 0.06em; margin-bottom: 10px; }
-.contact-link:hover { color: var(--accent); }
+.contact-link:hover { color: var(--accent-text); }
 
 /* Páginas de proyecto */
 .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 22px; }
@@ -167,8 +169,8 @@ a.proj:hover .name { color: var(--accent); }
 ul.links { list-style: none; padding: 0; margin: 0; }
 ul.links li { border-top: 1px solid var(--line); }
 ul.links a { display: block; padding: 16px 0; text-decoration: none; font-stretch: 125%; font-weight: 700; font-size: 17px; }
-ul.links a::after { content: '  →'; color: var(--accent); }
-ul.links a:hover { color: var(--accent); }
+ul.links a::after { content: '  →'; color: var(--accent-text); }
+ul.links a:hover { color: var(--accent-text); }
 
 footer { padding: 40px 0 56px; border-top: 1px solid var(--line); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 56px; }
 footer a { text-decoration: none; }

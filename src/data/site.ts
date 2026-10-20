@@ -153,13 +153,21 @@ export const projects: Project[] = [
     slug: 'trasteo',
     name: 'Trasteo',
     status: 'En construcción',
-    description: 'Mantén tus cosas en orden y encuéntralas fácilmente.',
-    stack: '',
+    description:
+      'Saber dónde guardas cada cosa en casa: ubicaciones, cajas y objetos con foto, búsqueda instantánea y una IA que te ayuda a guardar y a encontrar.',
+    stack: 'Expo · React Native · Supabase',
     href: '',
     openLabel: '',
-    tags: ['En construcción', 'Proyecto personal'],
-    lead: 'Mantén tus cosas en orden y encuéntralas fácilmente. Todavía se está construyendo: aquí irá su ficha cuando sea público.',
-    facts: [],
+    tags: ['En construcción', 'Expo', 'React Native', 'TypeScript', 'Supabase', 'Inventario', 'Fotos', 'IA'],
+    lead: 'Una app para saber dónde guardas cada cosa en casa. Lo registras en segundos, lo encuentras con una búsqueda o con una foto, y lo comparte toda la familia: uno guarda y otro busca. Todavía se está construyendo.',
+    facts: [
+      { title: 'Un árbol de ubicaciones', text: 'Casa › Salón › Mueble TV › Cajón 2 › Caja azul, sin límite de profundidad. Los objetos llevan nombre, descripción, cantidad y foto, y se ven con su ruta completa.' },
+      { title: 'Alta casi instantánea', text: 'Guardar y añadir otro en lote, recordando la última ubicación, y un onboarding con plantilla de casa para empezar en un minuto. Mover un objeto o una caja entera cuesta un toque.' },
+      { title: 'Búsqueda sin fricción', text: 'Sin tildes ni mayúsculas y con la ruta de cada resultado. Si no recuerdas cómo se llamaba, puedes buscar con una foto.' },
+      { title: 'IA que ayuda', text: 'Una foto de una balda, un cajón o una caja propone los objetos que ve y los guardas tras revisarlos. Buscando con una foto, entiende sinónimos y sugiere dónde mirar según dónde guardas cosas parecidas.' },
+      { title: 'Para toda la casa', text: 'Un hogar compartido al que se entra con un código de invitación, con miembros que ver, quitar o salir. La seguridad vive en la base de datos, con reglas de acceso en cada tabla.' },
+      { title: 'Lo que viene', text: 'Etiquetas QR imprimibles para las cajas (escanear y ver el contenido), préstamos, caducidades y garantías, exportar el inventario para el seguro y un modo mudanza.' },
+    ],
   },
 ];
 

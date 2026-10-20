@@ -19,7 +19,8 @@ export const marquee = [
 ];
 
 /** Captura de pantalla de un proyecto: `src` es una ruta de /public (se generan con scripts/optimize-shots.py). */
-export type Shot = { src: string; alt: string };
+/** `srcDark` es la misma pantalla en modo oscuro: se enseña cuando la web está en oscuro. */
+export type Shot = { src: string; srcDark?: string; alt: string };
 
 export const projects: {
   name: string;
@@ -37,7 +38,11 @@ export const projects: {
       'App para organizar un hogar compartido: tareas con puntos de esfuerzo, lista de la compra, gastos y notas.',
     stack: 'Expo · React Native · Supabase',
     href: '/apps/hogarnizer/',
-    // shots: [{ src: '/projects/hogarnizer/1.webp', alt: 'Qué se ve en la captura' }],
+    shots: [
+      { src: '/projects/hogarnizer/compra.webp', srcDark: '/projects/hogarnizer/compra-oscuro.webp', alt: 'Hogarnizer: lista de la compra con 14 productos agrupados por sección' },
+      { src: '/projects/hogarnizer/tareas.webp', srcDark: '/projects/hogarnizer/tareas-oscuro.webp', alt: 'Hogarnizer: tareas pendientes y hechas con sus puntos de esfuerzo' },
+      { src: '/projects/hogarnizer/gastos.webp', srcDark: '/projects/hogarnizer/gastos-oscuro.webp', alt: 'Hogarnizer: gastos del mes y saldo entre compañeros de piso' },
+    ],
   },
   {
     name: 'DuoMeteo',

@@ -58,11 +58,20 @@ const pad = String(index + 1).padStart(2, '0');
     </section>
   )}
 
+  {p.code && (
+    <section class="col" data-avatar="projects">
+      <h2>{p.code.title}</h2>
+      <pre class="code"><code>{p.code.text}</code></pre>
+    </section>
+  )}
+
   {p.links && (
     <section class="col" data-avatar="projects">
-      <h2>Legal</h2>
+      <h2>{p.linksTitle ?? 'Enlaces'}</h2>
       <ul class="links">
-        {p.links.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+        {p.links.map((l) => (
+          <li><a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel={l.href.startsWith('http') ? 'noopener' : undefined}>{l.label}</a></li>
+        ))}
       </ul>
     </section>
   )}

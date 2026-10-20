@@ -553,3 +553,7 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select:
 .proj .open:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); transform: rotate(45deg); }
 .proj:hover .stretch { color: var(--text); }
 .proj.has-shots .open { position: absolute; top: 24px; right: 26px; }
+
+/* Fragmento de código en la página de un proyecto */
+pre.code { margin: 0; padding: 18px 20px; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); font: 400 13px/1.7 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; color: var(--text); }
+pre.code code { font: inherit; white-space: pre; }

@@ -296,17 +296,18 @@ const { frame } = Astro.props;
     }
   }
 
-  /* Marco de pixel art colgado a la izquierda del avatar (los píxeles se ven a 4x, sin suavizar). */
+  /* Marco de pixel art colgado a la izquierda del avatar. Sus píxeles miden lo mismo que los del avatar
+     (rejilla de 128 en el ancho del avatar; el sprite tiene 52 de ancho) y se suaviza igual que él. */
   .frame {
+    --k: 1;
     position: absolute;
     right: calc(100% - 18px);
     bottom: 62%;
-    width: 96px;
+    width: calc(var(--size) * 52 / 128 * var(--k));
     height: auto;
-    image-rendering: pixelated;
     opacity: 0;
     pointer-events: none;
-    filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.28));
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.28));
     transition: opacity 0.6s ease;
   }
   .avatar:global(.framed) .frame {
@@ -339,7 +340,7 @@ const { frame } = Astro.props;
   }
   @media (max-width: 999px) {
     .frame {
-      width: 72px;
+      --k: 1.35;
       right: calc(100% - 10px);
     }
     /* Al bajar por la página se asoma por el borde, para no tapar el texto. */

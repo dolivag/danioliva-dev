@@ -30,7 +30,22 @@ export const projects: {
   href: string;
   /** Hasta 3 capturas de iPhone, enmarcadas en la tarjeta. Sin capturas, la tarjeta va solo con texto. */
   shots?: Shot[];
+  /** Captura de escritorio de la web, en una ventana de navegador (alternativa a `shots`). */
+  web?: Shot;
 }[] = [
+  {
+    name: 'QR City',
+    status: '',
+    description:
+      'Genera una ciudad en 3D isométrico cuyos tejados forman un código QR legible. Cinco estilos (papel, moderna, costera, nevada y cyberpunk), todo personalizable y paquetes npm para Angular, React y Vue.',
+    stack: 'Three.js · Vite · npm',
+    href: 'https://qr-city.danioliva.dev',
+    shots: [
+      { src: '/projects/qr-city/ciberpunk.webp', srcDark: '/projects/qr-city/ciberpunk-oscuro.webp', alt: 'QR City: ciudad cyberpunk con rascacielos violetas cuyos tejados forman el código QR' },
+      { src: '/projects/qr-city/costera.webp', srcDark: '/projects/qr-city/costera-oscuro.webp', alt: 'QR City: ciudad costera en 3D isométrico rodeada de mar' },
+      { src: '/projects/qr-city/laboratorio.webp', srcDark: '/projects/qr-city/laboratorio-oscuro.webp', alt: 'QR City: laboratorio con todos los ajustes configurables de la ciudad' },
+    ],
+  },
   {
     name: 'Hogarnizer',
     status: 'En construcción',
@@ -49,7 +64,12 @@ export const projects: {
     status: '',
     description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
-    href: 'https://duometeo.vercel.app/',
+    href: 'https://duometeo.danioliva.dev/',
+    web: {
+      src: '/projects/duometeo/web.webp',
+      srcDark: '/projects/duometeo/web-oscuro.webp',
+      alt: 'DuoMeteo comparando el tiempo en Barcelona (17 °C) y Reikiavik (4 °C), con sus diferencias de temperatura, humedad y distancia',
+    },
   },
   {
     name: 'Trasteo',

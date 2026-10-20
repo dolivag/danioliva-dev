@@ -13,7 +13,8 @@ El contenido (proyectos, experiencia, estudios) está en `src/data/site.ts`.
 
 ### Capturas de los proyectos
 
-Cada proyecto puede llevar hasta 3 capturas de iPhone, enmarcadas en su tarjeta:
+Cada proyecto puede llevar hasta 3 capturas de iPhone (`shots`) o una captura de escritorio en una
+ventana de navegador (`web`, preparada con `--width 1440`), enmarcadas en su tarjeta:
 
 ```bash
 python3 scripts/optimize-shots.py hogarnizer IMG_0001.PNG IMG_0002.PNG IMG_0003.PNG

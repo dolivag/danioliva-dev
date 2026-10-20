@@ -1,0 +1,76 @@
+---
+import Base from '../../layouts/Base.astro';
+import BrowserShot from '../../components/BrowserShot.astro';
+import ShotGallery from '../../components/ShotGallery.astro';
+import { projects, projectUrl } from '../../data/site';
+import type { Project } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project: p } = Astro.props as { project: Project };
+const index = projects.findIndex((x) => x.slug === p.slug);
+const others = projects.filter((x) => x.slug !== p.slug);
+const pad = String(index + 1).padStart(2, '0');
+---
+<Base title={p.name} description={p.description}>
+  <div class="hero" data-avatar="projects">
+    <h1 data-fit>
+      <span class="line l1">{p.name}</span>
+    </h1>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        {[0, 1].map(() => (
+          <span>
+            {p.tags.map((m) => (<><span>{m}</span><b>+</b></>))}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="col intro" data-avatar="projects">
+    <span class="label">{pad} <em>/</em> Proyecto{p.status ? ` · ${p.status}` : ''}</span>
+    <p class="big">{p.lead}</p>
+    <div class="actions">
+      {p.href && <a class="btn" href={p.href} target="_blank" rel="noopener">{p.openLabel}</a>}
+      <a class="btn secondary" href="/#proyectos">Volver</a>
+    </div>
+  </div>
+
+  {(p.shots?.length || p.web) && (
+    <section class="col" data-avatar="projects">
+      <h2>Capturas</h2>
+      {p.shots?.length ? <ShotGallery shots={p.shots} /> : null}
+      {p.web && p.href ? <BrowserShot shot={p.web} host={new URL(p.href).host} full /> : null}
+    </section>
+  )}
+
+  {p.facts.length > 0 && (
+    <section class="col" data-avatar="projects">
+      <h2>Qué hace</h2>
+      <div class="facts">
+        {p.facts.map((f) => (
+          <div class="fact"><h3>{f.title}</h3><p>{f.text}</p></div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {p.links && (
+    <section class="col" data-avatar="projects">
+      <h2>Legal</h2>
+      <ul class="links">
+        {p.links.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+      </ul>
+    </section>
+  )}
+
+  <section class="col" data-avatar="projects">
+    <h2>Más proyectos</h2>
+    <ul class="links">
+      {others.map((o) => (<li><a href={projectUrl(o)}>{o.name}</a></li>))}
+    </ul>
+  </section>
+</Base>

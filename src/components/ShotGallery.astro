@@ -1,0 +1,20 @@
+---
+import type { Shot } from '../data/site';
+
+interface Props {
+  shots: Shot[];
+}
+const { shots } = Astro.props;
+---
+<div class="gallery">
+  {
+    shots.map((s) => (
+      <figure class="phone-frame">
+        <div class="shot-screen">
+          <img class="light" src={s.src} alt={s.alt} width="390" height="844" loading="lazy" decoding="async" />
+          {s.srcDark && <img class="dark" src={s.srcDark} alt="" width="390" height="844" loading="lazy" decoding="async" />}
+        </div>
+      </figure>
+    ))
+  }
+</div>

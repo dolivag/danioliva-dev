@@ -11,6 +11,12 @@ npm run check    # tipos de Astro
 
 El contenido (proyectos, experiencia, estudios) está en `src/data/site.ts`.
 
+### Páginas de proyecto
+
+Cada proyecto de `projects` (en `src/data/site.ts`) tiene su página en `/apps/<slug>/` (la genera
+`src/pages/apps/[slug].astro`). La tarjeta de la portada lleva a esa página y su botón ↗ abre el proyecto
+(`href`) en una pestaña nueva; la página también tiene su botón para abrirlo.
+
 ### Capturas de los proyectos
 
 Cada proyecto puede llevar hasta 3 capturas de iPhone (`shots`) o una captura de escritorio en una

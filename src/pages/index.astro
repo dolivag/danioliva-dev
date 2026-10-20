@@ -1,16 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site, marquee, projects, experience, studies } from '../data/site';
+import { WORDS } from '../scripts/game';
 
 const pad = (n: number) => String(n + 1).padStart(2, '0');
 const items = [...marquee, ...marquee];
 ---
 <Base>
-  <div class="hero" data-avatar="hero">
+  <div class="hero home" data-avatar="hero">
     <h1 data-fit>
-      <span class="line l1">Daniel</span>
-      <span class="line l2">Oliva</span>
+      <span class="hi">Hi, I'm</span>
+      <span class="line l1">{site.name}</span>
     </h1>
+    <p class="role">Software engineer</p>
     <div class="marquee" aria-hidden="true">
       <div class="track">
         {[0, 1].map(() => (
@@ -23,7 +25,6 @@ const items = [...marquee, ...marquee];
   </div>
 
   <div class="col intro" data-avatar="hero">
-    <span class="label">D.<em>/</em> {site.role}</span>
     <p class="big">
       Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
       herramientas pequeñas que hacen el día a día un poco más fácil.
@@ -50,10 +51,10 @@ const items = [...marquee, ...marquee];
           rel={p.href?.startsWith('http') ? 'noopener' : undefined}
         >
           <div class="meta">
-            {(p.stack ? p.stack.split(' · ') : ['Proyecto personal']).map((t) => (<span>{t}</span>))}
+            {(p.stack ? p.stack.split(' · ') : ['Proyecto personal']).map((t) => (<span data-drag={t.toLowerCase() in WORDS ? t.toLowerCase() : undefined}>{t}</span>))}
             {p.href && <span class="plus">+</span>}
           </div>
-          <div class="name"><sup>{pad(i)}</sup>{p.name}{p.status && <span class="status">{p.status}</span>}</div>
+          <div class="name"><sup>{pad(i)}</sup><span class="word" data-drag={p.name.toLowerCase()}>{p.name}</span>{p.status && <span class="status">{p.status}</span>}</div>
           <p>{p.description}</p>
         </Tag>
       );

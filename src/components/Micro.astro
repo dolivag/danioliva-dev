@@ -1,0 +1,52 @@
+---
+---
+<script>
+  // Microinteracciones: barra de progreso, foco que sigue al cursor en las tarjetas y botones «magnéticos».
+  const bar = document.querySelector<HTMLElement>('.progress');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (bar) {
+    let ticking = false;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.setProperty('--p', String(max > 0 ? Math.min(scrollY / max, 1) : 0));
+      ticking = false;
+    };
+    addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+
+  if (fine) {
+    document.querySelectorAll<HTMLElement>('.proj').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+
+    if (!reduced) {
+      document.querySelectorAll<HTMLElement>('.btn').forEach((el) => {
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty('--tx', `${(e.clientX - (r.left + r.width / 2)) * 0.18}px`);
+          el.style.setProperty('--ty', `${(e.clientY - (r.top + r.height / 2)) * 0.3}px`);
+        });
+        el.addEventListener('pointerleave', () => {
+          el.style.removeProperty('--tx');
+          el.style.removeProperty('--ty');
+        });
+      });
+    }
+  }
+</script>

@@ -2,7 +2,8 @@
 import '../styles/global.css';
 import { site } from '../data/site';
 import Avatar from '../components/Avatar.astro';
-import PixelBg from '../components/PixelBg.astro';
+import Glow from '../components/Glow.astro';
+import Micro from '../components/Micro.astro';
 
 interface Props {
   title?: string;
@@ -30,11 +31,13 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#b7bb82" />
+    <meta name="theme-color" content="#f3f1ec" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   </head>
   <body>
-    <PixelBg />
+    <Glow />
+    <Micro />
+    <div class="progress" aria-hidden="true"></div>
     <div class="wrap">
       <header class="top">
         <a class="brand" href="/" aria-label={site.name}>&lt;D<span>.</span>O/&gt;</a>
@@ -84,7 +87,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
           const text = line.textContent ?? '';
           line.setAttribute('aria-label', text);
           line.innerHTML = Array.from(text)
-            .map((ch, i) => `<span class="letter" aria-hidden="true" style="--r:${row};--i:${i}">${ch}</span>`)
+            .map((ch, i) => `<span class="letter" aria-hidden="true" style="--r:${row};--i:${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`)
             .join('');
           const mask = document.createElement('span');
           mask.className = 'row';
@@ -124,7 +127,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
       const mode = () => root.dataset.theme ?? 'system';
       const applyTheme = () => {
         const dark = resolved() === 'dark';
-        themeColor?.setAttribute('content', dark ? '#1f2312' : '#b7bb82');
+        themeColor?.setAttribute('content', dark ? '#0f1115' : '#f3f1ec');
         document
           .querySelectorAll<HTMLElement>('.theme-group [data-mode]')
           .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode())));
@@ -185,7 +188,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
       // 4. Entrada: cuando la tipografía está lista arranca el nombre y, justo después, el resto de
       //    elementos van apareciendo escalonados (los de más abajo, al llegar a ellos con el scroll).
       const REVEAL =
-        'header.top > *, .marquee, .intro > *, .proj, .entry, .fact, .contact-link, ul.links li, section > h2, footer';
+        'header.top > *, .marquee, .hero .role, .intro > *, .proj, .entry, .fact, .contact-link, ul.links li, section > h2, footer';
       let started = false;
       const start = () => {
         if (started) return;

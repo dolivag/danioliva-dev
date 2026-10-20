@@ -18,7 +18,18 @@ export const marquee = [
   'Apps pequeñas',
 ];
 
-export const projects = [
+/** Captura de pantalla de un proyecto: `src` es una ruta de /public (se generan con scripts/optimize-shots.py). */
+export type Shot = { src: string; alt: string };
+
+export const projects: {
+  name: string;
+  status: string;
+  description: string;
+  stack: string;
+  href: string;
+  /** Hasta 3 capturas de iPhone, enmarcadas en la tarjeta. Sin capturas, la tarjeta va solo con texto. */
+  shots?: Shot[];
+}[] = [
   {
     name: 'Hogarnizer',
     status: 'En construcción',
@@ -26,6 +37,7 @@ export const projects = [
       'App para organizar un hogar compartido: tareas con puntos de esfuerzo, lista de la compra, gastos y notas.',
     stack: 'Expo · React Native · Supabase',
     href: '/apps/hogarnizer/',
+    // shots: [{ src: '/projects/hogarnizer/1.webp', alt: 'Qué se ve en la captura' }],
   },
   {
     name: 'DuoMeteo',

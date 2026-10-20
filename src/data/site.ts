@@ -65,7 +65,11 @@ export const projects: {
     description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
     href: 'https://duometeo.danioliva.dev/',
-    // web: { src: '/projects/duometeo/web.webp', srcDark: '/projects/duometeo/web-oscuro.webp', alt: 'Qué se ve en la captura' },
+    web: {
+      src: '/projects/duometeo/web.webp',
+      srcDark: '/projects/duometeo/web-oscuro.webp',
+      alt: 'DuoMeteo comparando el tiempo en Barcelona (17 °C) y Reikiavik (4 °C), con sus diferencias de temperatura, humedad y distancia',
+    },
   },
   {
     name: 'Trasteo',

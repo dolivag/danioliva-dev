@@ -69,8 +69,8 @@ const { shot, host } = Astro.props;
   }
   .screen {
     position: relative;
-    aspect-ratio: 16 / 9;
-    max-height: 250px;
+    width: 100%;
+    aspect-ratio: 12 / 5;
     overflow: hidden;
   }
   .screen img {
@@ -93,6 +93,11 @@ const { shot, host } = Astro.props;
   }
   :global(:root[data-theme='dark']) .screen img.dark {
     opacity: 1;
+  }
+  @media (max-width: 699px) {
+    .screen {
+      aspect-ratio: 4 / 3;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .browser {

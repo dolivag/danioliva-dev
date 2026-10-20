@@ -64,7 +64,7 @@ export const projects: {
     status: '',
     description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
-    href: 'https://duometeo.vercel.app/',
+    href: 'https://duometeo.danioliva.dev/',
     // web: { src: '/projects/duometeo/web.webp', srcDark: '/projects/duometeo/web-oscuro.webp', alt: 'Qué se ve en la captura' },
   },
   {

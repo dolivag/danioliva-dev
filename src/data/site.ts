@@ -98,13 +98,16 @@ export const projects: Project[] = [
     stack: 'Expo · React Native · Supabase',
     href: site.appUrl,
     openLabel: 'Abrir la app web',
-    tags: ['En construcción', 'Expo', 'React Native', 'Supabase', 'Tareas', 'Compra', 'Gastos', 'Notas'],
-    lead: 'La app para organizar un hogar compartido: repartir las tareas de forma justa con puntos de esfuerzo, hacer la lista de la compra entre todos, llevar los gastos y compartir notas.',
+    tags: ['En construcción', 'Expo', 'React Native', 'TypeScript', 'Supabase', 'Postgres', 'Tareas', 'Compra', 'Gastos', 'Notas', 'IA'],
+    lead: 'La app para organizar un hogar compartido: las tareas se reparten solas por esfuerzo, la compra se hace entre todos, los gastos se reparten y quedan claros los saldos. Nació como mi Trabajo Final de Grado (UOC, 2023) y la he reescrito desde cero; ahora la preparo para las tiendas.',
     facts: [
-      { title: 'Tareas', text: 'Rotación semanal y puntos según el esfuerzo de cada tarea.' },
-      { title: 'Compra', text: 'Una lista compartida que se convierte en gasto al terminarla.' },
-      { title: 'Gastos', text: 'Quién ha pagado qué y quién debe a quién.' },
-      { title: 'Notas', text: 'Avisos y recordatorios para toda la casa.' },
+      { title: 'Tareas que se reparten solas', text: 'Cada lunes las diarias y semanales se reparten por puntos de esfuerzo (las diarias cuentan siete veces) a quien menos lleva. Los puntos son para quien hace la tarea y hay ranking.' },
+      { title: 'Compra en equipo', text: 'Una lista compartida en tiempo real, agrupada por categoría, con productos básicos y puntuales y tiendas en el mapa. Al terminar la compra, un toque la apunta como gasto.' },
+      { title: 'Gastos y saldos', text: 'Reparto a partes iguales, varios pagadores y gastos fijos que se repiten solos (alquiler, luz, internet…). Los saldos dicen quién debe a quién y se saldan con un botón.' },
+      { title: 'Notas y avisos', text: 'Un tablón en tiempo real con una nota fijada y avisos push que eliges: compra, gastos, notas nuevas y un recordatorio de tareas a las nueve.' },
+      { title: 'Asistente con IA', text: 'Haz una foto a un ticket o a una factura y se convierte en gasto, o escribe en lenguaje normal («he pagado 45 de la luz, a medias con Bea») y te enseña lo que ha entendido. Solo apunta lo que dejas marcado.' },
+      { title: 'Un hogar, varias personas', text: 'Se entra con un código o un enlace de invitación y el propietario acepta la solicitud. Cada hogar usa su zona horaria y cada persona, su idioma: español, inglés o catalán, con tema claro u oscuro.' },
+      { title: 'Seguridad desde el diseño', text: 'Toda tabla tiene reglas de acceso (RLS) y la lógica crítica (rotación, puntos, saldos) vive en funciones de la base de datos, con pruebas automáticas. Hay copia de seguridad semanal, descarga de tus datos y borrado de la cuenta.' },
     ],
     linksTitle: 'Legal',
     links: [
@@ -138,7 +141,6 @@ export const projects: Project[] = [
       { title: 'Sin rastro', text: 'Sin cuentas ni seguimiento: una cookie recuerda el idioma y las visitas se cuentan de forma anónima. Tu ubicación solo se usa si la pides, redondeada a unos 100 m.' },
     ],
     links: [
-      { label: 'Código en GitHub', href: 'https://github.com/dolivag/weather-comparator' },
       { label: 'Datos de Open-Meteo', href: 'https://open-meteo.com' },
     ],
     web: {

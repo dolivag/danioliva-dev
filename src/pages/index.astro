@@ -6,11 +6,12 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
 const items = [...marquee, ...marquee];
 ---
 <Base>
-  <div class="hero" data-avatar="hero">
+  <div class="hero home" data-avatar="hero">
     <h1 data-fit>
-      <span class="line l1">Daniel</span>
-      <span class="line l2">Oliva</span>
+      <span class="hi">Hi, I'm</span>
+      <span class="line l1">{site.name}</span>
     </h1>
+    <p class="role">Software engineer</p>
     <div class="marquee" aria-hidden="true">
       <div class="track">
         {[0, 1].map(() => (
@@ -23,7 +24,6 @@ const items = [...marquee, ...marquee];
   </div>
 
   <div class="col intro" data-avatar="hero">
-    <span class="label">D.<em>/</em> {site.role}</span>
     <p class="big">
       Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y
       herramientas pequeñas que hacen el día a día un poco más fácil.

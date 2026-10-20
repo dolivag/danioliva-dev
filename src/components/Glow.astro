@@ -1,0 +1,64 @@
+---
+---
+<div id="glow" aria-hidden="true"></div>
+
+<script>
+  // Fondo liso con un brillo sutil que sigue al cursor (con un poco de inercia).
+  const glow = document.getElementById('glow');
+  if (glow) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let x = innerWidth / 2;
+    let y = innerHeight / 3;
+    let tx = x;
+    let ty = y;
+    let raf = 0;
+
+    const paint = () => {
+      glow.style.setProperty('--x', `${x}px`);
+      glow.style.setProperty('--y', `${y}px`);
+    };
+    const step = () => {
+      x += (tx - x) * 0.14;
+      y += (ty - y) * 0.14;
+      paint();
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(step) : 0;
+    };
+
+    paint();
+    addEventListener(
+      'pointermove',
+      (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+        glow.classList.add('on');
+        if (reduced) {
+          x = tx;
+          y = ty;
+          paint();
+        } else if (!raf) raf = requestAnimationFrame(step);
+      },
+      { passive: true },
+    );
+    // Al salir el cursor de la ventana el brillo se apaga.
+    document.documentElement.addEventListener('pointerleave', () => glow.classList.remove('on'));
+  }
+</script>
+
+<style>
+  #glow {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    background: radial-gradient(
+      circle 380px at var(--x, 50%) var(--y, 30%),
+      rgba(var(--glow), var(--glow-a)),
+      transparent 70%
+    );
+  }
+  #glow:global(.on) {
+    opacity: 1;
+  }
+</style>

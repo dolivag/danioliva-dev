@@ -2,10 +2,8 @@
 
 :root {
   --bg: #b7bb82; /* verde oliva claro */
-  --tile-a: #c1c48d;
-  --tile-b: #abb076;
-  --tile-c: #b7bb82;
-  --glow: 236, 240, 200; /* color de los cuadros que se encienden al pasar el cursor */
+  --glow: 236, 240, 200; /* color del brillo que sigue al cursor */
+  --glow-a: 0.5;
   --text: #0b1f4d; /* azul marino: 7,9:1 sobre el fondo */
   --muted: #25396f;
   --accent: #f0b52e; /* mostaza como RELLENO (burbuja, botón, etiquetas) */
@@ -28,10 +26,8 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
     --bg: #1f2312; /* oliva muy oscuro */
-    --tile-a: #272c18;
-    --tile-b: #181b0e;
-    --tile-c: #1f2312;
     --glow: 190, 200, 120;
+    --glow-a: 0.16;
     --text: #d6e3ff; /* azul claro */
     --muted: #a9bbdc;
     --accent: #f0b52e;
@@ -50,10 +46,8 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
   --bg: #1f2312; /* oliva muy oscuro */
-  --tile-a: #272c18;
-  --tile-b: #181b0e;
-  --tile-c: #1f2312;
   --glow: 190, 200, 120;
+  --glow-a: 0.16;
   --text: #d6e3ff; /* azul claro */
   --muted: #a9bbdc;
   --accent: #f0b52e;
@@ -169,6 +163,18 @@ nav.pill.scrolled a:hover, nav.pill.scrolled a.active { color: var(--glass-hover
 .hero h1 .line { display: block; white-space: nowrap; font-size: 17vw; }
 .hero h1 .line.l1 { text-align: left; }
 .hero h1 .line.l2 { text-align: right; }
+
+/* Portada de la home: «Hi, I'm» fijo y el nombre en una sola línea, más pequeño. */
+.hero.home h1 { max-width: min(100%, 780px); }
+.hero.home h1 .hi {
+  display: block; font-stretch: 125%; font-weight: 800; text-transform: none;
+  font-size: clamp(18px, 2.4vw, 30px); line-height: 1; letter-spacing: -0.01em; margin-bottom: 0.45em;
+}
+.hero.home h1 .line { font-size: 9vw; }
+.hero .role {
+  margin: 14px 0 0; font-stretch: 125%; font-weight: 700; text-transform: uppercase;
+  font-size: clamp(13px, 1.5vw, 18px); letter-spacing: 0.06em; line-height: 1.2;
+}
 
 .marquee {
   position: relative; overflow: hidden; margin: 18px calc(-1 * clamp(16px, 2.6vw, 38px)) 0;
@@ -298,7 +304,7 @@ footer a { text-decoration: none; }
   .js section > h2.in .inner { translate: 0 0; }
 
   /* Todo lo demás: aparece subiendo un poco. (`translate` y no `transform`: la píldora ya usa transform.) */
-  .js .marquee, .js .intro > *, .js .proj, .js .entry, .js .fact, .js .contact-link,
+  .js .marquee, .js .hero .role, .js .intro > *, .js .proj, .js .entry, .js .fact, .js .contact-link,
   .js ul.links li, .js footer, .js header.top > * {
     opacity: 0;
     translate: 0 22px;
@@ -308,6 +314,8 @@ footer a { text-decoration: none; }
   .js section > h2 { opacity: 1; translate: none; }
   .js .in:not(h2) { opacity: 1; translate: 0 0; }
   .js .hero .marquee { translate: 0 0; } /* la cinta solo aparece en fundido (ocupa todo el ancho) */
+  .js .hero .role { translate: 0 0; }
+  .js .hero .role.in { opacity: 1; }
   .js .marquee.in { opacity: 1; }
 }
 

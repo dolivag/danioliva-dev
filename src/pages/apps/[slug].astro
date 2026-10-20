@@ -14,7 +14,7 @@ const index = projects.findIndex((x) => x.slug === p.slug);
 const others = projects.filter((x) => x.slug !== p.slug);
 const pad = String(index + 1).padStart(2, '0');
 ---
-<Base title={p.name} description={p.description}>
+<Base title={p.name} description={p.description} frame={p.slug}>
   <div class="hero" data-avatar="projects">
     <h1 data-fit>
       <span class="line l1">{p.name}</span>

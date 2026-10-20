@@ -45,6 +45,13 @@ compone en un canvas: la escena (todo menos la cabeza), la cabeza y piezas que c
 (ojos, cejas, boca, birrete, manos, saludo, vapor). Cambia de gesto según la sección
 (`data-avatar` en cada sección).
 
+### Marcos del avatar en las páginas de proyecto
+
+Al entrar en `/apps/<slug>/` el avatar cuelga un marco de pixel art con el logo del proyecto. Los logos
+están en `art/frames/<slug>.svg` (y su `.png`, que sale de renderizarlo a 256 px); `python3
+scripts/build-frames.py` genera los sprites de `public/avatar/marcos/`. Para un proyecto nuevo: añadir su
+logo ahí y volver a lanzar el script.
+
 ### Juego de interacciones
 
 El avatar vive abajo a la derecha y tiene logros que se desbloquean (se guardan en `localStorage`). Los

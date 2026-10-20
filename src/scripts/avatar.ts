@@ -127,6 +127,16 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
     pieces: [...steam(k), ...typing(k, 1), 'ojos-camara', 'boca-sonrisa-cerrada'],
     head: bob(k, 4, 5),
   }),
+  // Cuelga el marco del proyecto: mira hacia él, lo coloca con la mano y sonríe.
+  marco: (k) => ({
+    pieces: [
+      ...steam(k),
+      ...(k < 14 && Math.floor(k / 3) % 2 ? ['saludo'] : []),
+      k < 16 ? 'ojos-izq' : 'ojos-camara',
+      'boca-sonrisa-cerrada',
+    ],
+    head: bob(k, 12),
+  }),
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
 };
 
@@ -285,7 +295,7 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     say,
     react(key, text, ms = 3200) {
       reaction = { key, start: tick, end: ms ? performance.now() + ms : 0 };
-      say(text, ms || 600000);
+      if (text) say(text, ms || 600000);
       draw(tick);
       if (reduced && ms) setTimeout(() => draw(tick), ms + 30);
     },

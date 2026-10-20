@@ -1,7 +1,14 @@
 ---
 import { ACHIEVEMENTS } from '../scripts/game';
+
+interface Props {
+  /** Proyecto del que cuelga un marco de pixel art (en la página de un proyecto). */
+  frame?: string;
+}
+const { frame } = Astro.props;
 ---
-<div class="avatar" data-state="hero">
+<div class="avatar" data-state="hero" data-frame={frame}>
+  {frame && <img class="frame" src={`/avatar/marcos/${frame}.png`} alt="" width="24" height="29" decoding="async" />}
   <div class="bubble" id="avatar-bubble" aria-hidden="true"></div>
   <div class="panel" id="avatar-panel" role="dialog" aria-label="Interacciones con el avatar" hidden>
     <p class="panel-title">Interacciones <span id="avatar-score"></span></p>
@@ -79,6 +86,32 @@ import { ACHIEVEMENTS } from '../scripts/game';
     };
 
     /** Reacciona y, si es la primera vez, desbloquea. Devuelve si era nuevo. */
+    // En la página de un proyecto: cuelga su marco (en móvil, solo un rato, para no tapar el texto).
+    if (root.dataset.frame) {
+      setTimeout(() => {
+        root.classList.add('framed');
+        avatar.react('marco', '', 2200);
+        if (matchMedia('(max-width: 999px)').matches) setTimeout(() => root.classList.add('frame-gone'), 6000);
+      }, 900);
+    }
+
+    // En móvil, al bajar por la página el avatar se asoma por el borde para no tapar el texto; al subir o tocarlo vuelve.
+    const mobile = matchMedia('(max-width: 999px)');
+    let lastY = scrollY;
+    addEventListener(
+      'scroll',
+      () => {
+        const y = scrollY;
+        if (mobile.matches) {
+          if (y > lastY + 6 && y > 120) root.classList.add('tucked');
+          else if (y < lastY - 6) root.classList.remove('tucked');
+        }
+        lastY = y;
+      },
+      { passive: true },
+    );
+    stage.addEventListener('click', () => root.classList.remove('tucked'));
+
     const trigger = (id: AchievementId, ms = 3200) => {
       const a = by(id);
       const isNew = !unlocked.has(id);
@@ -260,6 +293,64 @@ import { ACHIEVEMENTS } from '../scripts/game';
     }
     .avatar:global(.ready) {
       translate: 0 0;
+    }
+  }
+
+  /* Marco de pixel art colgado a la izquierda del avatar (los píxeles se ven a 4x, sin suavizar). */
+  .frame {
+    position: absolute;
+    right: calc(100% - 18px);
+    bottom: 62%;
+    width: 96px;
+    height: auto;
+    image-rendering: pixelated;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.28));
+    transition: opacity 0.6s ease;
+  }
+  .avatar:global(.framed) .frame {
+    opacity: 1;
+  }
+  .avatar:global(.frame-gone) .frame {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .avatar:global(.framed) .frame {
+      animation: hang 1.1s steps(5, end) both;
+    }
+    @keyframes hang {
+      0% {
+        transform: translateY(-160%);
+      }
+      45% {
+        transform: translateY(10%);
+      }
+      62% {
+        transform: translateY(-7%);
+      }
+      80% {
+        transform: translateY(3%);
+      }
+      100% {
+        transform: none;
+      }
+    }
+  }
+  @media (max-width: 999px) {
+    .frame {
+      width: 72px;
+      right: calc(100% - 10px);
+    }
+    /* Al bajar por la página se asoma por el borde, para no tapar el texto. */
+    .avatar {
+      transition:
+        opacity 0.8s ease 0.6s,
+        translate 1s var(--ease) 0.6s,
+        transform 0.5s var(--ease);
+    }
+    .avatar:global(.tucked) {
+      transform: translateX(62%);
     }
   }
 

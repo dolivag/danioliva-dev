@@ -10,12 +10,17 @@ el archivo, se numera 1, 2…), que luego se enlazan en `shots` de src/data/site
 import argparse
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ap = argparse.ArgumentParser()
 ap.add_argument("project")
 ap.add_argument("files", nargs="+")
 ap.add_argument("--crop-top", type=int, default=0)
+ap.add_argument(
+    "--hide-island",
+    action="store_true",
+    help="tapa con una isla negra la zona de la Dynamic Island (por si hay una actividad en directo, p. ej. la radio)",
+)
 args = ap.parse_args()
 
 out = Path(__file__).resolve().parent.parent / "public" / "projects" / args.project
@@ -23,6 +28,10 @@ out.mkdir(parents=True, exist_ok=True)
 for i, item in enumerate(args.files, 1):
     name, _, f = item.rpartition("=") if "=" in item else (str(i), "", item)
     im = Image.open(f).convert("RGB")
+    if args.hide_island:
+        d = ImageDraw.Draw(im)
+        w0 = im.width
+        d.rounded_rectangle((w0 * 0.27, w0 * 0.022, w0 * 0.73, w0 * 0.115), radius=w0 * 0.045, fill=(0, 0, 0))
     if args.crop_top:
         im = im.crop((0, args.crop_top, im.width, im.height))
     w = 390

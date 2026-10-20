@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepara capturas de iPhone para la web: las reduce a 390 px de ancho y las guarda en WebP.
+"""Prepara capturas de iPhone para la web: las reduce a 390 px de ancho (o `--width 1440` para capturas de escritorio) y las guarda en WebP.
 
     python3 scripts/optimize-shots.py hogarnizer tareas=IMG_0001.PNG tareas-oscuro=IMG_0002.PNG
 
@@ -16,6 +16,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("project")
 ap.add_argument("files", nargs="+")
 ap.add_argument("--crop-top", type=int, default=0)
+ap.add_argument("--width", type=int, default=390, help="ancho final (390 para móvil; 1440 para capturas de escritorio)")
 ap.add_argument(
     "--hide-island",
     action="store_true",
@@ -34,7 +35,7 @@ for i, item in enumerate(args.files, 1):
         d.rounded_rectangle((w0 * 0.27, w0 * 0.022, w0 * 0.73, w0 * 0.115), radius=w0 * 0.045, fill=(0, 0, 0))
     if args.crop_top:
         im = im.crop((0, args.crop_top, im.width, im.height))
-    w = 390
+    w = args.width
     im = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
     dest = out / f"{name or i}.webp"
     im.save(dest, "WEBP", quality=84, method=6)

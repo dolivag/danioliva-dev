@@ -30,6 +30,8 @@ export const projects: {
   href: string;
   /** Hasta 3 capturas de iPhone, enmarcadas en la tarjeta. Sin capturas, la tarjeta va solo con texto. */
   shots?: Shot[];
+  /** Captura de escritorio de la web, en una ventana de navegador (alternativa a `shots`). */
+  web?: Shot;
 }[] = [
   {
     name: 'QR City',
@@ -63,6 +65,7 @@ export const projects: {
     description: 'Compara el tiempo de dos ciudades, sus pronósticos y su histórico, de un vistazo.',
     stack: '',
     href: 'https://duometeo.vercel.app/',
+    // web: { src: '/projects/duometeo/web.webp', srcDark: '/projects/duometeo/web-oscuro.webp', alt: 'Qué se ve en la captura' },
   },
   {
     name: 'Trasteo',

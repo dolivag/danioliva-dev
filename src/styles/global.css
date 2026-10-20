@@ -528,3 +528,5 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select:
   .proj.has-shots p, .proj.has-shots .meta { max-width: calc(100% - 340px); }
   .proj.has-shots .meta .plus { position: absolute; top: 24px; right: 26px; }
 }
+
+.proj.has-web { padding-bottom: 0; }

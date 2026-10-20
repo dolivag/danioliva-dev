@@ -131,8 +131,8 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
   marco: (k) => ({
     pieces: [
       ...steam(k),
-      ...(k < 14 && Math.floor(k / 3) % 2 ? ['saludo'] : []),
-      k < 16 ? 'ojos-izq' : 'ojos-camara',
+      ...(k < 9 && Math.floor(k / 3) % 2 === 0 ? ['saludo'] : []),
+      k < 10 ? 'ojos-izq' : 'ojos-camara',
       'boca-sonrisa-cerrada',
     ],
     head: bob(k, 12),

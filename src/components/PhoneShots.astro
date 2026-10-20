@@ -1,0 +1,129 @@
+---
+import type { Shot } from '../data/site';
+
+interface Props {
+  shots: Shot[];
+}
+const shots = Astro.props.shots.slice(0, 3);
+---
+<div class={`phones n${shots.length}`} aria-hidden={shots.length ? undefined : 'true'}>
+  {
+    shots.map((s, i) => (
+      <figure class="phone" style={`--i:${i}`}>
+        <div class="screen">
+          <img class="light" src={s.src} alt={s.alt} width="390" height="844" loading="lazy" decoding="async" />
+          {s.srcDark && <img class="dark" src={s.srcDark} alt="" width="390" height="844" loading="lazy" decoding="async" />}
+        </div>
+      </figure>
+    ))
+  }
+</div>
+
+<style>
+  /* Los móviles asoman por abajo a la derecha de la tarjeta; al pasar el cursor suben y se abren. */
+  .phones {
+    position: absolute;
+    right: 26px;
+    bottom: 0;
+    width: 330px;
+    height: 100%;
+    pointer-events: none;
+  }
+  .phone {
+    --w: 150px;
+    --rise: 0px;
+    position: absolute;
+    bottom: -70px;
+    margin: 0;
+    width: var(--w);
+    aspect-ratio: 390 / 844;
+    padding: 5px;
+    border-radius: 28px;
+    background: #0b0c0f;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.14),
+      0 18px 40px rgba(0, 0, 0, 0.35);
+    transition:
+      translate 0.7s var(--ease, cubic-bezier(0.19, 1, 0.22, 1)),
+      rotate 0.7s var(--ease, cubic-bezier(0.19, 1, 0.22, 1));
+    translate: 0 var(--rise);
+  }
+  .screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 23px;
+  }
+  .screen img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  /* La captura oscura aparece (con fundido) cuando la web está en oscuro. */
+  .screen img.dark {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .screen img.dark {
+      opacity: 1;
+    }
+  }
+  :global(:root[data-theme='dark']) .screen img.dark {
+    opacity: 1;
+  }
+  /* Isla dinámica */
+  .phone::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 30%;
+    height: 8px;
+    translate: -50% 0;
+    border-radius: 99px;
+    background: #0b0c0f;
+  }
+
+  /* Una, dos o tres capturas: abanico centrado a la derecha */
+  .n1 .phone { right: 80px; }
+  .n2 .phone:nth-child(1) { right: 118px; rotate: -4deg; --rise: 14px; }
+  .n2 .phone:nth-child(2) { right: 10px; rotate: 3deg; }
+  .n3 .phone:nth-child(1) { right: 174px; rotate: -6deg; --rise: 26px; --w: 128px; }
+  .n3 .phone:nth-child(2) { right: 86px; rotate: 0deg; z-index: 1; }
+  .n3 .phone:nth-child(3) { right: -2px; rotate: 6deg; --rise: 26px; --w: 128px; }
+
+  :global(.proj:hover) .phone {
+    --rise: -26px;
+  }
+  :global(.proj:hover) .n2 .phone:nth-child(1) { rotate: -7deg; }
+  :global(.proj:hover) .n2 .phone:nth-child(2) { rotate: 6deg; }
+  :global(.proj:hover) .n3 .phone:nth-child(1) { rotate: -10deg; }
+  :global(.proj:hover) .n3 .phone:nth-child(3) { rotate: 10deg; }
+
+  @media (max-width: 699px) {
+    .phones {
+      position: relative;
+      right: auto;
+      width: 100%;
+      height: 230px;
+      margin-top: 22px;
+    }
+    .phone { --w: 120px; bottom: -60px; }
+    .n1 .phone { right: calc(50% - 60px); }
+    .n2 .phone:nth-child(1) { right: calc(50% - 8px); }
+    .n2 .phone:nth-child(2) { right: calc(50% - 124px); }
+    .n3 .phone { --w: 104px; }
+    .n3 .phone:nth-child(1) { right: calc(50% + 6px); }
+    .n3 .phone:nth-child(2) { right: calc(50% - 52px); }
+    .n3 .phone:nth-child(3) { right: calc(50% - 110px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .phone { transition: none; }
+  }
+</style>

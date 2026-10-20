@@ -11,6 +11,17 @@ npm run check    # tipos de Astro
 
 El contenido (proyectos, experiencia, estudios) está en `src/data/site.ts`.
 
+### Capturas de los proyectos
+
+Cada proyecto puede llevar hasta 3 capturas de iPhone, enmarcadas en su tarjeta:
+
+```bash
+python3 scripts/optimize-shots.py hogarnizer IMG_0001.PNG IMG_0002.PNG IMG_0003.PNG
+```
+
+Deja `public/projects/hogarnizer/1.webp…` (390 px de ancho). Luego se enlazan en `shots` del proyecto en
+`src/data/site.ts` (hay un ejemplo comentado), con un `alt` que describa la captura.
+
 ## Hogarnizer
 
 Las páginas legales de la app viven en la propia app web (`hogarnizer.danioliva.dev`); aquí solo hay

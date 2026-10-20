@@ -25,7 +25,16 @@ redirecciones, definidas en `astro.config.mjs`, para que estas URL no cambien nu
 El avatar que acompaña al visitante (`src/components/Avatar.astro` y `src/scripts/avatar.ts`) se
 compone en un canvas: la escena (todo menos la cabeza), la cabeza y piezas que cambian una sola zona
 (ojos, cejas, boca, birrete, manos, saludo, vapor). Cambia de gesto según la sección
-(`data-avatar` en cada sección) y al hacer clic.
+(`data-avatar` en cada sección).
+
+### Juego de interacciones
+
+El avatar vive abajo a la derecha y tiene logros que se desbloquean (se guardan en `localStorage`). Los
+datos y el arrastre de palabras están en `src/scripts/game.ts`; las poses de cada reacción, en
+`REACTIONS` de `avatar.ts`; el panel y la lógica, en `Avatar.astro`. Para una palabra arrastrable:
+`data-drag="palabra"` en el HTML y su entrada en `WORDS`. Para un logro nuevo: añadirlo a
+`ACHIEVEMENTS` y una pose con su mismo id en `REACTIONS`. El panel tiene un botón «Probar» por logro
+(alternativa para teclado y táctil).
 
 Las imágenes de partida están en `art/avatar/` (1024x1024, hechas con Gemini a partir de
 `base.jpg`, todas con el mismo encuadre y fondo rosa). `python3 scripts/build-avatar.py` (Pillow

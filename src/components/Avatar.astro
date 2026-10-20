@@ -1,148 +1,528 @@
 ---
+import { ACHIEVEMENTS } from '../scripts/game';
 ---
-<div class="avatar" data-state="hero" aria-hidden="true">
-  <div class="bubble" id="avatar-bubble"></div>
-  <canvas id="avatar-canvas" width="1024" height="1024"></canvas>
+<div class="avatar" data-state="hero">
+  <div class="bubble" id="avatar-bubble" aria-hidden="true"></div>
+  <div class="panel" id="avatar-panel" role="dialog" aria-label="Interacciones con el avatar" hidden>
+    <p class="panel-title">Interacciones <span id="avatar-score"></span></p>
+    <ul>
+      {
+        ACHIEVEMENTS.map((a) => (
+          <li data-id={a.id}>
+            <span class="check" aria-hidden="true"></span>
+            <span class="text">
+              <b>{a.title}</b>
+              <small>{a.hint}</small>
+            </span>
+            <button type="button" class="try" aria-label={`Probar: ${a.title}`}>Probar</button>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="done" hidden>
+      Lo has conseguido todo. ¿Hablamos? <a href="mailto:hola@danioliva.dev">hola@danioliva.dev</a>
+    </p>
+  </div>
+  <button class="counter" id="avatar-counter" type="button" aria-expanded="false" aria-controls="avatar-panel">
+    <span class="dot" aria-hidden="true"></span><span id="avatar-count">0/{ACHIEVEMENTS.length}</span>
+  </button>
+  <button class="stage" id="avatar-stage" type="button" aria-label="Saludar al avatar">
+    <canvas id="avatar-canvas" width="1024" height="1024" aria-hidden="true"></canvas>
+  </button>
 </div>
+<div class="toast" id="avatar-toast" role="status" aria-live="polite"></div>
 
 <script>
   import { startAvatar } from '../scripts/avatar';
+  import { ACHIEVEMENTS, JOKES, WORDS, enableWordDrag, loadUnlocked, saveUnlocked } from '../scripts/game';
+  import type { AchievementId } from '../scripts/game';
 
-  const canvas = document.getElementById('avatar-canvas') as HTMLCanvasElement | null;
-  const bubble = document.getElementById('avatar-bubble');
-  if (canvas && bubble) startAvatar(canvas, bubble);
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const root = document.querySelector<HTMLElement>('.avatar')!;
+  const canvas = $<HTMLCanvasElement>('avatar-canvas');
+  const bubble = $('avatar-bubble');
+  const stage = $('avatar-stage');
+  const counter = $('avatar-counter');
+  const panel = $('avatar-panel');
+  const toast = $('avatar-toast');
+  const total = ACHIEVEMENTS.length;
+  const unlocked = loadUnlocked();
+
+  const render = () => {
+    const n = ACHIEVEMENTS.filter((a) => unlocked.has(a.id)).length;
+    $('avatar-count').textContent = `${n}/${total}`;
+    $('avatar-score').textContent = `${n}/${total}`;
+    counter.toggleAttribute('data-new', n === 0);
+    counter.classList.toggle('complete', n === total);
+    counter.setAttribute('aria-label', `Interacciones con el avatar: ${n} de ${total} desbloqueadas`);
+    panel.querySelectorAll<HTMLElement>('li').forEach((li) => li.classList.toggle('on', unlocked.has(li.dataset.id!)));
+    panel.querySelector<HTMLElement>('.done')!.hidden = n < total;
+  };
+  render();
+
+  startAvatar(canvas, bubble).then((avatar) => {
+    if (!avatar) return;
+    const by = (id: AchievementId) => ACHIEVEMENTS.find((a) => a.id === id)!;
+    let toastTimer: number | undefined;
+
+    const announce = (text: string) => {
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3800);
+    };
+
+    /** Reacciona y, si es la primera vez, desbloquea. Devuelve si era nuevo. */
+    const trigger = (id: AchievementId, ms = 3200) => {
+      const a = by(id);
+      const isNew = !unlocked.has(id);
+      if (isNew) {
+        unlocked.add(id);
+        saveUnlocked(unlocked);
+        render();
+        root.classList.remove('burst');
+        void root.offsetWidth;
+        root.classList.add('burst');
+        const n = unlocked.size;
+        announce(n === total ? 'Colección completa. Lo has conseguido todo.' : `Desbloqueado · ${a.title} · ${n}/${total}`);
+      }
+      avatar.react(id, a.say, id === 'sueno' ? 0 : ms);
+      return isNew;
+    };
+
+    // Clic: el primero es el saludo; muchos seguidos, mareo; el resto, un chiste.
+    const clicks: number[] = [];
+    stage.addEventListener('click', () => {
+      const now = performance.now();
+      clicks.push(now);
+      while (clicks.length && now - clicks[0] > 2500) clicks.shift();
+      if (clicks.length >= 5) {
+        clicks.length = 0;
+        trigger('mareo');
+      } else if (!unlocked.has('hola')) trigger('hola');
+      else avatar.react('asiente', JOKES[Math.floor(Math.random() * JOKES.length)], 2600);
+    });
+
+    // Arrastrar palabras hasta el avatar.
+    enableWordDrag({
+      target: () => stage,
+      onOver: (over) => root.classList.toggle('over', over),
+      onDrop: (word) => {
+        const w = WORDS[word];
+        if (!w) return;
+        if (w.achievement) trigger(w.achievement);
+        else avatar.react('asiente', w.say ?? '', 3000);
+      },
+    });
+
+    // Quedarse quieto: se duerme; al volver a moverte, se despierta.
+    let lastActive = performance.now();
+    let asleep = false;
+    const active = () => {
+      lastActive = performance.now();
+      if (asleep) {
+        asleep = false;
+        avatar.stop();
+        avatar.say('¡Eh! Estaba soñando…', 2200);
+      }
+    };
+    for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart'])
+      addEventListener(ev, active, { passive: true });
+    setInterval(() => {
+      if (!asleep && !document.hidden && performance.now() - lastActive > 25000) {
+        asleep = true;
+        trigger('sueno');
+      }
+    }, 2000);
+
+    // Llegar al final de la página (habiendo bajado de verdad).
+    addEventListener(
+      'scroll',
+      () => {
+        const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+        if (atBottom && scrollY > 200 && !unlocked.has('final')) trigger('final', 4500);
+      },
+      { passive: true },
+    );
+
+    // Panel: lista de interacciones, con un botón «Probar» (alternativa para teclado y táctil).
+    const setPanel = (open: boolean) => {
+      panel.hidden = !open;
+      counter.setAttribute('aria-expanded', String(open));
+    };
+    counter.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setPanel(panel.hidden === true);
+    });
+    panel.addEventListener('click', (e) => {
+      const li = (e.target as Element).closest<HTMLElement>('li');
+      if (li && (e.target as Element).closest('.try')) trigger(li.dataset.id as AchievementId);
+    });
+    addEventListener('click', (e) => {
+      if (!panel.hidden && !root.contains(e.target as Node)) setPanel(false);
+    });
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        setPanel(false);
+        counter.focus();
+      }
+    });
+  });
 </script>
 
 <style>
-  /* La ilustración ocupa el lienzo cuadrado entero (sin fondo): el escritorio flota sobre la página. */
   .avatar {
-    --size: 132px;
-    --ease: cubic-bezier(0.3, 0.8, 0.2, 1);
+    --size: 128px;
+    --ease: cubic-bezier(0.19, 1, 0.22, 1);
     position: fixed;
-    z-index: 20;
+    z-index: 45;
+    right: clamp(10px, 2.6vw, 38px);
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     width: var(--size);
-    height: var(--size);
-    right: 12px;
-    bottom: 6px;
-    cursor: pointer;
     opacity: 0;
     transition:
-      width 0.7s var(--ease),
-      height 0.7s var(--ease),
-      right 0.7s var(--ease),
-      bottom 0.7s var(--ease),
-      opacity 0.6s ease 0.8s,
-      translate 1.1s var(--ease) 0.8s;
+      opacity 0.8s ease 0.6s,
+      translate 1s var(--ease) 0.6s;
+  }
+  @media (min-width: 1000px) {
+    .avatar {
+      --size: 210px;
+    }
   }
   .avatar:global(.ready) {
     opacity: 1;
   }
-  /* Entra subiendo desde abajo, justo después del nombre. */
   @media (prefers-reduced-motion: no-preference) {
     .avatar {
-      translate: 0 80px;
+      translate: 0 40px;
     }
     .avatar:global(.ready) {
       translate: 0 0;
     }
   }
+
+  .stage {
+    appearance: none;
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transition: transform 0.5s var(--ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stage:hover {
+    transform: translateY(-3px) scale(1.03);
+  }
+  .stage:active {
+    transform: scale(0.97);
+  }
   canvas {
     display: block;
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 10px 18px rgba(20, 17, 31, 0.18));
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.22));
+  }
+  /* Zona de suelta: aparece al empezar a arrastrar una palabra y se enciende al acercarla. */
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1.5px dashed var(--accent);
+    border-radius: 28px;
+    opacity: 0;
+    transform: scale(0.96);
+    transition:
+      opacity 0.25s ease,
+      transform 0.4s var(--ease),
+      background-color 0.25s ease;
+    pointer-events: none;
+  }
+  :global(body.is-dragging) .stage::before {
+    opacity: 0.55;
+    transform: none;
+  }
+  .avatar:global(.over) .stage::before {
+    opacity: 1;
+    transform: scale(1.04);
+    background: rgba(var(--glow), 0.16);
+  }
+  .stage:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 4px;
+    border-radius: 20px;
   }
 
-  /* Portada: grande, junto al titular. */
-  .avatar[data-state='hero'] {
-    --size: clamp(280px, 40vw, 440px);
-    right: max(0px, calc((100vw - 760px) / 2 - 60px));
-    bottom: calc(50vh - var(--size) / 2 - 20px);
+  /* Al desbloquear algo: un anillo que se expande. */
+  .avatar::after {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    border: 2px solid var(--accent);
+    border-radius: 30px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .avatar:global(.burst)::after {
+    animation: ping 0.9s var(--ease);
+  }
+  @keyframes ping {
+    from {
+      opacity: 0.9;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.35);
+    }
+  }
+
+  .counter {
+    appearance: none;
+    position: absolute;
+    z-index: 2;
+    top: 2px;
+    right: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    background: var(--glass-bg);
+    color: var(--text);
+    font: 500 11px/1 var(--font);
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow: 0 4px 14px var(--glass-shadow);
+    opacity: 0.75;
+    transition:
+      opacity 0.25s ease,
+      background-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.4s var(--ease);
+  }
+  .avatar:hover .counter,
+  .counter:focus-visible,
+  .counter[aria-expanded='true'] {
+    opacity: 1;
+  }
+  .counter:hover {
+    transform: translateY(-1px);
+  }
+  .counter.complete {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .counter.complete .dot {
+    background: var(--on-accent);
+  }
+  .counter:not([data-new]) .dot {
+    display: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .counter[data-new] .dot {
+      animation: breathe 2.2s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(var(--glow), 0.6);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(var(--glow), 0);
+      }
+    }
   }
 
   .bubble {
     position: absolute;
-    z-index: 1; /* el lienzo lleva `filter` y, si no, tapa la burbuja */
-    right: 62%;
-    bottom: 78%;
-    transform: translateY(6px);
-    max-width: 220px;
+    z-index: 1;
+    right: calc(100% - 14px);
+    bottom: 42%;
     width: max-content;
+    max-width: min(230px, 56vw);
+    padding: 9px 13px;
+    border: 1px solid var(--glass-line);
+    border-radius: 14px 14px 4px 14px;
     background: var(--accent);
     color: var(--on-accent);
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    font: 500 13px/1.35 var(--font);
     box-shadow: 0 8px 24px var(--glass-shadow);
-    font: 500 13px/1.3 var(--font);
-    padding: 8px 12px;
-    border-radius: 12px 12px 4px 12px;
     opacity: 0;
+    transform: translateY(6px) scale(0.96);
+    transform-origin: bottom right;
     pointer-events: none;
     transition:
       opacity 0.25s ease,
-      transform 0.25s ease;
+      transform 0.4s var(--ease);
   }
   .bubble:global(.show) {
     opacity: 1;
     transform: none;
   }
-  .avatar[data-state='hero'] .bubble {
-    font-size: 15px;
-    right: auto;
-    left: 68%;
-    bottom: 84%;
-    border-radius: 12px 12px 12px 4px;
+
+  .panel {
+    position: absolute;
+    z-index: 3;
+    right: 0;
+    bottom: calc(100% + 10px);
+    width: min(330px, calc(100vw - 20px));
+    padding: 16px;
+    border: 1px solid var(--glass-line);
+    border-radius: 18px;
+    background: var(--glass-bg);
+    color: var(--text);
+    backdrop-filter: blur(28px) saturate(1.6);
+    box-shadow: 0 16px 48px var(--glass-shadow);
+  }
+  .panel:not([hidden]) {
+    animation: pop 0.4s var(--ease);
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+    }
+  }
+  .panel-title {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 10px;
+    font: 500 11px/1 var(--font);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid var(--line);
+  }
+  .check {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  li:global(.on) .check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  li:global(.on) .check::after {
+    content: '';
+    width: 4px;
+    height: 8px;
+    margin-top: -2px;
+    border: solid var(--on-accent);
+    border-width: 0 1.6px 1.6px 0;
+    transform: rotate(40deg);
+  }
+  .text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .text b {
+    font: 600 13px/1.2 var(--font);
+  }
+  .text small {
+    font: 400 12px/1.3 var(--font);
+    color: var(--muted);
+  }
+  li:global(.on) .text b {
+    color: var(--accent-text);
+  }
+  .try {
+    appearance: none;
+    flex: none;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: 500 11px/1 var(--font);
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .try:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+  .done {
+    margin: 12px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    font: 500 13px/1.4 var(--font);
+  }
+  .done a {
+    color: var(--accent-text);
   }
 
-  /* Pantallas grandes: grande y fijo a la derecha en todas las secciones (no se encoge a la esquina). */
-  @media (min-width: 1000px) {
-    .avatar,
-    .avatar[data-state] {
-      --size: clamp(400px, min(46vw, 82vh), 680px);
-      right: max(0px, calc((100vw - 1180px) / 2 - 24px));
-      bottom: calc(50vh - var(--size) / 2);
-    }
-    /* En la portada, más pequeño y pegado abajo: el nombre gigante se lee entero encima. */
-    .avatar[data-state='hero'] {
-      --size: clamp(340px, min(36vw, 62vh), 540px);
-      bottom: 0;
-    }
-    .bubble {
-      right: auto;
-      left: 6%;
-      bottom: 91%;
-      font-size: 15px;
-      border-radius: 12px 12px 12px 4px;
-    }
-    /* En la portada va a la izquierda de él, bajo la cinta, para no tapar el nombre. */
-    .avatar[data-state='hero'] .bubble {
-      left: auto;
-      right: 96%;
-      bottom: 24%;
-      border-radius: 12px 12px 4px 12px;
-    }
+  /* Aviso de logro: abajo y centrado (fuera del contenedor del avatar, que lleva `translate`). */
+  .toast {
+    position: fixed;
+    z-index: 70;
+    left: 50%;
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    padding: 11px 18px;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    background: var(--glass-bg);
+    color: var(--text);
+    font: 500 13px/1.2 var(--font);
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(24px) saturate(1.6);
+    box-shadow: 0 10px 34px var(--glass-shadow);
+    opacity: 0;
+    transform: translate(-50%, 14px);
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      transform 0.5s var(--ease);
+  }
+  .toast:global(.show) {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 
-  @media (max-width: 999px) {
-    .avatar {
-      --size: 150px;
-      right: 2px;
-      bottom: 2px;
-    }
-    .avatar[data-state='hero'] {
-      --size: min(300px, 78vw);
-      right: calc(50vw - var(--size) / 2);
-      /* justo debajo de la cinta (la cabecera y el nombre miden más o menos 64 px + 55 vw) */
-      bottom: calc(100svh - 64px - 55vw - var(--size));
-    }
-    .avatar[data-state='hero'] .bubble {
-      left: auto;
-      right: 30%;
-      border-radius: 12px 12px 4px 12px;
-    }
-  }
   @media (prefers-reduced-motion: reduce) {
     .avatar,
-    .bubble {
+    .stage,
+    .bubble,
+    .toast {
       transition: none;
     }
   }

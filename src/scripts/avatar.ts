@@ -15,22 +15,6 @@ type Pose = { pieces: string[]; head: [number, number] };
 
 export type AvatarState = 'hero' | 'projects' | 'experience' | 'studies' | 'contact' | 'hogarnizer';
 
-export const BUBBLES: Record<AvatarState, string> = {
-  hero: '¡Hola! Soy Daniel.',
-  projects: 'Cosas que he construido.',
-  experience: 'Modo concentración.',
-  studies: 'Siempre aprendiendo.',
-  contact: '¿Hablamos?',
-  hogarnizer: 'Picando código a tope.',
-};
-
-const JOKES = [
-  'Compilando…',
-  'En mi máquina funciona.',
-  'git push --force (es broma).',
-  '¡Eh! Que me desconcentras.',
-];
-
 /** Vapor del café: tres formas que se van turnando. */
 const steam = (t: number) => [[], ['vapor-2'], ['vapor-3']][Math.floor(t / 4) % 3];
 /** Tecleo: las manos alternan cada `every` fotogramas. */
@@ -104,6 +88,36 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   }),
 };
 
+/** Reacciones del juego: poses puntuales que sustituyen a la de la sección. `k` es el fotograma desde que empezó. */
+const REACTIONS: Record<string, (k: number) => Pose> = {
+  hola: (k) => ({
+    pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 12),
+  }),
+  orden: (k) => ({
+    pieces: [...steam(k), ...typing(k, 1), 'cejas-fruncidas', 'ojos-pantalla'],
+    head: [-14, 12 + (k % 2) * 2],
+  }),
+  tiempo: (k) => ({
+    pieces: [...steam(k), 'ojos-arriba', 'boca-sonrisa-cerrada'],
+    head: k % 16 < 8 ? [0, 0] : [4, -2],
+  }),
+  trastero: (k) => {
+    const left = Math.floor(k / 6) % 2 === 0;
+    return { pieces: [...steam(k), left ? 'ojos-izq' : 'ojos-arriba-izq', 'boca-seria'], head: [left ? -6 : 0, 0] };
+  },
+  mareo: (k) => ({
+    pieces: [k % 2 ? 'ojos-arriba-izq' : 'ojos-izq', 'boca-o'],
+    head: [k % 2 ? -10 : 10, k % 4 < 2 ? 0 : 4],
+  }),
+  sueno: (k) => ({ pieces: ['ojos-cerrados', 'boca-seria'], head: [0, k % 40 < 20 ? 0 : 6] }),
+  final: (k) => ({
+    pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 12),
+  }),
+  asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
+};
+
 /**
  * Miradas disponibles y hacia dónde apuntan (x: izquierda -1 / derecha 1; y: arriba -1 / abajo 1,
  * vistas desde la pantalla de quien visita). Solo se usan las que existan en avatar.json.
@@ -130,9 +144,16 @@ function load(src: string) {
   });
 }
 
-export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement) {
+export type AvatarApi = {
+  /** Pone una reacción (`REACTIONS`) con un mensaje; `ms` es lo que dura (0: hasta `stop()`). */
+  react: (key: string, text: string, ms?: number) => void;
+  stop: () => void;
+  say: (text: string, ms?: number) => void;
+};
+
+export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement): Promise<AvatarApi | null> {
   const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  if (!ctx) return null;
   const root = canvas.closest('.avatar') as HTMLElement | null;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -168,16 +189,20 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
   let tick = 0;
   let blinkUntil = -1;
   let nextBlink = 25;
-  let surpriseUntil = -1;
+  let reaction: { key: string; start: number; end: number } | null = null;
 
   function draw(t: number) {
-    const pose = reduced
-      ? STATES[state](0, -100, false)
-      : STATES[state](t, since, t <= blinkUntil);
+    if (reaction && reaction.end && performance.now() > reaction.end) reaction = null;
+    const k = reaction ? (reduced ? 0 : t - reaction.start) : 0;
+    const pose = reaction
+      ? REACTIONS[reaction.key](k)
+      : reduced
+        ? STATES[state](0, -100, false)
+        : STATES[state](t, since, t <= blinkUntil);
     let on = pose.pieces;
     let [hx, hy] = pose.head;
     // Si el cursor se ha movido hace poco, la cabeza se vuelve un poco hacia él y los ojos lo miran.
-    if (!reduced && performance.now() - cursor.at < FOLLOW_MS) {
+    if (!reduced && !reaction && performance.now() - cursor.at < FOLLOW_MS) {
       hx += Math.round(cursor.x * 8);
       hy += Math.round(cursor.y * 5);
       const len = Math.hypot(cursor.x, cursor.y);
@@ -195,7 +220,6 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
         on = [...on, best];
       }
     }
-    if (t <= surpriseUntil) on = [...on.filter((p) => !p.startsWith('boca')), 'boca-o'];
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);
@@ -221,7 +245,6 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     state = next;
     since = tick;
     root?.setAttribute('data-state', next);
-    say(BUBBLES[next], next === 'hero' ? 5200 : 4200);
     draw(tick);
   }
 
@@ -246,16 +269,24 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
   sections.forEach((el) => io.observe(el));
   addEventListener('scroll', update, { passive: true });
 
-  root?.addEventListener('click', () => {
-    surpriseUntil = tick + 10;
-    say(JOKES[Math.floor(Math.random() * JOKES.length)], 2600);
-    draw(tick);
-  });
+  const api: AvatarApi = {
+    say,
+    react(key, text, ms = 3200) {
+      reaction = { key, start: tick, end: ms ? performance.now() + ms : 0 };
+      say(text, ms || 600000);
+      draw(tick);
+      if (reduced && ms) setTimeout(() => draw(tick), ms + 30);
+    },
+    stop() {
+      reaction = null;
+      bubble.classList.remove('show');
+      draw(tick);
+    },
+  };
 
   draw(0);
   root?.classList.add('ready');
-  if (reduced) return;
-  setTimeout(() => say(BUBBLES[state], 5200), 700);
+  if (reduced) return api;
   setInterval(() => {
     tick++;
     if (tick >= nextBlink) {
@@ -264,4 +295,5 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     }
     draw(tick);
   }, TICK_MS);
+  return api;
 }

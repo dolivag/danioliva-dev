@@ -11,10 +11,10 @@ import { ACHIEVEMENTS } from '../scripts/game';
           <li data-id={a.id}>
             <span class="check" aria-hidden="true"></span>
             <span class="text">
-              <b>{a.title}</b>
-              <small>{a.hint}</small>
+              <b>???</b>
+              <small>Por descubrir</small>
             </span>
-            <button type="button" class="try" aria-label={`Probar: ${a.title}`}>Probar</button>
+            <button type="button" class="try" aria-label={`Repetir: ${a.title}`}>Repetir</button>
           </li>
         ))
       }
@@ -55,7 +55,13 @@ import { ACHIEVEMENTS } from '../scripts/game';
     counter.toggleAttribute('data-new', n === 0);
     counter.classList.toggle('complete', n === total);
     counter.setAttribute('aria-label', `Interacciones con el avatar: ${n} de ${total} desbloqueadas`);
-    panel.querySelectorAll<HTMLElement>('li').forEach((li) => li.classList.toggle('on', unlocked.has(li.dataset.id!)));
+    panel.querySelectorAll<HTMLElement>('li').forEach((li) => {
+      const a = ACHIEVEMENTS.find((x) => x.id === li.dataset.id)!;
+      const on = unlocked.has(a.id);
+      li.classList.toggle('on', on);
+      li.querySelector('b')!.textContent = on ? a.title : '???';
+      li.querySelector('small')!.textContent = on ? a.how : 'Por descubrir';
+    });
     panel.querySelector<HTMLElement>('.done')!.hidden = n < total;
   };
   render();
@@ -145,7 +151,29 @@ import { ACHIEVEMENTS } from '../scripts/game';
       { passive: true },
     );
 
-    // Panel: lista de interacciones, con un botón «Probar» (alternativa para teclado y táctil).
+    // Cambiar de tema varias veces seguidas.
+    const themeTaps: number[] = [];
+    document.addEventListener('click', (e) => {
+      if (!(e.target as Element).closest('.theme, .theme-group button')) return;
+      const now = performance.now();
+      themeTaps.push(now);
+      while (themeTaps.length && now - themeTaps[0] > 8000) themeTaps.shift();
+      if (themeTaps.length >= 4 && !unlocked.has('tema')) trigger('tema');
+    });
+
+    // Código clásico con el teclado.
+    const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let typed = 0;
+    addEventListener('keydown', (e) => {
+      const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      typed = k === code[typed] ? typed + 1 : k === code[0] ? 1 : 0;
+      if (typed === code.length) {
+        typed = 0;
+        trigger('konami');
+      }
+    });
+
+    // Panel: lista de interacciones; las ya descubiertas se pueden repetir.
     const setPanel = (open: boolean) => {
       panel.hidden = !open;
       counter.setAttribute('aria-expanded', String(open));
@@ -459,6 +487,9 @@ import { ACHIEVEMENTS } from '../scripts/game';
   }
   li:global(.on) .text b {
     color: var(--accent-text);
+  }
+  li:not(:global(.on)) .try {
+    display: none;
   }
   .try {
     appearance: none;

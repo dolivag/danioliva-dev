@@ -115,6 +115,14 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
     pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
     head: bob(k, 12),
   }),
+  tema: (k) => ({
+    pieces: [k % 10 < 5 ? 'ojos-arriba' : 'ojos-abajo', 'boca-o'],
+    head: [k % 10 < 5 ? 4 : -4, 0],
+  }),
+  konami: (k) => ({
+    pieces: [...steam(k), ...typing(k, 1), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 4, 5),
+  }),
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
 };
 

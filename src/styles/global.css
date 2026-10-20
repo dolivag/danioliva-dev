@@ -511,8 +511,8 @@ footer { border-top-color: var(--line); font-size: 11px; letter-spacing: 0.1em; 
 @media (max-width: 999px) { .hero { padding-top: 46px; } nav.pill, nav.pill.scrolled { padding: 8px 10px; } }
 
 /* Palabras que se pueden arrastrar hasta el avatar */
-[data-drag] { cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; text-decoration: underline dotted transparent 1.5px; text-underline-offset: 7px; transition: text-decoration-color 0.25s ease, opacity 0.25s ease; }
-[data-drag]:hover { text-decoration-color: var(--accent); }
+/* Sin pistas visuales: nada indica que se puedan arrastrar. */
+[data-drag] { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: opacity 0.25s ease; }
 [data-drag].dragging { opacity: 0.3; }
 a.proj { -webkit-touch-callout: none; }
 body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select: none; }

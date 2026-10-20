@@ -33,8 +33,8 @@ El avatar vive abajo a la derecha y tiene logros que se desbloquean (se guardan 
 datos y el arrastre de palabras están en `src/scripts/game.ts`; las poses de cada reacción, en
 `REACTIONS` de `avatar.ts`; el panel y la lógica, en `Avatar.astro`. Para una palabra arrastrable:
 `data-drag="palabra"` en el HTML y su entrada en `WORDS`. Para un logro nuevo: añadirlo a
-`ACHIEVEMENTS` y una pose con su mismo id en `REACTIONS`. El panel tiene un botón «Probar» por logro
-(alternativa para teclado y táctil).
+`ACHIEVEMENTS` y una pose con su mismo id en `REACTIONS`. Las interacciones son secretas: el panel solo enseña «???» hasta que se descubren (y entonces
+permite repetirlas). Sin pistas visuales a propósito.
 
 Las imágenes de partida están en `art/avatar/` (1024x1024, hechas con Gemini a partir de
 `base.jpg`, todas con el mismo encuadre y fondo rosa). `python3 scripts/build-avatar.py` (Pillow

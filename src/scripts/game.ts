@@ -4,24 +4,27 @@
  * de palabras; las poses de cada reacción están en avatar.ts.
  */
 
-export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final';
+export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami';
 
 export type Achievement = {
   id: AchievementId;
   title: string;
-  hint: string;
+  /** Qué hiciste (se enseña solo una vez desbloqueado: las interacciones son secretas). */
+  how: string;
   /** Lo que dice el avatar al conseguirlo (y cada vez que se prueba desde el panel). */
   say: string;
 };
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: 'hola', title: 'Primer contacto', hint: 'Hazle un clic al avatar.', say: '¡Hola! Soy el avatar de Daniel.' },
-  { id: 'orden', title: 'Orden en casa', hint: 'Arrástrale «Hogarnizer».', say: 'Tareas, compra, gastos… ¡todo en orden!' },
-  { id: 'tiempo', title: 'Previsión', hint: 'Arrástrale «DuoMeteo».', say: 'Sol aquí, lluvia allí. Lo sabía.' },
-  { id: 'trastero', title: '¿Dónde estaba?', hint: 'Arrástrale «Trasteo».', say: '¿Dónde dejé el cable USB-C?' },
-  { id: 'mareo', title: 'Demasiado café', hint: 'Hazle clic muchas veces seguidas.', say: '¡Para, que me mareo!' },
-  { id: 'sueno', title: 'Siesta', hint: 'Quédate quieto un rato.', say: 'Zzz…' },
-  { id: 'final', title: 'Hasta pronto', hint: 'Llega al final de la página.', say: '¡Hasta pronto! Escríbeme cuando quieras.' },
+  { id: 'hola', title: 'Primer contacto', how: 'Le hiciste un clic.', say: '¡Hola! Soy el avatar de Daniel.' },
+  { id: 'orden', title: 'Orden en casa', how: 'Le arrastraste «Hogarnizer».', say: 'Tareas, compra, gastos… ¡todo en orden!' },
+  { id: 'tiempo', title: 'Previsión', how: 'Le arrastraste «DuoMeteo».', say: 'Sol aquí, lluvia allí. Lo sabía.' },
+  { id: 'trastero', title: '¿Dónde estaba?', how: 'Le arrastraste «Trasteo».', say: '¿Dónde dejé el cable USB-C?' },
+  { id: 'mareo', title: 'Demasiado café', how: 'Le hiciste clic muchas veces seguidas.', say: '¡Para, que me mareo!' },
+  { id: 'sueno', title: 'Siesta', how: 'Te quedaste quieto un rato.', say: 'Zzz…' },
+  { id: 'final', title: 'Hasta pronto', how: 'Llegaste al final de la página.', say: '¡Hasta pronto! Escríbeme cuando quieras.' },
+  { id: 'tema', title: 'Luces y sombras', how: 'Cambiaste varias veces de tema.', say: '¿Luces o ambiente? Decídete.' },
+  { id: 'konami', title: 'Código secreto', how: 'Tecleaste el código clásico.', say: '+30 vidas. Código desbloqueado.' },
 ];
 
 /** Palabras que se pueden arrastrar (`data-drag` en el HTML). Las que no dan logro solo reaccionan. */

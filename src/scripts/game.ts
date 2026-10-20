@@ -33,6 +33,8 @@ export const WORDS: Record<string, { achievement?: AchievementId; say?: string }
   hogarnizer: { achievement: 'orden' },
   duometeo: { achievement: 'tiempo' },
   trasteo: { achievement: 'trastero' },
+  'qr city': { say: 'Escaneando… ¡es una ciudad entera!' },
+  'three.js': { say: 'Un cubo, y de pronto una ciudad.' },
   expo: { say: 'De una base de código a las dos tiendas.' },
   'react native': { say: 'Un código, iOS y Android.' },
   supabase: { say: 'Backend sin sudar.' },

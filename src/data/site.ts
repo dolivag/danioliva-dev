@@ -32,6 +32,14 @@ export const projects: {
   shots?: Shot[];
 }[] = [
   {
+    name: 'QR City',
+    status: '',
+    description:
+      'Genera una ciudad en 3D isométrico cuyos tejados forman un código QR legible. Cinco estilos (papel, moderna, costera, nevada y cyberpunk), todo personalizable y paquetes npm para Angular, React y Vue.',
+    stack: 'Three.js · Vite · npm',
+    href: 'https://qr-city.danioliva.dev',
+  },
+  {
     name: 'Hogarnizer',
     status: 'En construcción',
     description:

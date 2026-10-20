@@ -161,6 +161,40 @@ import { ACHIEVEMENTS } from '../scripts/game';
       if (themeTaps.length >= 4 && !unlocked.has('tema')) trigger('tema');
     });
 
+    // Agitar el móvil (en iOS el navegador pide permiso: se pide con el primer toque al avatar).
+    const touchDevice = matchMedia('(pointer: coarse)').matches;
+    let lastShake = 0;
+    let shakes = 0;
+    let [lx, ly, lz] = [0, 0, 0];
+    const onMotion = (e: DeviceMotionEvent) => {
+      const a = e.accelerationIncludingGravity;
+      if (!a || a.x == null || a.y == null || a.z == null) return;
+      const delta = Math.abs(a.x - lx) + Math.abs(a.y - ly) + Math.abs(a.z - lz);
+      [lx, ly, lz] = [a.x, a.y, a.z];
+      const now = performance.now();
+      if (delta < 25 || now - lastShake < 120) return;
+      shakes = now - lastShake > 900 ? 1 : shakes + 1;
+      lastShake = now;
+      if (shakes >= 4) {
+        shakes = 0;
+        trigger('agitar');
+      }
+    };
+    if (touchDevice && typeof DeviceMotionEvent !== 'undefined') {
+      const ask = (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission;
+      if (typeof ask !== 'function') addEventListener('devicemotion', onMotion);
+      else
+        stage.addEventListener(
+          'click',
+          () => {
+            ask.call(DeviceMotionEvent)
+              .then((r) => r === 'granted' && addEventListener('devicemotion', onMotion))
+              .catch(() => {});
+          },
+          { once: true },
+        );
+    }
+
     // Código clásico con el teclado.
     const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let typed = 0;

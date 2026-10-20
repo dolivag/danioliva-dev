@@ -4,7 +4,7 @@
  * de palabras; las poses de cada reacción están en avatar.ts.
  */
 
-export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami';
+export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami' | 'agitar';
 
 export type Achievement = {
   id: AchievementId;
@@ -24,6 +24,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'sueno', title: 'Siesta', how: 'Te quedaste quieto un rato.', say: 'Zzz…' },
   { id: 'final', title: 'Hasta pronto', how: 'Llegaste al final de la página.', say: '¡Hasta pronto! Escríbeme cuando quieras.' },
   { id: 'tema', title: 'Luces y sombras', how: 'Cambiaste varias veces de tema.', say: '¿Luces o ambiente? Decídete.' },
+  { id: 'agitar', title: 'Terremoto', how: 'Agitaste el móvil.', say: '¡Eh! ¡Que me caigo de la mesa!' },
   { id: 'konami', title: 'Código secreto', how: 'Tecleaste el código clásico.', say: '+30 vidas. Código desbloqueado.' },
 ];
 

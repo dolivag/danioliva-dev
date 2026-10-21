@@ -37,7 +37,7 @@ export const ca: Dict = {
     systemShort: 'Sistema',
   },
   lang: { label: 'Idioma' },
-  contact: { writeMe: 'Escriu-me', code: 'Codi' },
+  contact: { writeMe: 'Escriu-me', code: 'Codi', profile: 'Perfil professional' },
   experience: [
     {
       company: 'Zennio',

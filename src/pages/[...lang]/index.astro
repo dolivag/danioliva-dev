@@ -26,7 +26,7 @@ const person = {
   jobTitle: t.role,
   description: t.meta.description,
   image: new URL('/og/' + lang + '/home.png', Astro.site).href,
-  sameAs: [site.github],
+  sameAs: [site.github, site.linkedin],
   worksFor: { '@type': 'Organization', name: 'Zennio' },
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Universitat Oberta de Catalunya' },
   knowsAbout: ['Angular', 'Node.js', 'NestJS', 'React', 'React Native', 'TypeScript', 'PostgreSQL', 'CI/CD'],
@@ -109,6 +109,7 @@ const person = {
   <section class="col" id="contacto" data-avatar="contact">
     <h2>{t.sections.contact}</h2>
     <a class="contact-link" href={`mailto:${site.email}`}><small>{t.contact.writeMe}</small>{site.email}</a>
+    <a class="contact-link" href={site.linkedin}><small>{t.contact.profile}</small>LinkedIn / daniel-oliva-gomez</a>
     <a class="contact-link" href={site.github}><small>{t.contact.code}</small>GitHub / dolivag</a>
   </section>
 </Base>

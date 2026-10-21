@@ -8,8 +8,10 @@ import Micro from '../components/Micro.astro';
 interface Props {
   title?: string;
   description?: string;
+  /** Proyecto del que el avatar cuelga un marco (su página). */
+  frame?: string;
 }
-const { title, description = 'Software engineer fullstack. Aplicaciones y herramientas pequeñas.' } =
+const { title, description = 'Software engineer fullstack. Aplicaciones y herramientas pequeñas.', frame } =
   Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
 ---
@@ -74,7 +76,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
       </button>
     </div>
-    <Avatar />
+    <Avatar frame={frame} />
 
     <script>
       const root = document.documentElement;

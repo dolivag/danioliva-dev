@@ -127,6 +127,16 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
     pieces: [...steam(k), ...typing(k, 1), 'ojos-camara', 'boca-sonrisa-cerrada'],
     head: bob(k, 4, 5),
   }),
+  // Pone el marco sobre la mesa: mira hacia abajo mientras cae, levanta la mano y sonríe.
+  marco: (k) => ({
+    pieces: [
+      ...steam(k),
+      ...(k < 8 && Math.floor(k / 2) % 2 === 0 ? ['saludo'] : []),
+      k < 6 ? 'ojos-abajo' : 'ojos-camara',
+      'boca-sonrisa-cerrada',
+    ],
+    head: bob(k, 12),
+  }),
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
 };
 
@@ -161,9 +171,24 @@ export type AvatarApi = {
   react: (key: string, text: string, ms?: number) => void;
   stop: () => void;
   say: (text: string, ms?: number) => void;
+  /** Pone el marco del proyecto sobre el escritorio (cae y se posa); `quitarMarco` lo retira. */
+  placeFrame: () => void;
+  removeFrame: () => void;
 };
 
-export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement): Promise<AvatarApi | null> {
+/**
+ * El marco de fotos de mesa (public/avatar/marcos/<proyecto>.png, a escala de píxel de arte) se dibuja ×8 sobre
+ * el escritorio, a la derecha de la maceta: tiene la misma granularidad que la ilustración. Cae con la gravedad
+ * y se posa con un pequeño rebote (desplazamientos en píxeles de arte por fotograma).
+ */
+const FRAME = { x: 724, base: 846, scale: 8 };
+const FRAME_FALL = [-9, -5, -2, 0, -1, 0];
+
+export async function startAvatar(
+  canvas: HTMLCanvasElement,
+  bubble: HTMLElement,
+  frameName?: string,
+): Promise<AvatarApi | null> {
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
   const root = canvas.closest('.avatar') as HTMLElement | null;
@@ -177,6 +202,8 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     ...names.map((n) => load(`/avatar/piezas/${n}.webp`)),
   ]);
   const piece = Object.fromEntries(names.map((n, i) => [n, images[i]]));
+  const frameImg = frameName ? await load(`/avatar/marcos/${frameName}.png`).catch(() => null) : null;
+  let frameFrom = -1; // fotograma en que se puso el marco (-1: sin marco)
   canvas.width = meta.size;
   canvas.height = meta.size;
 
@@ -235,6 +262,18 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);
+    if (frameImg && frameFrom >= 0) {
+      const k = reduced ? FRAME_FALL.length : Math.max(0, t - frameFrom);
+      const off = (FRAME_FALL[Math.min(k, FRAME_FALL.length - 1)] ?? 0) * FRAME.scale;
+      const w = frameImg.width * FRAME.scale;
+      const h = frameImg.height * FRAME.scale;
+      const y = FRAME.base - h + 6 + off;
+      c.fillStyle = 'rgba(0, 0, 0, 0.26)'; // sombra sobre la mesa
+      c.fillRect(FRAME.x + 8, FRAME.base - 10, w - 24, 12);
+      c.imageSmoothingEnabled = false;
+      c.drawImage(frameImg, FRAME.x, y, w, h);
+      c.imageSmoothingEnabled = true;
+    }
     // Primero lo que va fuera de la cabeza (manos, vapor…), luego la cabeza y sus piezas.
     for (const p of on) if (!meta.pieces[p].head) c.drawImage(piece[p], meta.pieces[p].x, meta.pieces[p].y);
     c.drawImage(head, hx, hy);
@@ -285,13 +324,21 @@ export async function startAvatar(canvas: HTMLCanvasElement, bubble: HTMLElement
     say,
     react(key, text, ms = 3200) {
       reaction = { key, start: tick, end: ms ? performance.now() + ms : 0 };
-      say(text, ms || 600000);
+      if (text) say(text, ms || 600000);
       draw(tick);
       if (reduced && ms) setTimeout(() => draw(tick), ms + 30);
     },
     stop() {
       reaction = null;
       bubble.classList.remove('show');
+      draw(tick);
+    },
+    placeFrame() {
+      frameFrom = tick;
+      draw(tick);
+    },
+    removeFrame() {
+      frameFrom = -1;
       draw(tick);
     },
   };

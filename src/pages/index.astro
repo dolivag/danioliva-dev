@@ -66,6 +66,12 @@ const items = [...marquee, ...marquee];
         <span class="when">{e.period}</span>
         <h3>{e.role} <span>/</span> {e.company}</h3>
         <p>{e.description}</p>
+        {e.bullets && (
+          <details class="more">
+            <summary>Ver el detalle</summary>
+            <ul>{e.bullets.map((b) => (<li>{b}</li>))}</ul>
+          </details>
+        )}
       </div>
     ))}
   </section>

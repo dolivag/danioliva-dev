@@ -38,7 +38,7 @@ El contenido de proyectos, experiencia y estudios está en `src/i18n/` (textos) 
   `node scripts/build-social.cjs` las guarda como PNG (y regenera `apple-touch-icon.png` y `favicon.ico`). Hay que
   volver a lanzarlo al cambiar un texto o una captura de proyecto, y subir los PNG. Necesita Playwright con
   Chromium (`PW_CHROMIUM_PATH` si ya lo tienes en otro sitio).
-- **Favicon:** `public/favicon.svg` cambia de colores con el tema del navegador (una «D» con punto ámbar).
+- **Favicon:** `public/favicon.svg`, una «D.» en Fraunces (la serif de los títulos) con el punto de los titulares, sobre ámbar: se ve igual en barras claras y oscuras.
 - **`theme-color`:** una meta para claro y otra para oscuro (el selector de tema las actualiza).
 - **Buscadores:** `sitemap.xml` (`src/pages/sitemap.xml.ts`) con las tres versiones de cada página (`hreflang`),
   `robots.txt`, y datos estructurados de schema.org: `Person` en la portada y `SoftwareApplication` en cada proyecto

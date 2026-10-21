@@ -41,17 +41,17 @@ function ico(png) {
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM_PATH || undefined });
 
-  // ---- iconos: el favicon en su versión para fondos claros (cuadro grafito, D marfil y punto ámbar)
+  // ---- iconos: el favicon (una «D.» sobre ámbar). Para iOS, a sangre (iOS redondea las esquinas él mismo).
   const svg = fs.readFileSync(path.join(ROOT, 'public', 'favicon.svg'), 'utf8');
-  const icon = async (size, out) => {
+  const icon = async (size, out, bleed = false) => {
     const p = await browser.newPage({ viewport: { width: size, height: size }, colorScheme: 'light' });
-    await p.setContent(`<body style="margin:0;background:#14161b">${svg.replace('<svg ', `<svg width="${size}" height="${size}" `)}</body>`);
-    const buf = await p.screenshot({ type: 'png' });
+    await p.setContent(`<body style="margin:0;background:${bleed ? '#f0b52e' : 'transparent'}">${svg.replace('<svg ', `<svg width="${size}" height="${size}" `)}</body>`);
+    const buf = await p.screenshot({ type: 'png', omitBackground: !bleed });
     await p.close();
     if (out) fs.writeFileSync(out, buf);
     return buf;
   };
-  await icon(180, path.join(ROOT, 'public', 'apple-touch-icon.png'));
+  await icon(180, path.join(ROOT, 'public', 'apple-touch-icon.png'), true);
   fs.writeFileSync(path.join(ROOT, 'public', 'favicon.ico'), ico(await icon(32)));
   console.log('iconos listos');
   if (onlyIcons) return browser.close();

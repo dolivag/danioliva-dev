@@ -42,7 +42,7 @@ export const es: Dict = {
     systemShort: 'Sistema',
   },
   lang: { label: 'Idioma' },
-  contact: { writeMe: 'Escríbeme', code: 'Código', profile: 'Perfil profesional' },
+  contact: { writeMe: 'Escríbeme', code: 'Código', profile: 'Perfil profesional', cvLabel: 'Currículum', cvLink: 'Ver y descargar el CV' },
   experience: [
     {
       company: 'Zennio',
@@ -64,7 +64,7 @@ export const es: Dict = {
     {
       company: 'Vanadys',
       role: 'Consultor asociado',
-      period: 'Julio 2022 – enero 2024',
+      period: 'Julio 2021 – enero 2024',
       description: 'Consultoría en proyectos con Avaloq.',
     },
   ],

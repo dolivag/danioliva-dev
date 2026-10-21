@@ -72,7 +72,7 @@ export type Dict = {
     systemShort: string;
   };
   lang: { label: string };
-  contact: { writeMe: string; code: string; profile: string };
+  contact: { writeMe: string; code: string; profile: string; cvLabel: string; cvLink: string };
   experience: { company: string; role: string; period: string; description: string; bullets?: string[] }[];
   studies: { school: string; when: string; title: string }[];
   projects: Record<string, ProjectCopy>;

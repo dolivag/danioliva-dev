@@ -167,7 +167,7 @@ export const ca: Dict = {
       description: 'App per a pares que genera contes infantils amb IA: tries nou conceptes i crea el conte amb una il·lustració per secció.',
       openLabel: '',
       tags: ['En pausa', 'Expo', 'React Native', 'Supabase', 'IA', 'Contes', 'Il·lustracions'],
-      lead: 'Una app per a pares que genera contes infantils amb IA: tries nou conceptes —personatges, llocs, objectes, valors— repartits en introducció, nus i desenllaç, i la IA escriu un conte curt per a nens de 3 a 8 anys, amb una il·lustració per secció. La vaig començar el març de 2026; ara està en pausa i penso reprendre-la.',
+      lead: 'Inspirada en el joc Story Cubes: una app per a pares que genera contes infantils amb IA: tries nou conceptes —personatges, llocs, objectes, valors— repartits en introducció, nus i desenllaç, i la IA escriu un conte curt per a nens de 3 a 8 anys, amb una il·lustració per secció. La vaig començar el març de 2026; ara està en pausa i penso reprendre-la.',
       facts: [
         { title: 'Nou conceptes, tres actes', text: 'Tres conceptes per a la introducció, tres per al nus i tres per al desenllaç, sense repetir-ne cap. N’hi ha més de cent de sortida i pots afegir-hi els teus.' },
         { title: 'Contes a mida', text: 'La IA escriu un conte curt adaptat a nens de 3 a 8 anys, amb contingut pensat per a ells.' },

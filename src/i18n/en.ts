@@ -167,7 +167,7 @@ export const en: Dict = {
       description: 'An app for parents that generates children’s stories with AI: you pick nine concepts and it creates the story with one illustration per section.',
       openLabel: '',
       tags: ['On hold', 'Expo', 'React Native', 'Supabase', 'AI', 'Stories', 'Illustrations'],
-      lead: 'An app for parents that generates children’s stories with AI: you pick nine concepts —characters, places, objects, values— spread across introduction, climax and ending, and the AI writes a short story for children aged 3 to 8, with one illustration per section. I started it in March 2026; it is on hold for now and I plan to pick it up again.',
+      lead: 'Inspired by the game Story Cubes: an app for parents that generates children’s stories with AI: you pick nine concepts —characters, places, objects, values— spread across introduction, climax and ending, and the AI writes a short story for children aged 3 to 8, with one illustration per section. I started it in March 2026; it is on hold for now and I plan to pick it up again.',
       facts: [
         { title: 'Nine concepts, three acts', text: 'Three concepts for the introduction, three for the climax and three for the ending, with no repeats. There are over a hundred to start with and you can add your own.' },
         { title: 'Made to measure', text: 'The AI writes a short story for children aged 3 to 8, with content designed for them.' },

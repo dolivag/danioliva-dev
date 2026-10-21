@@ -167,7 +167,7 @@ export const es: Dict = {
       description: 'App para padres que genera cuentos infantiles con IA: eliges nueve conceptos y crea el cuento con una ilustración por sección.',
       openLabel: '',
       tags: ['En pausa', 'Expo', 'React Native', 'Supabase', 'IA', 'Cuentos', 'Ilustraciones'],
-      lead: 'Una app para padres que genera cuentos infantiles con IA: eliges nueve conceptos —personajes, lugares, objetos, valores— repartidos en introducción, nudo y desenlace, y la IA escribe un cuento corto para niños de 3 a 8 años, con una ilustración por sección. La empecé en marzo de 2026; ahora está en pausa y pienso retomarla.',
+      lead: 'Inspirada en el juego Story Cubes: una app para padres que genera cuentos infantiles con IA: eliges nueve conceptos —personajes, lugares, objetos, valores— repartidos en introducción, nudo y desenlace, y la IA escribe un cuento corto para niños de 3 a 8 años, con una ilustración por sección. La empecé en marzo de 2026; ahora está en pausa y pienso retomarla.',
       facts: [
         { title: 'Nueve conceptos, tres actos', text: 'Tres conceptos para la introducción, tres para el nudo y tres para el desenlace, sin repetir ninguno. Hay más de cien de partida y puedes añadir los tuyos.' },
         { title: 'Cuentos a medida', text: 'La IA escribe un cuento corto adaptado a niños de 3 a 8 años, con contenido pensado para ellos.' },

@@ -45,10 +45,11 @@ compone en un canvas: la escena (todo menos la cabeza), la cabeza y piezas que c
 (ojos, cejas, boca, birrete, manos, saludo, vapor). Cambia de gesto según la sección
 (`data-avatar` en cada sección).
 
-### Marcos del avatar en las páginas de proyecto
+### Marco de fotos del avatar en las páginas de proyecto
 
-Al entrar en `/apps/<slug>/` el avatar cuelga un marco de pixel art con el logo del proyecto (con los
-mismos píxeles que el avatar: una rejilla de 128 en su ancho). Los logos
+Al entrar en `/apps/<slug>/` el avatar pone sobre su escritorio un marco de fotos de bambú con el logo del
+proyecto. El marco se dibuja dentro del lienzo del avatar (`avatar.ts`, `placeFrame`), con los mismos píxeles
+que él (una rejilla de 128 en 1024 px), mirando hacia donde mira el avatar y con su pie por detrás. Los logos
 están en `art/frames/<slug>.svg` (y su `.png`, que sale de renderizarlo a 256 px); `python3
 scripts/build-frames.py` genera los sprites de `public/avatar/marcos/`. Para un proyecto nuevo: añadir su
 logo ahí y volver a lanzar el script.

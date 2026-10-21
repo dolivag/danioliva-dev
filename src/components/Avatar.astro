@@ -2,13 +2,12 @@
 import { ACHIEVEMENTS } from '../scripts/game';
 
 interface Props {
-  /** Proyecto del que cuelga un marco de pixel art (en la página de un proyecto). */
+  /** Proyecto cuyo marco de fotos pone el avatar sobre su escritorio (en la página de un proyecto). */
   frame?: string;
 }
 const { frame } = Astro.props;
 ---
 <div class="avatar" data-state="hero" data-frame={frame}>
-  {frame && <img class="frame" src={`/avatar/marcos/${frame}.png`} alt="" width="24" height="29" decoding="async" />}
   <div class="bubble" id="avatar-bubble" aria-hidden="true"></div>
   <div class="panel" id="avatar-panel" role="dialog" aria-label="Interacciones con el avatar" hidden>
     <p class="panel-title">Interacciones <span id="avatar-score"></span></p>
@@ -73,7 +72,7 @@ const { frame } = Astro.props;
   };
   render();
 
-  startAvatar(canvas, bubble).then((avatar) => {
+  startAvatar(canvas, bubble, root.dataset.frame).then((avatar) => {
     if (!avatar) return;
     const by = (id: AchievementId) => ACHIEVEMENTS.find((a) => a.id === id)!;
     let toastTimer: number | undefined;
@@ -86,11 +85,11 @@ const { frame } = Astro.props;
     };
 
     /** Reacciona y, si es la primera vez, desbloquea. Devuelve si era nuevo. */
-    // En la página de un proyecto: cuelga su marco.
+    // En la página de un proyecto: pone su marco de fotos sobre el escritorio.
     if (root.dataset.frame) {
       setTimeout(() => {
-        root.classList.add('framed');
-        avatar.react('marco', '', 1300);
+        avatar.placeFrame();
+        avatar.react('marco', '', 1100);
       }, 700);
     }
 
@@ -295,45 +294,6 @@ const { frame } = Astro.props;
     }
   }
 
-  /* Marco de pixel art colgado de la pared, justo encima del portátil y la taza (el hueco vacío de la
-     ilustración). Sus píxeles miden lo mismo que los del avatar (rejilla de 128 en su ancho; el sprite
-     tiene 52 de ancho) y se suaviza igual que él. */
-  .frame {
-    position: absolute;
-    left: 3%;
-    bottom: 46%;
-    width: calc(var(--size) * 52 / 128);
-    height: auto;
-    opacity: 0;
-    pointer-events: none;
-    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.28));
-  }
-  .avatar:global(.framed) .frame {
-    opacity: 1;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    /* Cae con la gravedad (acelera) y rebota un poco al llegar a la pared. */
-    .avatar:global(.framed) .frame {
-      animation: hang 0.5s both;
-    }
-    @keyframes hang {
-      0% {
-        transform: translateY(-110%);
-        animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
-      }
-      62% {
-        transform: translateY(0);
-        animation-timing-function: ease-out;
-      }
-      80% {
-        transform: translateY(-9%);
-        animation-timing-function: ease-in;
-      }
-      100% {
-        transform: translateY(0);
-      }
-    }
-  }
   @media (max-width: 999px) {
     /* Al bajar por la página, el avatar se agacha y solo asoma la cabeza por el borde de abajo. */
     .avatar {

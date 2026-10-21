@@ -152,8 +152,7 @@ export const en: Dict = {
       webAlts: [
         'DuoMeteo: home page with an animated rain icon; there is one for every sky condition',
         'DuoMeteo comparing Buenos Aires (17 °C) and Sydney (18 °C): feels-like, humidity, wind, precipitation, UV index and sun hours',
-        'DuoMeteo: six-day forecast for both cities, with high, low and chance of rain',
-        'DuoMeteo: a globe with both cities and the distance between them, and the day’s temperature chart',
+        'DuoMeteo: six-day forecast for both cities, with high, low and chance of rain, and below it a globe with the distance between them and the day’s temperature chart',
       ],
     },
     trasteo: {

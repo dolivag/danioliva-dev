@@ -76,7 +76,6 @@ const projectsBase: ProjectBase[] = [
       { src: '/projects/duometeo/hero.webp', srcDark: '/projects/duometeo/hero-oscuro.webp' },
       { src: '/projects/duometeo/comparativa.webp', srcDark: '/projects/duometeo/comparativa-oscuro.webp' },
       { src: '/projects/duometeo/dias.webp', srcDark: '/projects/duometeo/dias-oscuro.webp' },
-      { src: '/projects/duometeo/grafica.webp', srcDark: '/projects/duometeo/grafica-oscuro.webp' },
     ],
   },
   {

@@ -21,6 +21,8 @@ export type ProjectCopy = {
   shotAlts?: string[];
   /** Texto alternativo de la captura de escritorio. */
   webAlt?: string;
+  /** Qué se ve en el vídeo de la captura de escritorio (`web.clip`). */
+  clipAlt?: string;
   /** Textos alternativos de las capturas de escritorio extra (`webs`), en el mismo orden. */
   webAlts?: string[];
 };

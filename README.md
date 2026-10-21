@@ -73,6 +73,10 @@ redirecciones, definidas en `astro.config.mjs`, para que estas URL no cambien nu
 - `/apps/hogarnizer/soporte`
 - `/apps/hogarnizer/eliminar-cuenta`
 
+## Currículum
+
+`/cv/`, `/ca/cv/` y `/en/cv/` (`src/pages/[...lang]/cv.astro`): una hoja A4 que se imprime o se guarda como PDF desde el botón de la página (sin teléfono). Los textos están en `src/i18n/cv.ts` (aparte del resto de diccionarios) y la foto en `public/cv/foto.webp`. Para que siga cabiendo en una sola página, si añades contenido conviene comprobar la vista de impresión (`Ctrl+P`) en los tres idiomas.
+
 ## Avatar animado
 
 El avatar que acompaña al visitante (`src/components/Avatar.astro` y `src/scripts/avatar.ts`) se

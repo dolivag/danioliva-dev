@@ -3,7 +3,7 @@ import { locales, localePath } from '../i18n';
 import { getProjects } from '../data/site';
 
 /** Mapa del sitio con las tres versiones de cada página (`hreflang`), a mano y sin dependencias. */
-const pages = ['/', ...getProjects('es').map((p) => `/apps/${p.slug}/`)];
+const pages = ['/', '/cv/', ...getProjects('es').map((p) => `/apps/${p.slug}/`)];
 
 export const GET: APIRoute = ({ site }) => {
   const abs = (lang: (typeof locales)[number], path: string) => new URL(localePath(lang, path), site).href;

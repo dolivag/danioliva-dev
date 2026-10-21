@@ -122,6 +122,7 @@ const person = {
     <h2>{t.sections.contact}</h2>
     <a class="contact-link" href={`mailto:${site.email}`}><small>{t.contact.writeMe}</small>{site.email}</a>
     <a class="contact-link" href={site.linkedin} target="_blank" rel="noopener"><small>{t.contact.profile}</small>LinkedIn / daniel-oliva-gomez<span class="sr-only"> ({t.common.newTab})</span></a>
+    <a class="contact-link" href={localePath(lang, '/cv/')}><small>{t.contact.cvLabel}</small>{t.contact.cvLink}</a>
     <a class="contact-link" href={site.github} target="_blank" rel="noopener"><small>{t.contact.code}</small>GitHub / dolivag<span class="sr-only"> ({t.common.newTab})</span></a>
   </section>
   <script>

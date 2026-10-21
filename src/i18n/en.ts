@@ -42,7 +42,7 @@ export const en: Dict = {
     systemShort: 'System',
   },
   lang: { label: 'Language' },
-  contact: { writeMe: 'Write to me', code: 'Code', profile: 'Professional profile' },
+  contact: { writeMe: 'Write to me', code: 'Code', profile: 'Professional profile', cvLabel: 'Résumé', cvLink: 'View and download my résumé' },
   experience: [
     {
       company: 'Zennio',

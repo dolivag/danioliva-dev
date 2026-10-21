@@ -116,21 +116,44 @@ const total = ACHIEVEMENT_IDS.length;
     if (lost) setTimeout(() => avatar.react('tema', lost, 4500), 900);
 
     // En móvil, al bajar por la página el avatar se agacha (solo asoma la cabeza) para no tapar el texto; al subir o tocarlo vuelve.
+    // Para que no se agache ni se levante a saltos: hace falta desplazarse de verdad (40 px hacia abajo, 24 hacia arriba, sin
+    // contar el temblor de la inercia ni de la barra del navegador) y, mientras habla, se abre el panel o acaba de tocarse,
+    // se queda arriba (`lift`).
     const mobile = matchMedia('(max-width: 999px)');
     let lastY = scrollY;
+    let run = 0; // lo que se lleva desplazado en la misma dirección (+ hacia abajo)
+    let liftUntil = 0;
+    const lift = (ms: number) => {
+      root.classList.remove('tucked');
+      liftUntil = Math.max(liftUntil, performance.now() + ms);
+      run = 0;
+    };
     addEventListener(
       'scroll',
       () => {
         const y = scrollY;
-        if (mobile.matches) {
-          if (y > lastY + 6 && y > 120) root.classList.add('tucked');
-          else if (y < lastY - 6) root.classList.remove('tucked');
-        }
+        const dy = y - lastY;
         lastY = y;
+        if (!mobile.matches) return;
+        run = Math.sign(dy) === Math.sign(run) ? run + dy : dy;
+        if (performance.now() < liftUntil || !panel.hidden) return;
+        if (run > 40 && y > 120) root.classList.add('tucked');
+        else if (run < -24) root.classList.remove('tucked');
       },
       { passive: true },
     );
-    stage.addEventListener('click', () => root.classList.remove('tucked'));
+    stage.addEventListener('pointerdown', () => lift(6000));
+    stage.addEventListener('click', () => lift(6000));
+    // Todo lo que dice el avatar mantiene su bocadillo a la vista.
+    for (const name of ['react', 'say'] as const) {
+      const original = avatar[name] as (...args: any[]) => void;
+      avatar[name] = ((...args: any[]) => {
+        const text = name === 'react' ? args[1] : args[0];
+        const ms = (name === 'react' ? args[2] : args[1]) ?? 3200;
+        if (text) lift(ms + 800);
+        original(...args);
+      }) as never;
+    }
 
     // Lo que dura cada reacción (las de varias poses necesitan más que las de un gesto).
     const DURATION: Partial<Record<AchievementId, number>> = { cafe: 4100, planta: 3800, noctambulo: 4000 };
@@ -340,6 +363,10 @@ const total = ACHIEVEMENT_IDS.length;
     const setPanel = (open: boolean) => {
       panel.hidden = !open;
       counter.setAttribute('aria-expanded', String(open));
+      if (open) {
+        lift(0);
+        bubble.classList.remove('show'); // el panel sube por el mismo sitio que el bocadillo
+      }
       fitPanel();
     };
     counter.addEventListener('click', (e) => {
@@ -727,6 +754,20 @@ const total = ACHIEVEMENT_IDS.length;
   .toast:global(.show) {
     opacity: 1;
     transform: translate(-50%, 0);
+  }
+
+  /* En móvil el aviso va arriba, bajo el menú: abajo se pisaba con el bocadillo del avatar. */
+  @media (max-width: 999px) {
+    .toast {
+      bottom: auto;
+      top: calc(68px + env(safe-area-inset-top, 0px));
+      max-width: calc(100vw - 32px);
+      text-align: center;
+      transform: translate(-50%, -14px);
+    }
+    .toast:global(.show) {
+      transform: translate(-50%, 0);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

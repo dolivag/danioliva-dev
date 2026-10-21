@@ -160,7 +160,8 @@ const DEAD_ZONE = 0.16; // cursor casi encima: mira de frente
 function load(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
-    img.onload = () => resolve(img);
+    // `decode()` descodifica la imagen fuera del hilo principal (si no, el primer `drawImage` lo bloquea).
+    img.onload = () => (img.decode ? img.decode().then(() => resolve(img), () => resolve(img)) : resolve(img));
     img.onerror = reject;
     img.src = src;
   });
@@ -347,6 +348,7 @@ export async function startAvatar(
   root?.classList.add('ready');
   if (reduced) return api;
   setInterval(() => {
+    if (document.hidden) return; // pestaña oculta: nada que dibujar
     tick++;
     if (tick >= nextBlink) {
       blinkUntil = tick + 1;

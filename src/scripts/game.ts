@@ -150,4 +150,36 @@ export function enableWordDrag({ target, onOver, onDrop }: DragOptions) {
       timer = window.setTimeout(() => start(sx, sy), 350);
     }
   });
+
+  // Sin arrastrar: doble clic en una etiqueta (las de los proyectos son enlaces, y ahí el primer clic ya navega) o
+  // Mayús+Intro con el foco en una palabra o en un enlace que la contiene. Mismo vuelo y mismo resultado que arrastrándola.
+  const fly = (el: HTMLElement) => {
+    const word = el.dataset.drag!;
+    const r = el.getBoundingClientRect();
+    const t = target().getBoundingClientRect();
+    const ghost = document.createElement('div');
+    ghost.className = 'drag-ghost';
+    ghost.textContent = el.textContent?.trim() ?? word;
+    document.body.append(ghost);
+    ghost.style.transform = `translate(${r.left + r.width / 2}px, ${r.top + r.height / 2}px) translate(-50%, -50%)`;
+    ghost.getBoundingClientRect(); // fija la posición de salida antes de animar
+    ghost.style.transition = 'transform 0.55s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.55s ease';
+    ghost.style.opacity = '0';
+    ghost.style.transform = `translate(${t.left + t.width / 2}px, ${t.top + t.height * 0.4}px) translate(-50%, -50%) scale(0.3)`;
+    setTimeout(() => ghost.remove(), 650);
+    onDrop(word);
+  };
+  document.addEventListener('dblclick', (e) => {
+    const el = (e.target as Element).closest<HTMLElement>('[data-drag]');
+    if (el && !el.closest('a')) fly(el);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || !e.shiftKey) return;
+    const t = e.target as Element;
+    const el = t.closest<HTMLElement>('[data-drag]') ?? t.querySelector<HTMLElement>('[data-drag]');
+    if (el) {
+      e.preventDefault();
+      fly(el);
+    }
+  });
 }

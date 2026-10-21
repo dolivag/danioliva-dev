@@ -24,6 +24,8 @@ export const es: Dict = {
     links: 'Enlaces',
     viewDetail: 'Ver el detalle',
     email: 'Email',
+    newTab: 'se abre en una pestaña nueva',
+    skip: 'Saltar al contenido',
   },
   theme: {
     group: 'Tema de la web',
@@ -159,7 +161,7 @@ export const es: Dict = {
     repeat: 'Repetir',
     repeatAria: 'Repetir: {title}',
     stageAria: 'Saludar al avatar',
-    counterAria: 'Interacciones con el avatar: {n} de {total} desbloqueadas',
+    counterAria: '{n}/{total} interacciones con el avatar desbloqueadas',
     unlocked: 'Desbloqueado · {title} · {n}/{total}',
     complete: 'Colección completa. Lo has conseguido todo.',
     done: 'Lo has conseguido todo. ¿Hablamos?',

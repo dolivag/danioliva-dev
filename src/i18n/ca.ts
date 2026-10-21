@@ -24,6 +24,8 @@ export const ca: Dict = {
     links: 'Enllaços',
     viewDetail: 'Veure el detall',
     email: 'Correu',
+    newTab: 's’obre en una pestanya nova',
+    skip: 'Salta al contingut',
   },
   theme: {
     group: 'Tema del web',
@@ -159,7 +161,7 @@ export const ca: Dict = {
     repeat: 'Repeteix',
     repeatAria: 'Repeteix: {title}',
     stageAria: 'Saluda l’avatar',
-    counterAria: 'Interaccions amb l’avatar: {n} de {total} desbloquejades',
+    counterAria: '{n}/{total} interaccions amb l’avatar desbloquejades',
     unlocked: 'Desbloquejat · {title} · {n}/{total}',
     complete: 'Col·lecció completa. Ho has aconseguit tot.',
     done: 'Ho has aconseguit tot. Parlem?',

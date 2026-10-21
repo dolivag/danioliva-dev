@@ -7,6 +7,10 @@ import Avatar from '../components/Avatar.astro';
 import LangSwitch from '../components/LangSwitch.astro';
 import Glow from '../components/Glow.astro';
 import Micro from '../components/Micro.astro';
+// Las fuentes de arriba de todo (título, saludo en cursiva y texto) se piden ya, sin esperar a leer el CSS.
+import frauncesFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
+import frauncesItalicFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-italic.woff2?url';
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
   /** Idioma de la página (por defecto, el de su ruta). */
@@ -44,6 +48,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
       } catch {}
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {[frauncesFont, frauncesItalicFont, interFont].map((href) => (<link rel="preload" as="font" type="font/woff2" href={href} crossorigin />))}
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />
@@ -72,6 +77,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
     <link rel="canonical" href={abs(lang)} />
   </head>
   <body>
+    <a class="skip" href="#contenido">{t.common.skip}</a>
     <Glow />
     <Micro />
     <div class="progress" aria-hidden="true"></div>
@@ -91,10 +97,10 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
         </nav>
         <div class="social">
           <LangSwitch lang={lang} path={path} variant="header" />
-          <a class="ico" href={site.github} rel="me" aria-label="GitHub" title="GitHub">
+          <a class="ico" href={site.github} target="_blank" rel="me noopener" aria-label={`GitHub (${t.common.newTab})`} title="GitHub">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
           </a>
-          <a class="ico" href={site.linkedin} rel="me" aria-label="LinkedIn" title="LinkedIn">
+          <a class="ico" href={site.linkedin} target="_blank" rel="me noopener" aria-label={`LinkedIn (${t.common.newTab})`} title="LinkedIn">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
           </a>
           <a class="ico" href={`mailto:${site.email}`} aria-label={t.common.email} title={t.common.email}>
@@ -102,11 +108,11 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
           </a>
         </div>
       </header>
-      <main><slot /></main>
+      <main id="contenido" tabindex="-1"><slot /></main>
       <footer>
         © {new Date().getFullYear()} {site.name} ·{' '}
-        <a href={site.github}>GitHub</a> ·{' '}
-        <a href={site.linkedin}>LinkedIn</a> ·{' '}
+        <a href={site.github} target="_blank" rel="noopener">GitHub<span class="sr-only"> ({t.common.newTab})</span></a> ·{' '}
+        <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn<span class="sr-only"> ({t.common.newTab})</span></a> ·{' '}
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </footer>
     </div>
@@ -130,14 +136,16 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
       // 1. El nombre gigante: cada línea en una máscara y cada letra en su propio trozo, para que
       //    suban desde abajo una detrás de otra.
       document.querySelectorAll<HTMLElement>('[data-fit]').forEach((group) => {
+        // El nombre accesible es el del h1 entero («Hola, soy Daniel Oliva»); las letras sueltas no se leen.
+        group.setAttribute('aria-label', Array.from(group.children, (c) => c.textContent?.trim()).filter(Boolean).join(' '));
         group.querySelectorAll<HTMLElement>('.line').forEach((line, row) => {
           const text = line.textContent ?? '';
-          line.setAttribute('aria-label', text);
           line.innerHTML = Array.from(text)
             .map((ch, i) => `<span class="letter" aria-hidden="true" style="--r:${row};--i:${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`)
             .join('');
           const mask = document.createElement('span');
           mask.className = 'row';
+          mask.setAttribute('aria-hidden', 'true');
           line.replaceWith(mask);
           mask.append(line);
         });

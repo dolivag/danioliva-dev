@@ -44,6 +44,10 @@ export type Dict = {
     links: string;
     viewDetail: string;
     email: string;
+    /** Aviso para lectores de pantalla en los enlaces que abren otra pestaña (sin paréntesis). */
+    newTab: string;
+    /** Enlace «saltar al contenido» para teclado y lectores de pantalla. */
+    skip: string;
   };
   theme: {
     group: string;
@@ -69,7 +73,7 @@ export type Dict = {
     /** `{title}` */
     repeatAria: string;
     stageAria: string;
-    /** `{n}`, `{total}` */
+    /** `{n}`, `{total}`; debe empezar por el texto visible del botón («{n}/{total}»). */
     counterAria: string;
     /** `{title}`, `{n}`, `{total}` */
     unlocked: string;

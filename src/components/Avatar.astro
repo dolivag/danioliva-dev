@@ -86,7 +86,9 @@ const total = ACHIEVEMENT_IDS.length;
   };
   render();
 
-  startAvatar(canvas, bubble, root.dataset.frame).then((avatar) => {
+  // El avatar (20 imágenes y un lienzo de 1024 px) arranca cuando el navegador está libre: no compite con el primer pintado.
+  const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 300));
+  idle(() => startAvatar(canvas, bubble, root.dataset.frame).then((avatar) => {
     if (!avatar) return;
     let toastTimer: number | undefined;
 
@@ -273,7 +275,7 @@ const total = ACHIEVEMENT_IDS.length;
         counter.focus();
       }
     });
-  });
+  }));
 </script>
 
 <style>
@@ -408,7 +410,8 @@ const total = ACHIEVEMENT_IDS.length;
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    padding: 5px 10px;
+    min-height: 28px;
+    padding: 5px 11px;
     border: 1px solid var(--glass-line);
     border-radius: 999px;
     background: var(--glass-bg);

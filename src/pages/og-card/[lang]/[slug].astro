@@ -1,0 +1,118 @@
+---
+// Tarjetas de 1200×630 para las vistas previas al compartir (`og:image`). Solo existen con `astro dev`: en el
+// build no genera nada. `scripts/build-social.cjs` las abre en un navegador y guarda `public/og/<idioma>/<slug>.png`.
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource-variable/fraunces/wght.css';
+import '@fontsource-variable/fraunces/wght-italic.css';
+import { site, getProjects } from '../../../data/site';
+import { useDict, locales } from '../../../i18n';
+import type { Lang } from '../../../i18n';
+
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return locales.flatMap((lang) =>
+    ['home', ...getProjects(lang).map((p) => p.slug)].map((slug) => ({ params: { lang, slug }, props: { lang, slug } })),
+  );
+}
+
+const { lang, slug } = Astro.props as { lang: Lang; slug: string };
+const t = useDict(lang);
+const all = getProjects(lang);
+const project = slug === 'home' ? undefined : all.find((p) => p.slug === slug);
+const n = project ? String(all.findIndex((p) => p.slug === slug) + 1).padStart(2, '0') : '';
+const shots = project?.shots?.slice(0, 3) ?? [];
+const web = project?.web;
+const avatarSize = 560;
+---
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>{slug} · {lang}</title>
+    <style is:global>
+      * { box-sizing: border-box; margin: 0; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; background: #0f1115; }
+      body { position: relative; font-family: 'Inter Variable', system-ui, sans-serif; color: #ece9e2; -webkit-font-smoothing: antialiased; }
+      .glow { position: absolute; inset: 0; background: radial-gradient(640px 520px at 86% 78%, rgba(240, 181, 46, 0.16), transparent 70%); }
+      .grain { position: absolute; inset: 0; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+      .brand { position: absolute; left: 72px; top: 56px; font-weight: 700; font-size: 26px; letter-spacing: -0.02em; }
+      .brand i { color: #f0b52e; font-style: normal; }
+      .url { position: absolute; left: 72px; bottom: 52px; font-size: 22px; letter-spacing: 0.06em; color: #9a9ea8; }
+      .text { position: absolute; left: 72px; top: 150px; width: 520px; }
+      astro-dev-toolbar { display: none !important; }
+      .serif { font-family: 'Fraunces Variable', Georgia, serif; font-variation-settings: 'opsz' 144; letter-spacing: -0.03em; line-height: 0.98; }
+      .hi { font-family: 'Fraunces Variable', Georgia, serif; font-style: italic; font-weight: 350; font-size: 40px; color: #9a9ea8; margin-bottom: 8px; }
+      .name { font-weight: 380; font-size: 124px; width: 600px; }
+      .role { display: flex; align-items: center; gap: 18px; margin-top: 34px; font-size: 24px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #f0b52e; }
+      .role::before { content: ''; width: 56px; height: 2px; background: currentColor; }
+      .label { font-size: 22px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #f0b52e; margin-bottom: 22px; }
+      .pname { font-weight: 400; font-size: 112px; }
+      .desc { margin-top: 30px; font-size: 28px; line-height: 1.35; color: #9a9ea8; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+      .stack { margin-top: 26px; font-size: 20px; letter-spacing: 0.12em; text-transform: uppercase; color: #ece9e2; opacity: 0.7; }
+      .art { position: absolute; right: 0; bottom: 0; }
+      .avatar { position: absolute; right: 30px; bottom: -18px; width: 560px; height: 560px; }
+      .avatar img { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .avatar .frame { image-rendering: auto; inset: auto; width: auto; height: auto; }
+      .phones { position: absolute; right: 40px; bottom: 0; width: 520px; height: 520px; }
+      .phone { position: absolute; bottom: -110px; width: 210px; aspect-ratio: 390 / 844; padding: 6px; border-radius: 32px; background: #0b0c0f; box-shadow: 0 0 0 1px rgba(255,255,255,.16), 0 24px 50px rgba(0,0,0,.5); }
+      .phone img { width: 100%; height: 100%; border-radius: 26px; object-fit: cover; object-position: top; display: block; }
+      .phone:nth-child(1) { left: 0; transform: rotate(-7deg) translateY(36px); }
+      .phone:nth-child(2) { left: 155px; z-index: 1; bottom: -70px; }
+      .phone:nth-child(3) { left: 310px; transform: rotate(7deg) translateY(36px); }
+      .browser { position: absolute; right: -40px; bottom: -40px; width: 600px; border-radius: 14px 14px 0 0; background: #14161b; box-shadow: 0 0 0 1px rgba(255,255,255,.16), 0 24px 50px rgba(0,0,0,.5); }
+      .browser .bar { display: flex; gap: 7px; padding: 12px 14px; background: #1c1f26; border-radius: 14px 14px 0 0; }
+      .browser .bar i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.22); }
+      .browser img { display: block; width: 100%; height: 380px; object-fit: cover; object-position: top; }
+    </style>
+  </head>
+  <body data-ready>
+    <div class="glow"></div>
+    <div class="grain"></div>
+    <div class="brand">&lt;D<i>.</i>O/&gt;</div>
+
+    {
+      !project ? (
+        <div class="text">
+          <div class="hi">{t.hero.hi}</div>
+          <div class="name serif">{site.name}</div>
+          <div class="role">{t.hero.role}</div>
+        </div>
+      ) : (
+        <div class="text">
+          <div class="label">{n} / {t.common.project}{project.status ? ` · ${project.status}` : ''}</div>
+          <div class="pname serif">{project.name}</div>
+          <div class="desc">{project.description}</div>
+          <div class="stack">{project.stack}</div>
+        </div>
+      )
+    }
+
+    {
+      (!project || (!shots.length && !web)) && (
+        <div class="avatar">
+          <img src="/avatar/escena.webp" alt="" />
+          {slug === 'trasteo' && (
+            <img class="frame" src="/avatar/marcos/trasteo.png" alt="" style={`left:${(724 / 1024) * avatarSize}px;top:${((846 - 8 * 23 + 6) / 1024) * avatarSize}px;width:${(8 * 21 / 1024) * avatarSize}px`} />
+          )}
+          <img src="/avatar/cabeza.webp" alt="" />
+        </div>
+      )
+    }
+    {
+      shots.length > 0 && (
+        <div class="phones">
+          {shots.map((s) => (<div class="phone"><img src={s.srcDark ?? s.src} alt="" /></div>))}
+        </div>
+      )
+    }
+    {
+      web && (
+        <div class="browser">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <img src={web.srcDark ?? web.src} alt="" />
+        </div>
+      )
+    }
+    <div class="url">danioliva.dev</div>
+  </body>
+</html>

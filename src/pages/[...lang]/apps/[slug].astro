@@ -4,7 +4,8 @@ import BrowserShot from '../../../components/BrowserShot.astro';
 import ShotGallery from '../../../components/ShotGallery.astro';
 import { getProjects, projectUrl } from '../../../data/site';
 import type { Project } from '../../../data/site';
-import { useDict, locales, defaultLang } from '../../../i18n';
+import { useDict, locales, defaultLang, localePath } from '../../../i18n';
+import { site } from '../../../data/site';
 import type { Lang } from '../../../i18n';
 
 export function getStaticPaths() {
@@ -22,8 +23,23 @@ const projects = getProjects(lang);
 const index = projects.findIndex((x) => x.slug === p.slug);
 const others = projects.filter((x) => x.slug !== p.slug);
 const pad = String(index + 1).padStart(2, '0');
+const APP_TYPE: Record<string, string> = { 'qr-city': 'WebApplication', duometeo: 'WebApplication', hogarnizer: 'MobileApplication' };
+const jsonLd = p.href && APP_TYPE[p.slug]
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: p.name,
+      description: p.description,
+      url: p.href,
+      applicationCategory: APP_TYPE[p.slug],
+      inLanguage: lang,
+      image: new URL(`/og/${lang}/${p.slug}.png`, Astro.site).href,
+      author: { '@type': 'Person', name: site.name, url: new URL('/', Astro.site).href },
+      mainEntityOfPage: new URL(localePath(lang, `/apps/${p.slug}/`), Astro.site).href,
+    }
+  : undefined;
 ---
-<Base lang={lang} title={p.name} description={p.description} frame={p.slug}>
+<Base lang={lang} title={p.name} description={p.description} frame={p.slug} og={p.slug} jsonLd={jsonLd}>
   <div class="hero" data-avatar="projects">
     <h1 data-fit>
       <span class="line l1">{p.name}</span>

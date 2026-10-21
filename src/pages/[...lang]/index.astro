@@ -16,8 +16,24 @@ const { lang } = Astro.props as { lang: Lang };
 const t = useDict(lang);
 const projects = getProjects(lang);
 const pad = (n: number) => String(n + 1).padStart(2, '0');
+const url = new URL(localePath(lang, '/'), Astro.site).href;
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${new URL('/', Astro.site).href}#daniel-oliva`,
+  name: site.name,
+  url,
+  jobTitle: t.role,
+  description: t.meta.description,
+  image: new URL('/og/' + lang + '/home.png', Astro.site).href,
+  sameAs: [site.github],
+  worksFor: { '@type': 'Organization', name: 'Zennio' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Universitat Oberta de Catalunya' },
+  knowsAbout: ['Angular', 'Node.js', 'NestJS', 'React', 'React Native', 'TypeScript', 'PostgreSQL', 'CI/CD'],
+  knowsLanguage: ['es', 'ca', 'en'],
+};
 ---
-<Base lang={lang}>
+<Base lang={lang} og="home" jsonLd={person}>
   <div class="hero home" data-avatar="hero">
     <h1 data-fit>
       <span class="hi">{t.hero.hi}</span>

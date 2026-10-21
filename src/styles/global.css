@@ -603,3 +603,6 @@ pre.code code { font: inherit; white-space: pre; }
 .social a.ico:hover { color: var(--text); background: var(--card); transform: translateY(-2px); }
 .social a.ico:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 .lang-header { margin-right: 8px; }
+
+/* Texto solo para lectores de pantalla (p. ej. «se abre en una pestaña nueva») */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

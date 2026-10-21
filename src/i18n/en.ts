@@ -24,6 +24,7 @@ export const en: Dict = {
     links: 'Links',
     viewDetail: 'See the details',
     email: 'Email',
+    newTab: 'opens in a new tab',
   },
   theme: {
     group: 'Site theme',

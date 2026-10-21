@@ -44,6 +44,8 @@ export type Dict = {
     links: string;
     viewDetail: string;
     email: string;
+    /** Aviso para lectores de pantalla en los enlaces que abren otra pestaña (sin paréntesis). */
+    newTab: string;
   };
   theme: {
     group: string;

@@ -21,8 +21,8 @@ mantiene la página en la que estás.
 **Redirección automática:** `middleware.ts` (Routing Middleware de Vercel) manda `/` y `/apps/<slug>/` a `/ca/…` o
 `/en/…` según `Accept-Language` (el idioma preferido entre los que hay; si no se habla ninguno, inglés). No actúa
 si hay cookie `lang` (la pone el selector al elegir idioma), con buscadores o previsualizaciones, ni sin la
-cabecera. Es un 302 y solo se ve desplegado en Vercel, no en `astro preview`; la lógica está en
-`src/i18n/negotiate.ts`.
+cabecera. Es un 302 y solo se ve desplegado en Vercel, no en `astro preview`; todo está en ese
+fichero, sin imports (Vercel compila cada archivo por separado y un import sin extensión no se resuelve).
 
 Para un proyecto nuevo: sus datos en `src/data/site.ts` y sus textos, con el mismo `slug`, en los tres idiomas.
 Para un idioma nuevo: `src/i18n/<código>.ts`, añadirlo a `locales` y a `langNames` en `src/i18n/index.ts` y a

@@ -268,6 +268,23 @@ footer a { text-decoration: none; }
   .intro > .glance { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
 }
 
+/* ---- Anchas: la portada usa el ancho en vez de una sola columna ---- */
+@media (min-width: 1100px) {
+  main > .pair, main > .col.intro { max-width: 1800px; }
+  /* Experiencia y estudios, lado a lado. */
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; align-items: start; }
+}
+/* Con menos de 1440 px las tarjetas de proyecto quedarían estrechas para sus capturas: siguen en una columna. */
+@media (min-width: 1440px) {
+  main > #proyectos, main > #contacto { max-width: 1800px; }
+  /* Proyectos: dos tarjetas por fila. */
+  #proyectos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; align-items: start; }
+  #proyectos > h2 { grid-column: 1 / -1; }
+  /* Contacto: los tres enlaces en una fila. */
+  #contacto { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; align-items: start; }
+  #contacto > h2 { grid-column: 1 / -1; }
+}
+
 /* ---- Móvil ---- */
 @media (max-width: 999px) {
   nav.pill { padding: 9px 12px; top: 10px; font-size: 10.5px; }

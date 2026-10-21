@@ -111,7 +111,14 @@ escritorio; las zonas, en coordenadas del lienzo de 1024, están en `ZONES` de `
 (se recuerdan en `localStorage` los idiomas y las páginas de proyecto visitados: `avatar-langs`, `avatar-projects`),
 **noctámbulo** (entrar entre las 00:00 y las 06:00, hora local), **terminal** (escribir `sudo` o `npm install` fuera de
 un campo de texto; los comandos y sus respuestas están en `game.commands` de `src/i18n/`) y **Storia** arrastrada
-(`WORDS`). Todas reutilizan las piezas que ya hay: sus poses (`REACTIONS`) no necesitan imágenes nuevas.
+(`WORDS`). Las poses de la taza, la planta (regadera y guindillas), el noctámbulo (bostezo con la mano) y el saludo (dos
+fotogramas que se alternan) usan piezas propias de `art/avatar/` (`taza-sube`, `taza-boca`, `regadera`,
+`planta-feliz`, `ojos-somnolientos`, `ojos-bostezo`, `boca-bostezo`, `mano-boca`, `ojos-felices`, `boca-ahh`,
+`saludo-2`). Una pieza solo añade píxeles; las que se llevan algo de la escena (la taza de la mesa) llevan su
+máscara de borrado (`*.borra.webp`, se pinta con `destination-out`; el rectángulo está en `PIECES` como tercer
+valor). Las gotas y las «z» no son imágenes: son rectángulos de 1×1 o 2×2 píxeles de ilustración que dibuja
+`avatar.ts` (`rects` de la pose). Las piezas que tapan la cara van «con la cabeza» y se pinta la cabeza fija
+(`head: [0, 0]`) mientras están puestas.
 
 Las imágenes de partida están en `art/avatar/` (1024x1024, hechas con Gemini a partir de
 `base.jpg`, todas con el mismo encuadre y fondo rosa). `python3 scripts/build-avatar.py` (Pillow

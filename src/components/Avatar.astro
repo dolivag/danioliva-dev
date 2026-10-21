@@ -129,7 +129,10 @@ const total = ACHIEVEMENT_IDS.length;
     );
     stage.addEventListener('click', () => root.classList.remove('tucked'));
 
-    const trigger = (id: AchievementId, ms = 3200, say?: string) => {
+    // Lo que dura cada reacción (las de varias poses necesitan más que las de un gesto).
+    const DURATION: Partial<Record<AchievementId, number>> = { cafe: 3800, planta: 3800, noctambulo: 4000 };
+    const trigger = (id: AchievementId, ms?: number, say?: string) => {
+      ms ??= DURATION[id] ?? 3200;
       const a = g.achievements[id];
       const isNew = !unlocked.has(id);
       if (isNew) {

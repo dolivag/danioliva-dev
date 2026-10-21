@@ -30,7 +30,10 @@ OUT = ROOT / "public" / "avatar"
 SIZE = 1024
 PINK = np.array([221, 44, 142], float)  # el fondo de la ilustración
 
-# Zona de cada pieza (x0, y0, x1, y1) y si va pegada a la cabeza (se mueve con ella).
+# Zona de cada pieza (x0, y0, x1, y1), si va pegada a la cabeza (se mueve con ella) y, opcional, un rectángulo
+# de la escena que la pose se lleva (las piezas solo añaden píxeles: para quitar algo se guarda una máscara de borrado).
+MUG = (95, 640, 215, 812)  # donde está la taza (y su vapor) en la escena
+
 PIECES = {
     "ojos-cerrados": ((470, 240, 650, 345), True),
     "ojos-reojo": ((470, 240, 650, 345), True),
@@ -48,7 +51,22 @@ PIECES = {
     "boca-seria": ((480, 345, 650, 480), True),
     "boca-o": ((480, 345, 650, 480), True),
     "birrete": ((380, 30, 850, 320), True),
-    "saludo": ((250, 470, 670, 900), False),
+    # Saludo: la segunda mano en alto (dos fotogramas que se alternan para agitarla).
+    "saludo": ((200, 330, 540, 640), False),
+    "saludo-2": ((200, 330, 540, 640), False),
+    # Café: la taza sale de la mesa (`MUG`: se borra de la escena) y sube a la boca. Las de la cara van con la cabeza.
+    "taza-sube": ((90, 300, 520, 830), False, MUG),
+    "taza-boca": ((90, 260, 700, 830), True, MUG),
+    "ojos-felices": ((470, 240, 650, 345), True),
+    "boca-ahh": ((480, 345, 650, 480), True),
+    # Riego: la regadera sobre la planta y la planta ya crecida, con guindillas.
+    "regadera": ((300, 440, 720, 730), False),
+    "planta-feliz": ((560, 540, 790, 870), False),
+    # Bostezo.
+    "ojos-somnolientos": ((470, 240, 650, 345), True),
+    "ojos-bostezo": ((470, 240, 650, 345), True),
+    "boca-bostezo": ((480, 345, 660, 510), True),
+    "mano-boca": ((320, 250, 700, 640), True),
     "manos": ((420, 640, 700, 880), False),
     "vapor-2": ((100, 590, 230, 790), False),
     "vapor-3": ((100, 590, 230, 790), False),
@@ -136,7 +154,9 @@ def main():
 
     # --- Piezas
     meta = {"size": SIZE, "pieces": {}}
-    for name, ((x0, y0, x1, y1), on_head) in PIECES.items():
+    for name, spec in PIECES.items():
+        (x0, y0, x1, y1), on_head = spec[0], spec[1]
+        erase_rect = spec[2] if len(spec) > 2 else None
         if not (ART / f"{name}.jpg").exists():
             print("sin imagen (se omite):", name)
             continue
@@ -155,6 +175,15 @@ def main():
         box = (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
         save(var, alpha, OUT / "piezas" / f"{name}.webp", crop=box)
         meta["pieces"][name] = {"x": box[0], "y": box[1], "head": on_head}
+        if erase_rect:
+            # Borrar de la escena lo que la base tiene y esta variante ya no (la taza de la mesa).
+            ex0, ey0, ex1, ey1 = erase_rect
+            gone = (pink_alpha(base) > 0.5) & (pink_alpha(var) < 0.5)
+            keep = np.zeros_like(gone)
+            keep[ey0:ey1, ex0:ex1] = True
+            gone = grow(gone & keep, 3) & keep
+            save(np.zeros_like(base), feather(gone, 1.2), OUT / "piezas" / f"{name}.borra.webp", crop=erase_rect)
+            meta["pieces"][name]["erase"] = {"x": ex0, "y": ey0}
         print(f"pieza {name}: {box[2] - box[0]}x{box[3] - box[1]} en ({box[0]}, {box[1]})")
 
     (OUT / "avatar.json").write_text(json.dumps(meta, indent=2) + "\n")

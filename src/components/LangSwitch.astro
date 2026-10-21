@@ -36,6 +36,14 @@ const label = useDict(lang).lang.label;
 }
 
 <script>
+  // Al elegir un idioma se acuerda (cookie `lang`, un año): la redirección automática por idioma del navegador
+  // (middleware.ts) deja entonces de actuar. Solo se guarda cuando la persona lo elige, nunca por visitar.
+  const remember = (e: Event) => {
+    const a = (e.target as Element).closest<HTMLAnchorElement>('.lang a[data-lang]');
+    if (a?.dataset.lang) document.cookie = `lang=${a.dataset.lang}; path=/; max-age=31536000; SameSite=Lax`;
+  };
+  document.addEventListener('click', remember);
+  document.addEventListener('auxclick', remember);
   // El desplegable del menú se cierra al pulsar fuera o con Escape.
   const close = () => document.querySelectorAll<HTMLDetailsElement>('details.lang-pill[open]').forEach((d) => (d.open = false));
   document.addEventListener('click', (e) => {

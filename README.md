@@ -77,6 +77,14 @@ redirecciones, definidas en `astro.config.mjs`, para que estas URL no cambien nu
 
 `/cv/`, `/ca/cv/` y `/en/cv/` (`src/pages/[...lang]/cv.astro`): una hoja A4 que se imprime o se guarda como PDF desde el botón de la página (sin teléfono). Los textos están en `src/i18n/cv.ts` (aparte del resto de diccionarios) y la foto en `public/cv/foto.webp`. Para que siga cabiendo en una sola página, si añades contenido conviene comprobar la vista de impresión (`Ctrl+P`) en los tres idiomas.
 
+## Vídeos en bucle
+
+Una captura de escritorio de un proyecto puede ser un vídeo corto (`clip` en `web` de `src/data/site.ts`, con su `clipAlt` en
+los textos). `scripts/optimize-clip.sh` convierte una grabación a MP4 + WebM + póster. `BrowserShot.astro` los reproduce
+en bucle, sin sonido, solo mientras se ven en pantalla; con «reducir movimiento» no arrancan solos y se enseñan con controles.
+DuoMeteo lo grabé con Playwright (`recordVideo`) y recortando con ffmpeg. Las escenas 3D (QR City) no salen fluidas en un
+navegador sin GPU: ese se graba en un equipo con tarjeta gráfica.
+
 ## Avatar animado
 
 El avatar que acompaña al visitante (`src/components/Avatar.astro` y `src/scripts/avatar.ts`) se

@@ -12,7 +12,15 @@ export const site = {
 
 /** Captura de pantalla de un proyecto: `src` es una ruta de /public (se generan con scripts/optimize-shots.py). */
 /** `srcDark` es la misma pantalla en modo oscuro: se enseña cuando la web está en oscuro. */
-export type Shot = { src: string; srcDark?: string; alt: string };
+export type Shot = {
+  src: string;
+  srcDark?: string;
+  alt: string;
+  /** Vídeo corto en bucle en lugar de la imagen: ruta sin extensión (`<ruta>.webm`, `.mp4` y el póster `.jpg`; ver `scripts/optimize-clip.sh`). */
+  clip?: string;
+  /** Qué se ve en el vídeo (para lectores de pantalla). */
+  clipAlt?: string;
+};
 
 /** Lo de un proyecto que no es texto. Los textos (por idioma) están en `src/i18n/<idioma>.ts`, bajo `projects[slug]`. */
 type ProjectBase = {
@@ -28,7 +36,7 @@ type ProjectBase = {
   /** Hasta 3 capturas de iPhone, enmarcadas en la tarjeta y en su página (su `alt`, en `shotAlts`). Sin capturas, solo texto. */
   shots?: { src: string; srcDark?: string }[];
   /** Captura de escritorio de la web, en una ventana de navegador (alternativa a `shots`; su `alt`, en `webAlt`). */
-  web?: { src: string; srcDark?: string };
+  web?: { src: string; srcDark?: string; clip?: string };
   /** Más capturas de escritorio, que se enseñan bajo la principal en su página (sus `alt`, en `webAlts`). */
   webs?: { src: string; srcDark?: string }[];
 };
@@ -71,7 +79,7 @@ const projectsBase: ProjectBase[] = [
     stack: 'Next.js · React · Tailwind',
     href: 'https://duometeo.danioliva.dev/',
     links: ['https://open-meteo.com'],
-    web: { src: '/projects/duometeo/web.webp', srcDark: '/projects/duometeo/web-oscuro.webp' },
+    web: { src: '/projects/duometeo/web.webp', srcDark: '/projects/duometeo/web-oscuro.webp', clip: '/projects/duometeo/clip' },
     webs: [
       { src: '/projects/duometeo/hero.webp', srcDark: '/projects/duometeo/hero-oscuro.webp' },
       { src: '/projects/duometeo/comparativa.webp', srcDark: '/projects/duometeo/comparativa-oscuro.webp' },
@@ -94,7 +102,7 @@ const projectsBase: ProjectBase[] = [
 
 /** Un proyecto listo para pintar: sus datos y sus textos en un idioma. */
 export type Project = Omit<ProjectBase, 'links' | 'shots' | 'web' | 'webs'> &
-  Omit<ProjectCopy, 'links' | 'shotAlts' | 'webAlt' | 'webAlts'> & {
+  Omit<ProjectCopy, 'links' | 'shotAlts' | 'webAlt' | 'webAlts' | 'clipAlt'> & {
     links?: { label: string; href: string }[];
     shots?: Shot[];
     web?: Shot;
@@ -106,7 +114,7 @@ export const projectUrl = (lang: Lang, p: Pick<ProjectBase, 'slug'>) => localePa
 export function getProjects(lang: Lang): Project[] {
   const copy = useDict(lang).projects;
   return projectsBase.map((b) => {
-    const { links, shotAlts, webAlt, webAlts, ...text } = copy[b.slug];
+    const { links, shotAlts, webAlt, webAlts, clipAlt, ...text } = copy[b.slug];
     return {
       ...text,
       slug: b.slug,
@@ -115,7 +123,7 @@ export function getProjects(lang: Lang): Project[] {
       href: b.href,
       links: b.links?.map((href, i) => ({ href, label: links?.[i] ?? href })),
       shots: b.shots?.map((s, i) => ({ ...s, alt: shotAlts?.[i] ?? '' })),
-      web: b.web ? { ...b.web, alt: webAlt ?? '' } : undefined,
+      web: b.web ? { ...b.web, alt: webAlt ?? '', clipAlt } : undefined,
       webs: b.webs?.map((s, i) => ({ ...s, alt: webAlts?.[i] ?? '' })),
     };
   });

@@ -149,6 +149,7 @@ export const ca: Dict = {
       ],
       links: ['Dades d’Open-Meteo'],
       webAlt: 'DuoMeteo comparant el temps a Barcelona (17 °C) i Reykjavík (4 °C), amb les seves diferències de temperatura, humitat i distància',
+      clipAlt: 'Vídeo de DuoMeteo: la portada amb les icones animades del cel, una comparació de Buenos Aires i Sydney i el recorregut per la seva previsió, el globus i el gràfic de vent',
       webAlts: [
         'DuoMeteo: portada amb una icona animada de pluja; n’hi ha una per a cada condició del cel',
         'DuoMeteo comparant Buenos Aires (17 °C) i Sydney (18 °C): sensació, humitat, vent, precipitació, índex UV i hores de sol',

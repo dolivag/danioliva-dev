@@ -10,16 +10,47 @@ interface Props {
 }
 const { shot, host, full = false } = Astro.props;
 ---
-<div class:list={['browser', { full }]}>
+<div class:list={['browser', { full, 'has-clip': !!shot.clip }]}>
   <div class="bar" aria-hidden="true">
     <span class="dots"><i></i><i></i><i></i></span>
     <span class="url">{host}</span>
   </div>
   <div class="shot-screen screen">
-    <img class="light" src={shot.src} alt={shot.alt} width="1440" height="900" loading="lazy" decoding="async" />
-    {shot.srcDark && <img class="dark" src={shot.srcDark} alt="" width="1440" height="900" loading="lazy" decoding="async" />}
+    {
+      shot.clip ? (
+        <video class="clip" data-clip muted loop playsinline preload="none" width="960" height="600" poster={`${shot.clip}.jpg`} role="img" aria-label={shot.clipAlt ?? shot.alt}>
+          <source src={`${shot.clip}.webm`} type="video/webm" />
+          <source src={`${shot.clip}.mp4`} type="video/mp4" />
+        </video>
+      ) : (
+        <>
+          <img class="light" src={shot.src} alt={shot.alt} width="1440" height="900" loading="lazy" decoding="async" />
+          {shot.srcDark && <img class="dark" src={shot.srcDark} alt="" width="1440" height="900" loading="lazy" decoding="async" />}
+        </>
+      )
+    }
   </div>
 </div>
+
+<script>
+  // Vídeos en bucle: solo corren mientras se ven (ahorra batería y datos). Con «reducir movimiento»
+  // no arrancan solos: se enseña el póster y el vídeo con controles.
+  const clips = document.querySelectorAll<HTMLVideoElement>('video[data-clip]');
+  if (clips.length) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      clips.forEach((v) => {
+        v.controls = true;
+        v.loop = false;
+      });
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => (e.isIntersecting ? (e.target as HTMLVideoElement).play().catch(() => {}) : (e.target as HTMLVideoElement).pause())),
+        { threshold: 0.35 },
+      );
+      clips.forEach((v) => io.observe(v));
+    }
+  }
+</script>
 
 <style>
   /* Ventana de navegador que asoma por abajo de la tarjeta; al pasar el cursor sube un poco. */
@@ -74,6 +105,18 @@ const { shot, host, full = false } = Astro.props;
     width: 100%;
     aspect-ratio: 12 / 5;
     overflow: hidden;
+  }
+  .clip {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    background: #14161b;
+  }
+  /* Con vídeo, la ventana se enseña entera (16:10), también en la tarjeta. */
+  .has-clip .screen {
+    aspect-ratio: 16 / 10;
   }
   .full {
     margin: 0;

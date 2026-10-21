@@ -149,6 +149,7 @@ export const es: Dict = {
       ],
       links: ['Datos de Open-Meteo'],
       webAlt: 'DuoMeteo comparando el tiempo en Barcelona (17 °C) y Reikiavik (4 °C), con sus diferencias de temperatura, humedad y distancia',
+      clipAlt: 'Vídeo de DuoMeteo: la portada con los iconos animados del cielo, una comparación de Buenos Aires y Sídney y el recorrido por su previsión, el globo y la gráfica de viento',
       webAlts: [
         'DuoMeteo: portada con un icono animado de lluvia; hay uno para cada condición del cielo',
         'DuoMeteo comparando Buenos Aires (17 °C) y Sídney (18 °C): sensación, humedad, viento, precipitación, índice UV y horas de sol',

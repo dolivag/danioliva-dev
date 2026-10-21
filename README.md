@@ -9,12 +9,25 @@ npm run build    # genera dist/
 npm run check    # tipos de Astro
 ```
 
-El contenido (proyectos, experiencia, estudios) está en `src/data/site.ts`.
+### Idiomas
+
+La web está en castellano (raíz, las URLs de siempre), catalán (`/ca/…`) e inglés (`/en/…`). Todo lo que se ve
+es texto de `src/i18n/<idioma>.ts` (`es.ts`, `ca.ts`, `en.ts`, tipados por `types.ts`: si falta algo en un
+idioma, `astro check` falla): interfaz, intro, experiencia, estudios, fichas de proyecto y juego del avatar.
+Lo que no es texto (enlaces, capturas, stack) sigue en `src/data/site.ts`. Las páginas son una sola plantilla
+(`src/pages/[...lang]/`); cada una lleva `hreflang`, `canonical` y `og:locale`, y un selector de idioma que
+mantiene la página en la que estás.
+
+Para un proyecto nuevo: sus datos en `src/data/site.ts` y sus textos, con el mismo `slug`, en los tres idiomas.
+Para un idioma nuevo: `src/i18n/<código>.ts`, añadirlo a `locales` y a `langNames` en `src/i18n/index.ts` y a
+`i18n.locales` de `astro.config.mjs`.
+
+El contenido de proyectos, experiencia y estudios está en `src/i18n/` (textos) y `src/data/site.ts` (datos).
 
 ### Páginas de proyecto
 
-Cada proyecto de `projects` (en `src/data/site.ts`) tiene su página en `/apps/<slug>/` (la genera
-`src/pages/apps/[slug].astro`). La tarjeta de la portada lleva a esa página y su botón ↗ abre el proyecto
+Cada proyecto de `src/data/site.ts` tiene su página en `/apps/<slug>/` (y `/ca/…`, `/en/…`; la genera
+`src/pages/[...lang]/apps/[slug].astro`). La tarjeta de la portada lleva a esa página y su botón ↗ abre el proyecto
 (`href`) en una pestaña nueva; la página también tiene su botón para abrirlo.
 
 ### Capturas de los proyectos

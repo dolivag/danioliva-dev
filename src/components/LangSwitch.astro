@@ -1,0 +1,180 @@
+---
+import { locales, langNames, localePath, useDict } from '../i18n';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  /** La ruta de la página sin el prefijo de idioma. */
+  path: string;
+  /** `inline`: los tres idiomas en la cabecera (escritorio). `pill`: un desplegable dentro del menú (móvil). */
+  variant: 'inline' | 'pill';
+}
+const { lang, path, variant } = Astro.props;
+const label = useDict(lang).lang.label;
+---
+{
+  variant === 'inline' ? (
+    <nav class="lang lang-inline" aria-label={label}>
+      {locales.map((l) => (
+        <a href={localePath(l, path)} hreflang={l} lang={l} aria-label={langNames[l]} aria-current={l === lang ? 'true' : undefined} data-lang={l}>
+          {l}
+        </a>
+      ))}
+    </nav>
+  ) : (
+    <details class="lang lang-pill">
+      <summary aria-label={`${label}: ${langNames[lang]}`}>{lang}</summary>
+      <div class="menu" role="group" aria-label={label}>
+        {locales.map((l) => (
+          <a href={localePath(l, path)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-lang={l}>
+            {langNames[l]}
+          </a>
+        ))}
+      </div>
+    </details>
+  )
+}
+
+<script>
+  // El desplegable del menú se cierra al pulsar fuera o con Escape.
+  const close = () => document.querySelectorAll<HTMLDetailsElement>('details.lang-pill[open]').forEach((d) => (d.open = false));
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('details.lang-pill')) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+</script>
+
+<style is:global>
+  /* Escritorio: «ES · CA · EN» junto a GitHub y Email. Móvil: un desplegable dentro del menú. */
+  .lang-inline {
+    display: inline-flex;
+    gap: 2px;
+    margin-right: 10px;
+    padding-right: 14px;
+    border-right: 1px solid var(--line);
+  }
+  .lang-inline a {
+    padding: 2px 5px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: none;
+    color: var(--muted);
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+  .lang-inline a:hover {
+    color: var(--text);
+    background: var(--card);
+  }
+  .lang-inline a[aria-current='true'] {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .lang-pill {
+    display: none;
+    position: relative;
+  }
+  .lang-pill summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    line-height: 1;
+    user-select: none;
+  }
+  .lang-pill summary::-webkit-details-marker {
+    display: none;
+  }
+  .lang-pill summary::after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin: 0 0 2px 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.3s var(--ease);
+  }
+  .lang-pill[open] summary::after {
+    transform: rotate(-135deg) translate(-1px, -1px);
+  }
+  .lang-pill .menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: -8px;
+    display: grid;
+    min-width: 140px;
+    padding: 6px;
+    border: 1px solid var(--glass-line);
+    border-radius: 16px;
+    background: var(--glass-bg);
+    box-shadow: 0 14px 40px var(--glass-shadow);
+    backdrop-filter: blur(28px) saturate(1.6);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+  }
+  nav.pill .lang-pill .menu a {
+    display: block; /* `nav.pill a:first-child` la esconde en móvil */
+    padding: 11px 14px;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--text);
+  }
+  nav.pill .lang-pill .menu a::after {
+    display: none;
+  }
+  nav.pill .lang-pill .menu a:hover,
+  nav.pill .lang-pill .menu a[aria-current='true'] {
+    font-weight: 700;
+    background: var(--card);
+    color: var(--text);
+  }
+  @media (max-width: 999px) {
+    .lang-pill {
+      display: block;
+      margin-left: 2px;
+    }
+  }
+  /* Móvil estrecho: el menú (con textos más largos en catalán) debe caber entero. */
+  @media (max-width: 440px) {
+    nav.pill {
+      max-width: calc(100vw - 12px);
+      font-size: 10.5px;
+      letter-spacing: 0.02em;
+      gap: 0;
+    }
+    nav.pill.scrolled {
+      font-size: 11px;
+    }
+    nav.pill a,
+    nav.pill.scrolled a {
+      padding: 0 6px;
+    }
+    .lang-pill summary {
+      padding: 6px 5px;
+    }
+    .lang-pill summary::after {
+      margin-left: 3px;
+    }
+  }
+  @media (min-width: 1000px) {
+    .lang-pill {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lang-pill[open] .menu {
+      animation: pop 0.35s var(--ease);
+    }
+  }
+</style>

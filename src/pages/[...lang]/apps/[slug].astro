@@ -1,20 +1,29 @@
 ---
-import Base from '../../layouts/Base.astro';
-import BrowserShot from '../../components/BrowserShot.astro';
-import ShotGallery from '../../components/ShotGallery.astro';
-import { projects, projectUrl } from '../../data/site';
-import type { Project } from '../../data/site';
+import Base from '../../../layouts/Base.astro';
+import BrowserShot from '../../../components/BrowserShot.astro';
+import ShotGallery from '../../../components/ShotGallery.astro';
+import { getProjects, projectUrl } from '../../../data/site';
+import type { Project } from '../../../data/site';
+import { useDict, locales, defaultLang } from '../../../i18n';
+import type { Lang } from '../../../i18n';
 
 export function getStaticPaths() {
-  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+  return locales.flatMap((lang) =>
+    getProjects(lang).map((project) => ({
+      params: { lang: lang === defaultLang ? undefined : lang, slug: project.slug },
+      props: { project, lang },
+    })),
+  );
 }
 
-const { project: p } = Astro.props as { project: Project };
+const { project: p, lang } = Astro.props as { project: Project; lang: Lang };
+const t = useDict(lang);
+const projects = getProjects(lang);
 const index = projects.findIndex((x) => x.slug === p.slug);
 const others = projects.filter((x) => x.slug !== p.slug);
 const pad = String(index + 1).padStart(2, '0');
 ---
-<Base title={p.name} description={p.description} frame={p.slug}>
+<Base lang={lang} title={p.name} description={p.description} frame={p.slug}>
   <div class="hero" data-avatar="projects">
     <h1 data-fit>
       <span class="line l1">{p.name}</span>
@@ -31,17 +40,17 @@ const pad = String(index + 1).padStart(2, '0');
   </div>
 
   <div class="col intro" data-avatar="projects">
-    <span class="label">{pad} <em>/</em> Proyecto{p.status ? ` · ${p.status}` : ''}</span>
+    <span class="label">{pad} <em>/</em> {t.common.project}{p.status ? ` · ${p.status}` : ''}</span>
     <p class="big">{p.lead}</p>
     <div class="actions">
       {p.href && <a class="btn" href={p.href} target="_blank" rel="noopener">{p.openLabel}</a>}
-      <a class="btn secondary" href="/#proyectos">Volver</a>
+      <a class="btn secondary" href={`${lang === defaultLang ? '' : '/' + lang}/#proyectos`}>{t.common.back}</a>
     </div>
   </div>
 
   {(p.shots?.length || p.web) && (
     <section class="col" data-avatar="projects">
-      <h2>Capturas</h2>
+      <h2>{t.common.captures}</h2>
       {p.shots?.length ? <ShotGallery shots={p.shots} /> : null}
       {p.web && p.href ? <BrowserShot shot={p.web} host={new URL(p.href).host} full /> : null}
     </section>
@@ -49,7 +58,7 @@ const pad = String(index + 1).padStart(2, '0');
 
   {p.facts.length > 0 && (
     <section class="col" data-avatar="projects">
-      <h2>Qué hace</h2>
+      <h2>{t.common.whatItDoes}</h2>
       <div class="facts">
         {p.facts.map((f) => (
           <div class="fact"><h3>{f.title}</h3><p>{f.text}</p></div>
@@ -67,7 +76,7 @@ const pad = String(index + 1).padStart(2, '0');
 
   {p.links && (
     <section class="col" data-avatar="projects">
-      <h2>{p.linksTitle ?? 'Enlaces'}</h2>
+      <h2>{p.linksTitle ?? t.common.links}</h2>
       <ul class="links">
         {p.links.map((l) => (
           <li><a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel={l.href.startsWith('http') ? 'noopener' : undefined}>{l.label}</a></li>
@@ -77,9 +86,9 @@ const pad = String(index + 1).padStart(2, '0');
   )}
 
   <section class="col" data-avatar="projects">
-    <h2>Más proyectos</h2>
+    <h2>{t.common.moreProjects}</h2>
     <ul class="links">
-      {others.map((o) => (<li><a href={projectUrl(o)}>{o.name}</a></li>))}
+      {others.map((o) => (<li><a href={projectUrl(lang, o)}>{o.name}</a></li>))}
     </ul>
   </section>
 </Base>

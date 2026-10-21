@@ -6,41 +6,20 @@
 
 export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami' | 'agitar';
 
-export type Achievement = {
-  id: AchievementId;
-  title: string;
-  /** Qué hiciste (se enseña solo una vez desbloqueado: las interacciones son secretas). */
-  how: string;
-  /** Lo que dice el avatar al conseguirlo (y cada vez que se prueba desde el panel). */
-  say: string;
-};
+/** Los logros, en el orden del panel. Sus textos (título, pista y frase) están en `src/i18n/<idioma>.ts`. */
+export const ACHIEVEMENT_IDS: AchievementId[] = ['hola', 'orden', 'tiempo', 'trastero', 'mareo', 'sueno', 'final', 'tema', 'agitar', 'konami'];
 
-export const ACHIEVEMENTS: Achievement[] = [
-  { id: 'hola', title: 'Primer contacto', how: 'Le hiciste un clic.', say: '¡Hola! Soy el avatar de Daniel.' },
-  { id: 'orden', title: 'Orden en casa', how: 'Le arrastraste «Hogarnizer».', say: 'Tareas, compra, gastos… ¡todo en orden!' },
-  { id: 'tiempo', title: 'Previsión', how: 'Le arrastraste «DuoMeteo».', say: 'Sol aquí, lluvia allí. Lo sabía.' },
-  { id: 'trastero', title: '¿Dónde estaba?', how: 'Le arrastraste «Trasteo».', say: '¿Dónde dejé el cable USB-C?' },
-  { id: 'mareo', title: 'Demasiado café', how: 'Le hiciste clic muchas veces seguidas.', say: '¡Para, que me mareo!' },
-  { id: 'sueno', title: 'Siesta', how: 'Te quedaste quieto un rato.', say: 'Zzz…' },
-  { id: 'final', title: 'Hasta pronto', how: 'Llegaste al final de la página.', say: '¡Hasta pronto! Escríbeme cuando quieras.' },
-  { id: 'tema', title: 'Luces y sombras', how: 'Cambiaste varias veces de tema.', say: '¿Luces o ambiente? Decídete.' },
-  { id: 'agitar', title: 'Terremoto', how: 'Agitaste el móvil.', say: '¡Eh! ¡Que me caigo de la mesa!' },
-  { id: 'konami', title: 'Código secreto', how: 'Tecleaste el código clásico.', say: '+30 vidas. Código desbloqueado.' },
-];
-
-/** Palabras que se pueden arrastrar (`data-drag` en el HTML). Las que no dan logro solo reaccionan. */
-export const WORDS: Record<string, { achievement?: AchievementId; say?: string }> = {
+/** Palabras que se pueden arrastrar (`data-drag` en el HTML). Las que no dan logro solo reaccionan (frase en `game.words`). */
+export const WORDS: Record<string, { achievement?: AchievementId }> = {
   hogarnizer: { achievement: 'orden' },
   duometeo: { achievement: 'tiempo' },
   trasteo: { achievement: 'trastero' },
-  'qr city': { say: 'Escaneando… ¡es una ciudad entera!' },
-  'three.js': { say: 'Un cubo, y de pronto una ciudad.' },
-  expo: { say: 'De una base de código a las dos tiendas.' },
-  'react native': { say: 'Un código, iOS y Android.' },
-  supabase: { say: 'Backend sin sudar.' },
+  'qr city': {},
+  'three.js': {},
+  expo: {},
+  'react native': {},
+  supabase: {},
 };
-
-export const JOKES = ['Compilando…', 'En mi máquina funciona.', 'git push --force (es broma).', '¡Eh! Que me desconcentras.'];
 
 const KEY = 'avatar-unlocked';
 

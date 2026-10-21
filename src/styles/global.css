@@ -281,6 +281,9 @@ footer a { text-decoration: none; }
     padding: 8px 0; margin: -8px 0; align-items: stretch;
   }
   .cards::-webkit-scrollbar { display: none; }
+  /* Las tarjetas que asoman a la derecha se ven desde el principio (no esperan a la animación de entrada) y se difuminan para indicar que hay más. */
+  .js .cards > .proj { opacity: 1; translate: 0 0; }
+  .cards:not(.at-end) { mask-image: linear-gradient(to right, #000 calc(100% - 90px), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 90px), transparent); }
   .cards > .proj { flex: 0 0 clamp(640px, 46%, 760px); scroll-snap-align: start; margin-bottom: 0; }
   .car-nav { position: absolute; top: 72px; right: 0; gap: 8px; }
   .js .car-nav { display: flex; }

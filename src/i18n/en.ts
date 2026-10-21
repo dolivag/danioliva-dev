@@ -3,6 +3,7 @@ import type { Dict } from './types';
 export const en: Dict = {
   meta: { description: 'Fullstack software engineer. Small apps and tools.' },
   role: 'Fullstack software engineer',
+  notFound: { hi: 'Oops…', text: 'This page doesn’t exist or is no longer here. The link may be mistyped.', say: 'Where was that page? I can’t find it either…', home: 'Back to home', projects: 'See projects' },
   hero: { hi: "Hi, I'm", role: 'Software engineer' },
   nav: { label: 'Main', index: 'Home', projects: 'Projects', experience: 'Experience', contact: 'Contact' },
   sections: { projects: 'Projects', experience: 'Experience', studies: 'Education', contact: 'Contact' },

@@ -28,6 +28,8 @@ export type Dict = {
   /** Cargo, para el título de la página. */
   role: string;
   hero: { hi: string; role: string };
+  /** Página 404. `say` es lo que dice el avatar al llegar. */
+  notFound: { hi: string; text: string; say: string; home: string; projects: string };
   nav: { label: string; index: string; projects: string; experience: string; contact: string };
   sections: { projects: string; experience: string; studies: string; contact: string };
   intro: { big: string; text: string; viewProjects: string; contact: string };

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { useDict, locales, defaultLang, localePath } from '../i18n';
+
+// Vercel sirve este mismo 404.html para cualquier ruta que no existe, sea cual sea su idioma:
+// se incluyen los tres textos y un script elige uno (prefijo de la ruta, cookie o idioma del navegador).
+const texts = locales.map((lang) => ({ lang, t: useDict(lang) }));
+---
+<Base title="404" noindex>
+  {
+    texts.map(({ lang, t }) => (
+      <div class="nf" lang={lang} data-nf={lang} data-say={t.notFound.say} hidden={lang !== defaultLang}>
+        <div class="hero home" data-avatar="hero">
+          <h1 data-fit>
+            <span class="hi">{t.notFound.hi}</span>
+            <span class="line l1">404</span>
+          </h1>
+        </div>
+        <div class="col intro">
+          <p class="big">{t.notFound.text}</p>
+          <div class="actions">
+            <a class="btn" href={localePath(lang, '/')}>{t.notFound.home}</a>
+            <a class="btn secondary" href={localePath(lang, '/#proyectos')}>{t.notFound.projects}</a>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+  <script is:inline>
+    (function () {
+      var all = ['es', 'ca', 'en'];
+      var first = location.pathname.split('/')[1];
+      var cookie = (document.cookie.match(/(?:^|; )lang=(es|ca|en)/) || [])[1];
+      var nav = (navigator.language || '').slice(0, 2);
+      var pick = all.indexOf(first) > -1 ? first : cookie || (all.indexOf(nav) > -1 ? nav : nav ? 'en' : 'es');
+      document.documentElement.lang = pick;
+      document.querySelectorAll('.nf').forEach(function (el) { el.hidden = el.dataset.nf !== pick; });
+    })();
+  </script>
+</Base>

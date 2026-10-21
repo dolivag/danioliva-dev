@@ -108,6 +108,10 @@ const total = ACHIEVEMENT_IDS.length;
       }, 700);
     }
 
+    // En la 404 (`data-say` en el texto visible): mira a un lado y a otro, como perdido, y lo dice.
+    const lost = document.querySelector<HTMLElement>('[data-say]:not([hidden])')?.dataset.say;
+    if (lost) setTimeout(() => avatar.react('tema', lost, 4500), 900);
+
     // En móvil, al bajar por la página el avatar se agacha (solo asoma la cabeza) para no tapar el texto; al subir o tocarlo vuelve.
     const mobile = matchMedia('(max-width: 999px)');
     let lastY = scrollY;

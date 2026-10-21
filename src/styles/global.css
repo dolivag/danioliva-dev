@@ -557,3 +557,32 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select:
 /* Fragmento de código en la página de un proyecto */
 pre.code { margin: 0; padding: 18px 20px; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); font: 400 13px/1.7 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; color: var(--text); }
 pre.code code { font: inherit; white-space: pre; }
+
+/* Detalle plegable de un puesto de experiencia */
+.entry .more { grid-column: 2; margin-top: 12px; max-width: 34em; }
+.entry .more summary {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; user-select: none;
+  font: 500 11px/1 var(--font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-text);
+}
+.entry .more summary::-webkit-details-marker { display: none; }
+.entry .more summary::before {
+  content: ''; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg); transition: transform 0.4s var(--ease);
+}
+.entry .more[open] summary::before { transform: rotate(45deg) translate(-1px, -1px); }
+.entry .more summary:hover { color: var(--text); }
+.entry .more ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.entry .more li { position: relative; padding-left: 18px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.entry .more li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .entry .more[open] li { animation: rise 0.5s var(--ease) both; }
+  .entry .more[open] li:nth-child(2) { animation-delay: 0.04s; }
+  .entry .more[open] li:nth-child(3) { animation-delay: 0.08s; }
+  .entry .more[open] li:nth-child(4) { animation-delay: 0.12s; }
+  .entry .more[open] li:nth-child(5) { animation-delay: 0.16s; }
+  .entry .more[open] li:nth-child(6) { animation-delay: 0.2s; }
+  .entry .more[open] li:nth-child(7) { animation-delay: 0.24s; }
+  .entry .more[open] li:nth-child(8) { animation-delay: 0.28s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+}
+@media (max-width: 999px) { .entry .more { grid-column: 1; } }

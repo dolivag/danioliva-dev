@@ -167,13 +167,30 @@ export const projects: Project[] = [
   },
 ];
 
-export const experience = [
+export const experience: {
+  company: string;
+  role: string;
+  period: string;
+  description: string;
+  /** Detalle del puesto, plegado bajo la descripción. */
+  bullets?: string[];
+}[] = [
   {
     company: 'Zennio',
     role: 'Fullstack engineer',
     period: 'Desde enero de 2024',
     description:
-      'Desarrollo fullstack con Angular, Node.js, NestJS, React y React Native, además de herramientas de automatización y CI/CD.',
+      'Desarrollo full-stack end-to-end de una plataforma de gestión de edificios: Angular + PrimeNG en frontend, NestJS + TypeScript y PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. Responsable de arquitectura de features, calidad (Jest, Cypress, SonarQube) y CI/CD en GitLab.',
+    bullets: [
+      'Desarrollo end-to-end de funcionalidades: modelo de datos, API, UI y pruebas.',
+      'Frontend con Angular y PrimeNG; backend con NestJS, TypeScript, Sequelize y PostgreSQL/TimescaleDB.',
+      'Diseño y evolución del esquema de base de datos, incluidas migraciones y consultas de alto volumen.',
+      'Optimización de rendimiento: diagnóstico y resolución de consultas lentas y cuellos de botella en API.',
+      'Estrategia de pruebas: unitarias (Jest), integración y E2E con Cypress en pipelines de CI.',
+      'CI/CD en GitLab, quality gates con SonarQube y automatización de releases.',
+      'Monorepo Nx con pnpm: build, lint, test y documentación (Docusaurus) unificados.',
+      'Estandarización técnica del equipo: convenciones, documentación y revisión de código.',
+    ],
   },
   {
     company: 'Vanadys',

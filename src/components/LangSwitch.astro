@@ -1,0 +1,227 @@
+---
+import { locales, langNames, localePath, useDict } from '../i18n';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  /** La ruta de la página sin el prefijo de idioma. */
+  path: string;
+  /** `header`: en la cabecera (escritorio). `pill`: dentro del menú flotante (móvil). */
+  variant: 'header' | 'pill';
+}
+const { lang, path, variant } = Astro.props;
+const label = useDict(lang).lang.label;
+---
+<details class={`lang lang-${variant}`}>
+  <summary aria-label={`${label}: ${langNames[lang]}`}>
+    <svg class="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M3 12h18M12 3c2.6 2.4 3.9 5.4 3.9 9S14.600 18.600 12 21M12 3c-2.600 2.400-3.900 5.400-3.900 9S9.400 18.600 12 21"></path>
+    </svg>
+    <span class="code">{lang}</span>
+    <svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M2.500 4.500 6 8l3.500-3.500"></path>
+    </svg>
+  </summary>
+  <div class="menu" role="group" aria-label={label}>
+    {
+      locales.map((l) => (
+        <a href={localePath(l, path)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-lang={l}>
+          <span>{langNames[l]}</span>
+          <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m5 12.500 4.500 4.500L19 7.500"></path>
+          </svg>
+        </a>
+      ))
+    }
+  </div>
+</details>
+
+<script>
+  // Al elegir un idioma se acuerda (cookie `lang`, un año): la redirección automática por idioma del navegador
+  // (middleware.ts) deja entonces de actuar. Solo se guarda cuando la persona lo elige, nunca por visitar.
+  const remember = (e: Event) => {
+    const a = (e.target as Element).closest<HTMLAnchorElement>('.lang a[data-lang]');
+    if (a?.dataset.lang) document.cookie = `lang=${a.dataset.lang}; path=/; max-age=31536000; SameSite=Lax`;
+  };
+  document.addEventListener('click', remember);
+  document.addEventListener('auxclick', remember);
+  // El desplegable se cierra al pulsar fuera o con Escape (y al abrir uno, se cierra el otro).
+  const close = (except?: Element | null) =>
+    document.querySelectorAll<HTMLDetailsElement>('details.lang[open]').forEach((d) => d !== except && (d.open = false));
+  document.addEventListener('click', (e) => {
+    const inside = (e.target as Element).closest('details.lang');
+    close(inside);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const open = document.querySelector<HTMLDetailsElement>('details.lang[open]');
+      if (open) {
+        open.open = false;
+        open.querySelector('summary')?.focus();
+      }
+    }
+  });
+</script>
+
+<style is:global>
+  /* Selector de idioma: el globo, el idioma actual y un desplegable con una marca en el elegido. */
+  details.lang {
+    position: relative;
+  }
+  details.lang summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px 6px 9px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    color: var(--text);
+    font: 600 11.5px/1 var(--font);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  details.lang summary::-webkit-details-marker {
+    display: none;
+  }
+  details.lang summary:hover,
+  details.lang[open] summary {
+    background: var(--card);
+    border-color: rgba(var(--glow), 0.7);
+  }
+  details.lang summary:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 3px;
+  }
+  details.lang .globe {
+    width: 15px;
+    height: 15px;
+    flex: none;
+  }
+  details.lang .chev {
+    width: 9px;
+    height: 9px;
+    flex: none;
+    transition: transform 0.35s var(--ease);
+  }
+  details.lang[open] .chev {
+    transform: rotate(180deg);
+  }
+  details.lang .menu {
+    position: absolute;
+    z-index: 60;
+    top: calc(100% + 10px);
+    right: 0;
+    display: grid;
+    min-width: 168px;
+    padding: 6px;
+    border: 1px solid var(--glass-line);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--bg) 93%, transparent); /* casi opaco: debajo hay titulares grandes */
+    box-shadow: 0 16px 44px var(--glass-shadow);
+    backdrop-filter: blur(28px) saturate(1.6);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+  }
+  details.lang .menu a,
+  nav.pill details.lang .menu a {
+    display: flex; /* `nav.pill a:first-child` la esconde en móvil */
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 12px;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    background-image: none;
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  details.lang .menu a::after,
+  nav.pill details.lang .menu a::after {
+    display: none;
+  }
+  details.lang .menu a:hover,
+  nav.pill details.lang .menu a:hover {
+    background: var(--card);
+    color: var(--text);
+  }
+  details.lang .menu a[aria-current='true'] {
+    font-weight: 700;
+  }
+  details.lang .tick {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    color: var(--accent-text);
+    opacity: 0;
+  }
+  details.lang .menu a[aria-current='true'] .tick {
+    opacity: 1;
+  }
+  /* En el menú flotante (móvil) va más compacto y sin borde propio. */
+  details.lang-pill {
+    margin-left: 2px;
+  }
+  details.lang-pill summary {
+    gap: 5px;
+    padding: 6px 7px;
+    border-color: transparent;
+    font-size: 10.5px;
+  }
+  details.lang-pill summary:hover,
+  details.lang-pill[open] summary {
+    border-color: transparent;
+  }
+  details.lang-pill .menu {
+    right: -6px;
+  }
+  @media (min-width: 1000px) {
+    details.lang-pill {
+      display: none;
+    }
+  }
+  @media (max-width: 999px) {
+    details.lang-header {
+      display: none;
+    }
+  }
+  /* Móvil estrecho: el menú (con textos más largos en catalán) debe caber entero. */
+  @media (max-width: 440px) {
+    nav.pill {
+      max-width: calc(100vw - 12px);
+      font-size: 10.5px;
+      letter-spacing: 0.02em;
+      gap: 0;
+    }
+    nav.pill.scrolled {
+      font-size: 11px;
+    }
+    nav.pill a,
+    nav.pill.scrolled a {
+      padding: 0 6px;
+    }
+    details.lang-pill summary {
+      gap: 4px;
+      padding: 6px 5px;
+    }
+    details.lang-pill .globe {
+      width: 13px;
+      height: 13px;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    details.lang[open] .menu {
+      animation: pop 0.3s var(--ease);
+    }
+  }
+</style>

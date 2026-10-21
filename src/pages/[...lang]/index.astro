@@ -1,0 +1,98 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site, getProjects, projectUrl } from '../../data/site';
+import { WORDS } from '../../scripts/game';
+import { useDict, locales, defaultLang, localePath, fmt } from '../../i18n';
+import type { Lang } from '../../i18n';
+import PhoneShots from '../../components/PhoneShots.astro';
+import BrowserShot from '../../components/BrowserShot.astro';
+
+// El español (por defecto) va en la raíz; el catalán y el inglés, bajo /ca/ y /en/.
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { lang: l === defaultLang ? undefined : l }, props: { lang: l } }));
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useDict(lang);
+const projects = getProjects(lang);
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+---
+<Base lang={lang}>
+  <div class="hero home" data-avatar="hero">
+    <h1 data-fit>
+      <span class="hi">{t.hero.hi}</span>
+      <span class="line l1">{site.name}</span>
+    </h1>
+    <p class="role">{t.hero.role}</p>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        {[0, 1].map(() => (
+          <span>
+            {t.marquee.map((m) => (<><span>{m}</span><b>+</b></>))}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="col intro" data-avatar="hero">
+    <p class="big">{t.intro.big}</p>
+    <p>{t.intro.text}</p>
+    <div class="actions">
+      <a class="btn" href="#proyectos">{t.intro.viewProjects}</a>
+      <a class="btn secondary" href="#contacto">{t.intro.contact}</a>
+    </div>
+  </div>
+
+  <section class="col" id="proyectos" data-avatar="projects">
+    <h2>{t.sections.projects}</h2>
+    {projects.map((p, i) => (
+      <article class:list={['proj', { 'has-shots': p.shots?.length, 'has-web': p.web }]}>
+        <div class="meta">
+          {(p.stack ? p.stack.split(' · ') : [t.common.personalProject]).map((w) => (<span data-drag={w.toLowerCase() in WORDS ? w.toLowerCase() : undefined}>{w}</span>))}
+          {p.href && (
+            <a class="open" href={p.href} target="_blank" rel="noopener" aria-label={fmt(t.common.openAria, { name: p.name })}>↗</a>
+          )}
+        </div>
+        <div class="name"><sup>{pad(i)}</sup><a class="stretch" href={projectUrl(lang, p)}><span class="word" data-drag={p.name.toLowerCase()}>{p.name}</span></a>{p.status && <span class="status">{p.status}</span>}</div>
+        <p>{p.description}</p>
+        {p.shots?.length ? <PhoneShots shots={p.shots} /> : null}
+        {p.web && p.href ? <BrowserShot shot={p.web} host={new URL(p.href).host} /> : null}
+      </article>
+    ))}
+  </section>
+
+  <section class="col" id="experiencia" data-avatar="experience">
+    <h2>{t.sections.experience}</h2>
+    {t.experience.map((e) => (
+      <div class="entry">
+        <span class="when">{e.period}</span>
+        <h3>{e.role} <span>/</span> {e.company}</h3>
+        <p>{e.description}</p>
+        {e.bullets && (
+          <details class="more">
+            <summary>{t.common.viewDetail}</summary>
+            <ul>{e.bullets.map((b) => (<li>{b}</li>))}</ul>
+          </details>
+        )}
+      </div>
+    ))}
+  </section>
+
+  <section class="col" id="estudios" data-avatar="studies">
+    <h2>{t.sections.studies}</h2>
+    {t.studies.map((s) => (
+      <div class="entry">
+        <span class="when">{s.when}</span>
+        <h3>{s.school}</h3>
+        <p>{s.title}</p>
+      </div>
+    ))}
+  </section>
+
+  <section class="col" id="contacto" data-avatar="contact">
+    <h2>{t.sections.contact}</h2>
+    <a class="contact-link" href={`mailto:${site.email}`}><small>{t.contact.writeMe}</small>{site.email}</a>
+    <a class="contact-link" href={site.github}><small>{t.contact.code}</small>GitHub / dolivag</a>
+  </section>
+</Base>

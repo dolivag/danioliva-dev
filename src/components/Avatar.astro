@@ -1,47 +1,60 @@
 ---
-import { ACHIEVEMENTS } from '../scripts/game';
+import { ACHIEVEMENT_IDS } from '../scripts/game';
+import { useDict, fmt } from '../i18n';
+import type { Lang } from '../i18n';
+import { site } from '../data/site';
 
 interface Props {
+  /** Idioma de los textos del panel, los avisos y lo que dice el avatar. */
+  lang: Lang;
   /** Proyecto cuyo marco de fotos pone el avatar sobre su escritorio (en la página de un proyecto). */
   frame?: string;
 }
-const { frame } = Astro.props;
+const { frame, lang } = Astro.props;
+const g = useDict(lang).game;
+const total = ACHIEVEMENT_IDS.length;
 ---
 <div class="avatar" data-state="hero" data-frame={frame}>
   <div class="bubble" id="avatar-bubble" aria-hidden="true"></div>
-  <div class="panel" id="avatar-panel" role="dialog" aria-label="Interacciones con el avatar" hidden>
-    <p class="panel-title">Interacciones <span id="avatar-score"></span></p>
+  <div class="panel" id="avatar-panel" role="dialog" aria-label={g.panelAria} hidden>
+    <p class="panel-title">{g.panelTitle} <span id="avatar-score"></span></p>
     <ul>
       {
-        ACHIEVEMENTS.map((a) => (
-          <li data-id={a.id}>
+        ACHIEVEMENT_IDS.map((id) => (
+          <li data-id={id}>
             <span class="check" aria-hidden="true"></span>
             <span class="text">
               <b>???</b>
-              <small>Por descubrir</small>
+              <small>{g.toDiscover}</small>
             </span>
-            <button type="button" class="try" aria-label={`Repetir: ${a.title}`}>Repetir</button>
+            <button type="button" class="try" aria-label={fmt(g.repeatAria, { title: g.achievements[id].title })}>{g.repeat}</button>
           </li>
         ))
       }
     </ul>
     <p class="done" hidden>
-      Lo has conseguido todo. ¿Hablamos? <a href="mailto:hola@danioliva.dev">hola@danioliva.dev</a>
+      {g.done} <a href={`mailto:${site.email}`}>{site.email}</a>
     </p>
   </div>
   <button class="counter" id="avatar-counter" type="button" aria-expanded="false" aria-controls="avatar-panel">
-    <span class="dot" aria-hidden="true"></span><span id="avatar-count">0/{ACHIEVEMENTS.length}</span>
+    <span class="dot" aria-hidden="true"></span><span id="avatar-count">0/{total}</span>
   </button>
-  <button class="stage" id="avatar-stage" type="button" aria-label="Saludar al avatar">
+  <button class="stage" id="avatar-stage" type="button" aria-label={g.stageAria}>
     <canvas id="avatar-canvas" width="1024" height="1024" aria-hidden="true"></canvas>
   </button>
 </div>
 <div class="toast" id="avatar-toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="avatar-i18n" set:html={JSON.stringify(g)} />
 
 <script>
   import { startAvatar } from '../scripts/avatar';
-  import { ACHIEVEMENTS, JOKES, WORDS, enableWordDrag, loadUnlocked, saveUnlocked } from '../scripts/game';
+  import { ACHIEVEMENT_IDS, WORDS, enableWordDrag, loadUnlocked, saveUnlocked } from '../scripts/game';
   import type { AchievementId } from '../scripts/game';
+  import type { Dict } from '../i18n/types';
+
+  // Los textos (en el idioma de la página) los pone el servidor en un JSON; aquí solo se rellenan sus huecos.
+  const g: Dict['game'] = JSON.parse(document.getElementById('avatar-i18n')!.textContent!);
+  const fmt = (tpl: string, vars: Record<string, string | number>) => tpl.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
 
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
   const root = document.querySelector<HTMLElement>('.avatar')!;
@@ -51,22 +64,23 @@ const { frame } = Astro.props;
   const counter = $('avatar-counter');
   const panel = $('avatar-panel');
   const toast = $('avatar-toast');
-  const total = ACHIEVEMENTS.length;
+  const total = ACHIEVEMENT_IDS.length;
   const unlocked = loadUnlocked();
 
   const render = () => {
-    const n = ACHIEVEMENTS.filter((a) => unlocked.has(a.id)).length;
+    const n = ACHIEVEMENT_IDS.filter((id) => unlocked.has(id)).length;
     $('avatar-count').textContent = `${n}/${total}`;
     $('avatar-score').textContent = `${n}/${total}`;
     counter.toggleAttribute('data-new', n === 0);
     counter.classList.toggle('complete', n === total);
-    counter.setAttribute('aria-label', `Interacciones con el avatar: ${n} de ${total} desbloqueadas`);
+    counter.setAttribute('aria-label', fmt(g.counterAria, { n, total }));
     panel.querySelectorAll<HTMLElement>('li').forEach((li) => {
-      const a = ACHIEVEMENTS.find((x) => x.id === li.dataset.id)!;
-      const on = unlocked.has(a.id);
+      const id = li.dataset.id as AchievementId;
+      const a = g.achievements[id];
+      const on = unlocked.has(id);
       li.classList.toggle('on', on);
       li.querySelector('b')!.textContent = on ? a.title : '???';
-      li.querySelector('small')!.textContent = on ? a.how : 'Por descubrir';
+      li.querySelector('small')!.textContent = on ? a.how : g.toDiscover;
     });
     panel.querySelector<HTMLElement>('.done')!.hidden = n < total;
   };
@@ -74,7 +88,6 @@ const { frame } = Astro.props;
 
   startAvatar(canvas, bubble, root.dataset.frame).then((avatar) => {
     if (!avatar) return;
-    const by = (id: AchievementId) => ACHIEVEMENTS.find((a) => a.id === id)!;
     let toastTimer: number | undefined;
 
     const announce = (text: string) => {
@@ -111,7 +124,7 @@ const { frame } = Astro.props;
     stage.addEventListener('click', () => root.classList.remove('tucked'));
 
     const trigger = (id: AchievementId, ms = 3200) => {
-      const a = by(id);
+      const a = g.achievements[id];
       const isNew = !unlocked.has(id);
       if (isNew) {
         unlocked.add(id);
@@ -121,7 +134,7 @@ const { frame } = Astro.props;
         void root.offsetWidth;
         root.classList.add('burst');
         const n = unlocked.size;
-        announce(n === total ? 'Colección completa. Lo has conseguido todo.' : `Desbloqueado · ${a.title} · ${n}/${total}`);
+        announce(n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
       }
       avatar.react(id, a.say, id === 'sueno' ? 0 : ms);
       return isNew;
@@ -137,7 +150,7 @@ const { frame } = Astro.props;
         clicks.length = 0;
         trigger('mareo');
       } else if (!unlocked.has('hola')) trigger('hola');
-      else avatar.react('asiente', JOKES[Math.floor(Math.random() * JOKES.length)], 2600);
+      else avatar.react('asiente', g.jokes[Math.floor(Math.random() * g.jokes.length)], 2600);
     });
 
     // Arrastrar palabras hasta el avatar.
@@ -148,7 +161,7 @@ const { frame } = Astro.props;
         const w = WORDS[word];
         if (!w) return;
         if (w.achievement) trigger(w.achievement);
-        else avatar.react('asiente', w.say ?? '', 3000);
+        else avatar.react('asiente', g.words[word] ?? '', 3000);
       },
     });
 
@@ -160,7 +173,7 @@ const { frame } = Astro.props;
       if (asleep) {
         asleep = false;
         avatar.stop();
-        avatar.say('¡Eh! Estaba soñando…', 2200);
+        avatar.say(g.woke, 2200);
       }
     };
     for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart'])

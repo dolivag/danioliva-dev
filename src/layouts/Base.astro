@@ -1,22 +1,31 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
+import { useDict, langFromPath, stripLang, localePath, locales, ogLocale, defaultLang } from '../i18n';
+import type { Lang } from '../i18n';
 import Avatar from '../components/Avatar.astro';
+import LangSwitch from '../components/LangSwitch.astro';
 import Glow from '../components/Glow.astro';
 import Micro from '../components/Micro.astro';
 
 interface Props {
+  /** Idioma de la página (por defecto, el de su ruta). */
+  lang?: Lang;
   title?: string;
   description?: string;
   /** Proyecto del que el avatar cuelga un marco (su página). */
   frame?: string;
 }
-const { title, description = 'Software engineer fullstack. Aplicaciones y herramientas pequeñas.', frame } =
-  Astro.props;
-const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const { title, frame } = Astro.props;
+const lang: Lang = Astro.props.lang ?? langFromPath(Astro.url.pathname);
+const t = useDict(lang);
+const description = Astro.props.description ?? t.meta.description;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${t.role}`;
+const path = stripLang(Astro.url.pathname);
+const abs = (l: Lang) => new URL(localePath(l, path), Astro.site).href;
 ---
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <script is:inline>
@@ -32,9 +41,13 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    {locales.filter((l) => l !== lang).map((l) => (<meta property="og:locale:alternate" content={ogLocale[l]} />))}
+    {locales.map((l) => (<link rel="alternate" hreflang={l} href={abs(l)} />))}
+    <link rel="alternate" hreflang="x-default" href={abs(defaultLang)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#f3f1ec" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="canonical" href={abs(lang)} />
   </head>
   <body>
     <Glow />
@@ -42,20 +55,22 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
     <div class="progress" aria-hidden="true"></div>
     <div class="wrap">
       <header class="top">
-        <a class="brand" href="/" aria-label={site.name}>&lt;D<span>.</span>O/&gt;</a>
-        <nav class="pill" aria-label="Principal">
-          <a href="/">Índice</a>
-          <a href="/#proyectos">Proyectos</a>
-          <a href="/#experiencia">Experiencia</a>
-          <a href="/#contacto">Contacto</a>
-          <button class="theme" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Tema claro / oscuro">
+        <a class="brand" href={localePath(lang, '/')} aria-label={site.name}>&lt;D<span>.</span>O/&gt;</a>
+        <nav class="pill" aria-label={t.nav.label}>
+          <a href={localePath(lang, '/')}>{t.nav.index}</a>
+          <a href={localePath(lang, '/#proyectos')}>{t.nav.projects}</a>
+          <a href={localePath(lang, '/#experiencia')}>{t.nav.experience}</a>
+          <a href={localePath(lang, '/#contacto')}>{t.nav.contact}</a>
+          <LangSwitch lang={lang} path={path} variant="pill" />
+          <button class="theme" type="button" aria-label={t.theme.toggle} title={t.theme.toggleTitle}>
             <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" /></svg>
             <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
           </button>
         </nav>
         <div class="social">
+          <LangSwitch lang={lang} path={path} variant="header" />
           <a href={site.github}>GitHub</a>
-          <a href={`mailto:${site.email}`}>Email</a>
+          <a href={`mailto:${site.email}`}>{t.common.email}</a>
         </div>
       </header>
       <main><slot /></main>
@@ -65,18 +80,18 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.r
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </footer>
     </div>
-    <div class="theme-group" role="group" aria-label="Tema de la web">
-      <button type="button" data-mode="light" aria-pressed="false" aria-label="Tema claro" title="Claro">
+    <div class="theme-group" role="group" aria-label={t.theme.group}>
+      <button type="button" data-mode="light" aria-pressed="false" aria-label={t.theme.light} title={t.theme.lightShort}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
       </button>
-      <button type="button" data-mode="dark" aria-pressed="false" aria-label="Tema oscuro" title="Oscuro">
+      <button type="button" data-mode="dark" aria-pressed="false" aria-label={t.theme.dark} title={t.theme.darkShort}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" /></svg>
       </button>
-      <button type="button" data-mode="system" aria-pressed="false" aria-label="Tema del sistema" title="Sistema">
+      <button type="button" data-mode="system" aria-pressed="false" aria-label={t.theme.system} title={t.theme.systemShort}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
       </button>
     </div>
-    <Avatar frame={frame} />
+    <Avatar lang={lang} frame={frame} />
 
     <script>
       const root = document.documentElement;

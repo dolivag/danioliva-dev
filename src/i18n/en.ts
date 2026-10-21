@@ -46,13 +46,13 @@ export const en: Dict = {
   experience: [
     {
       company: 'Zennio',
-      role: 'Software engineer',
+      role: 'Fullstack engineer',
       period: 'Since January 2024',
       description:
-        'Development of a building management platform: frontend with Angular and PrimeNG and, when the team needs it, backend with NestJS, TypeScript and PostgreSQL/TimescaleDB, in an Nx monorepo. The team’s reference for CI/CD and automation, and a driver of AI adoption.',
+        'Full-stack development of a building management platform: Angular + PrimeNG on the frontend and NestJS + TypeScript with PostgreSQL/TimescaleDB on the backend, in an Nx monorepo. The team’s reference for CI/CD and automation, and a driver of AI adoption.',
       bullets: [
-        'Features from start to finish when needed: data model, API, UI and tests.',
-        'Frontend with Angular and PrimeNG; backend, when the team is overloaded, with NestJS, TypeScript, Sequelize and PostgreSQL/TimescaleDB.',
+        'End-to-end feature development: data model, API, UI and tests.',
+        'Frontend with Angular and PrimeNG; backend with NestJS, TypeScript, Sequelize and PostgreSQL/TimescaleDB.',
         'Design and evolution of the database schema, including migrations and high-volume queries.',
         'Performance tuning: diagnosing and fixing slow queries and API bottlenecks.',
         'Testing strategy: unit (Jest), integration and E2E with Cypress in CI pipelines.',
@@ -164,15 +164,15 @@ export const en: Dict = {
     },
     storia: {
       status: 'On hold',
-      description: 'An app that generates children’s stories with AI: you pick the concepts and characters, and it creates the illustrations too.',
+      description: 'An app for parents that generates children’s stories with AI: you pick nine concepts and it creates the story with one illustration per section.',
       openLabel: '',
-      tags: ['On hold', 'AI', 'Stories', 'Characters', 'Images'],
-      lead: 'An app that generates children’s stories with AI: you pick the narrative concepts, customise the characters and the app creates the images too. I started it in March 2026 as a testbed for new AI tools and trends. It is on hold for now.',
+      tags: ['On hold', 'Expo', 'React Native', 'Supabase', 'AI', 'Stories', 'Illustrations'],
+      lead: 'An app for parents that generates children’s stories with AI: you pick nine concepts —characters, places, objects, values— spread across introduction, climax and ending, and the AI writes a short story for children aged 3 to 8, with one illustration per section. I started it in March 2026; it is on hold for now and I plan to pick it up again.',
       facts: [
-        { title: 'Narrative concepts', text: 'Each story starts from the concepts you select.' },
-        { title: 'Custom characters', text: 'The story’s characters adapt to what you want to tell.' },
-        { title: 'With illustrations', text: 'Besides the text, AI generates the story’s images.' },
-        { title: 'A testbed', text: 'A personal project to try out AI tools and trends. Started in March 2026 and on hold.' },
+        { title: 'Nine concepts, three acts', text: 'Three concepts for the introduction, three for the climax and three for the ending, with no repeats. There are over a hundred to start with and you can add your own.' },
+        { title: 'Made to measure', text: 'The AI writes a short story for children aged 3 to 8, with content designed for them.' },
+        { title: 'With illustrations', text: 'An AI-generated image for each part of the story.' },
+        { title: 'A testbed', text: 'A Supabase function talks to the AI provider (Claude, Gemini or Groq), which can be swapped without touching the app. A personal project to try out AI tools and trends.' },
       ],
     },
   },

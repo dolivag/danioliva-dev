@@ -46,13 +46,13 @@ export const ca: Dict = {
   experience: [
     {
       company: 'Zennio',
-      role: 'Software engineer',
+      role: 'Fullstack engineer',
       period: 'Des de gener de 2024',
       description:
-        'Desenvolupament d’una plataforma de gestió d’edificis: frontend amb Angular i PrimeNG i, quan l’equip ho necessita, backend amb NestJS, TypeScript i PostgreSQL/TimescaleDB, dins d’un monorepo Nx. Referent de l’equip en CI/CD i automatitzacions, i impulsor de l’adopció d’IA.',
+        'Desenvolupament full-stack d’una plataforma de gestió d’edificis: Angular + PrimeNG al frontend i NestJS + TypeScript amb PostgreSQL/TimescaleDB al backend, dins d’un monorepo Nx. Referent de l’equip en CI/CD i automatitzacions, i impulsor de l’adopció d’IA.',
       bullets: [
-        'Funcionalitats de principi a fi quan cal: model de dades, API, UI i proves.',
-        'Frontend amb Angular i PrimeNG; backend, en moments de sobrecàrrega de l’equip, amb NestJS, TypeScript, Sequelize i PostgreSQL/TimescaleDB.',
+        'Desenvolupament end-to-end de funcionalitats: model de dades, API, UI i proves.',
+        'Frontend amb Angular i PrimeNG; backend amb NestJS, TypeScript, Sequelize i PostgreSQL/TimescaleDB.',
         'Disseny i evolució de l’esquema de la base de dades, incloent-hi migracions i consultes d’alt volum.',
         'Optimització del rendiment: diagnòstic i resolució de consultes lentes i colls d’ampolla a l’API.',
         'Estratègia de proves: unitàries (Jest), d’integració i E2E amb Cypress en pipelines de CI.',
@@ -164,15 +164,15 @@ export const ca: Dict = {
     },
     storia: {
       status: 'En pausa',
-      description: 'App que genera històries infantils amb IA: tries els conceptes i els personatges, i també crea les il·lustracions.',
+      description: 'App per a pares que genera contes infantils amb IA: tries nou conceptes i crea el conte amb una il·lustració per secció.',
       openLabel: '',
-      tags: ['En pausa', 'IA', 'Històries', 'Personatges', 'Imatges'],
-      lead: 'Una app que genera històries infantils amb IA: tries els conceptes narratius, personalitzes els personatges i l’app crea també les imatges. La vaig començar el març de 2026 com a banc de proves per a noves eines i tendències d’IA. Ara està en pausa.',
+      tags: ['En pausa', 'Expo', 'React Native', 'Supabase', 'IA', 'Contes', 'Il·lustracions'],
+      lead: 'Una app per a pares que genera contes infantils amb IA: tries nou conceptes —personatges, llocs, objectes, valors— repartits en introducció, nus i desenllaç, i la IA escriu un conte curt per a nens de 3 a 8 anys, amb una il·lustració per secció. La vaig començar el març de 2026; ara està en pausa i penso reprendre-la.',
       facts: [
-        { title: 'Conceptes narratius', text: 'Cada història parteix dels conceptes que selecciones.' },
-        { title: 'Personatges personalitzats', text: 'Els protagonistes del conte s’adapten al que vols explicar.' },
-        { title: 'Amb il·lustracions', text: 'A més del text, la IA genera les imatges de la història.' },
-        { title: 'Banc de proves', text: 'Un projecte personal per provar eines i tendències d’IA. Va començar el març de 2026 i està en pausa.' },
+        { title: 'Nou conceptes, tres actes', text: 'Tres conceptes per a la introducció, tres per al nus i tres per al desenllaç, sense repetir-ne cap. N’hi ha més de cent de sortida i pots afegir-hi els teus.' },
+        { title: 'Contes a mida', text: 'La IA escriu un conte curt adaptat a nens de 3 a 8 anys, amb contingut pensat per a ells.' },
+        { title: 'Amb il·lustracions', text: 'Una imatge generada amb IA per a cada part del conte.' },
+        { title: 'Banc de proves', text: 'Una funció de Supabase parla amb el proveïdor d’IA (Claude, Gemini o Groq), que es canvia sense tocar l’app. Un projecte personal per provar eines i tendències d’IA.' },
       ],
     },
   },

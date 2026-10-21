@@ -80,7 +80,7 @@ const projectsBase: ProjectBase[] = [
   {
     slug: 'storia',
     name: 'Storia',
-    stack: '',
+    stack: 'Expo · React Native · Supabase',
     href: '',
   },
 ];

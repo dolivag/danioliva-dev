@@ -46,13 +46,13 @@ export const es: Dict = {
   experience: [
     {
       company: 'Zennio',
-      role: 'Software engineer',
+      role: 'Fullstack engineer',
       period: 'Desde enero de 2024',
       description:
-        'Desarrollo de una plataforma de gestión de edificios: frontend con Angular y PrimeNG y, cuando el equipo lo necesita, backend con NestJS, TypeScript y PostgreSQL/TimescaleDB, dentro de un monorepo Nx. Referente del equipo en CI/CD y automatizaciones, e impulsor de la adopción de IA.',
+        'Desarrollo full-stack de una plataforma de gestión de edificios: Angular + PrimeNG en frontend y NestJS + TypeScript con PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. Referente del equipo en CI/CD y automatizaciones, e impulsor de la adopción de IA.',
       bullets: [
-        'Funcionalidades de principio a fin cuando hace falta: modelo de datos, API, UI y pruebas.',
-        'Frontend con Angular y PrimeNG; backend, en momentos de sobrecarga del equipo, con NestJS, TypeScript, Sequelize y PostgreSQL/TimescaleDB.',
+        'Desarrollo end-to-end de funcionalidades: modelo de datos, API, UI y pruebas.',
+        'Frontend con Angular y PrimeNG; backend con NestJS, TypeScript, Sequelize y PostgreSQL/TimescaleDB.',
         'Diseño y evolución del esquema de base de datos, incluidas migraciones y consultas de alto volumen.',
         'Optimización de rendimiento: diagnóstico y resolución de consultas lentas y cuellos de botella en API.',
         'Estrategia de pruebas: unitarias (Jest), integración y E2E con Cypress en pipelines de CI.',
@@ -164,15 +164,15 @@ export const es: Dict = {
     },
     storia: {
       status: 'En pausa',
-      description: 'App que genera historias infantiles con IA: eliges los conceptos y los personajes, y también crea las ilustraciones.',
+      description: 'App para padres que genera cuentos infantiles con IA: eliges nueve conceptos y crea el cuento con una ilustración por sección.',
       openLabel: '',
-      tags: ['En pausa', 'IA', 'Historias', 'Personajes', 'Imágenes'],
-      lead: 'Una app que genera historias infantiles con IA: eliges los conceptos narrativos, personalizas a los personajes y la app crea también las imágenes. La empecé en marzo de 2026 como banco de pruebas para nuevas herramientas y tendencias de IA. Ahora está en pausa.',
+      tags: ['En pausa', 'Expo', 'React Native', 'Supabase', 'IA', 'Cuentos', 'Ilustraciones'],
+      lead: 'Una app para padres que genera cuentos infantiles con IA: eliges nueve conceptos —personajes, lugares, objetos, valores— repartidos en introducción, nudo y desenlace, y la IA escribe un cuento corto para niños de 3 a 8 años, con una ilustración por sección. La empecé en marzo de 2026; ahora está en pausa y pienso retomarla.',
       facts: [
-        { title: 'Conceptos narrativos', text: 'Cada historia parte de los conceptos que seleccionas.' },
-        { title: 'Personajes personalizados', text: 'Los protagonistas del cuento se adaptan a lo que quieres contar.' },
-        { title: 'Con ilustraciones', text: 'Además del texto, la IA genera las imágenes de la historia.' },
-        { title: 'Banco de pruebas', text: 'Un proyecto personal para probar herramientas y tendencias de IA. Empezó en marzo de 2026 y está en pausa.' },
+        { title: 'Nueve conceptos, tres actos', text: 'Tres conceptos para la introducción, tres para el nudo y tres para el desenlace, sin repetir ninguno. Hay más de cien de partida y puedes añadir los tuyos.' },
+        { title: 'Cuentos a medida', text: 'La IA escribe un cuento corto adaptado a niños de 3 a 8 años, con contenido pensado para ellos.' },
+        { title: 'Con ilustraciones', text: 'Una imagen generada con IA para cada parte del cuento.' },
+        { title: 'Banco de pruebas', text: 'Una función de Supabase habla con el proveedor de IA (Claude, Gemini o Groq), que se cambia sin tocar la app. Un proyecto personal para probar herramientas y tendencias de IA.' },
       ],
     },
   },

@@ -56,12 +56,12 @@ const es: CvCopy = {
     title: 'Experiencia laboral',
     jobs: [
       {
-        role: 'Software engineer',
+        role: 'Fullstack engineer',
         company: 'Zennio',
         place: 'Toledo (remoto desde Barcelona)',
         period: 'Enero 2024 – actualidad',
         bullets: [
-          'Desarrollo frontend de aplicación web (Angular, PrimeNG) asumiendo funciones backend (NestJS) en momentos de sobrecarga o falta de recursos del equipo.',
+          'Desarrollo full-stack de aplicación web: frontend con Angular y PrimeNG y backend con NestJS.',
           'Referente del equipo en CI/CD: diseño de pipelines, automatización de releases y creación de bots.',
           'Impulsor de la adopción de IA en el equipo: creación de skills, configuración de MCPs e integración de herramientas de IA en el flujo de desarrollo.',
           'Colaboración en la estandarización de calidad de código a nivel transversal: adopción de merge requests, herramientas como Prettier, Linter o scans de SonarQube.',
@@ -137,12 +137,12 @@ const ca: CvCopy = {
     title: 'Experiència laboral',
     jobs: [
       {
-        role: 'Software engineer',
+        role: 'Fullstack engineer',
         company: 'Zennio',
         place: 'Toledo (en remot des de Barcelona)',
         period: 'Gener 2024 – actualitat',
         bullets: [
-          'Desenvolupament frontend d’aplicació web (Angular, PrimeNG) assumint funcions de backend (NestJS) en moments de sobrecàrrega o manca de recursos de l’equip.',
+          'Desenvolupament full-stack d’aplicació web: frontend amb Angular i PrimeNG i backend amb NestJS.',
           'Referent de l’equip en CI/CD: disseny de pipelines, automatització de releases i creació de bots.',
           'Impulsor de l’adopció d’IA a l’equip: creació de skills, configuració de MCPs i integració d’eines d’IA en el flux de desenvolupament.',
           'Col·laboració en l’estandardització de la qualitat del codi a nivell transversal: adopció de merge requests, eines com Prettier, Linter o escaneigs de SonarQube.',
@@ -218,12 +218,12 @@ const en: CvCopy = {
     title: 'Work experience',
     jobs: [
       {
-        role: 'Software engineer',
+        role: 'Fullstack engineer',
         company: 'Zennio',
         place: 'Toledo (remote from Barcelona)',
         period: 'January 2024 – present',
         bullets: [
-          'Frontend development of a web application (Angular, PrimeNG), taking on backend work (NestJS) when the team is overloaded or short on resources.',
+          'Full-stack development of a web application: frontend with Angular and PrimeNG and backend with NestJS.',
           'Team reference for CI/CD: pipeline design, release automation and bot creation.',
           'Driving AI adoption in the team: building skills, configuring MCPs and integrating AI tools into the development workflow.',
           'Helping standardise code quality across teams: adoption of merge requests, tools such as Prettier and linters, and SonarQube scans.',

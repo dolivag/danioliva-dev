@@ -21,6 +21,8 @@ export type ProjectCopy = {
   shotAlts?: string[];
   /** Texto alternativo de la captura de escritorio. */
   webAlt?: string;
+  /** Textos alternativos de las capturas de escritorio extra (`webs`), en el mismo orden. */
+  webAlts?: string[];
 };
 
 export type Dict = {

@@ -149,6 +149,11 @@ export const en: Dict = {
       ],
       links: ['Data from Open-Meteo'],
       webAlt: 'DuoMeteo comparing the weather in Barcelona (17 °C) and Reykjavík (4 °C), with their differences in temperature, humidity and distance',
+      webAlts: [
+        'DuoMeteo: home page with an animated rain icon; there is one for every sky condition',
+        'DuoMeteo comparing Buenos Aires (17 °C) and Sydney (18 °C): feels-like, humidity, wind, precipitation, UV index and sun hours',
+        'DuoMeteo: six-day forecast for both cities, with high, low and chance of rain, and below it a globe with the distance between them and the day’s temperature chart',
+      ],
     },
     trasteo: {
       status: 'In progress',

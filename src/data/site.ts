@@ -29,6 +29,8 @@ type ProjectBase = {
   shots?: { src: string; srcDark?: string }[];
   /** Captura de escritorio de la web, en una ventana de navegador (alternativa a `shots`; su `alt`, en `webAlt`). */
   web?: { src: string; srcDark?: string };
+  /** Más capturas de escritorio, que se enseñan bajo la principal en su página (sus `alt`, en `webAlts`). */
+  webs?: { src: string; srcDark?: string }[];
 };
 
 const projectsBase: ProjectBase[] = [
@@ -70,6 +72,11 @@ const projectsBase: ProjectBase[] = [
     href: 'https://duometeo.danioliva.dev/',
     links: ['https://open-meteo.com'],
     web: { src: '/projects/duometeo/web.webp', srcDark: '/projects/duometeo/web-oscuro.webp' },
+    webs: [
+      { src: '/projects/duometeo/hero.webp', srcDark: '/projects/duometeo/hero-oscuro.webp' },
+      { src: '/projects/duometeo/comparativa.webp', srcDark: '/projects/duometeo/comparativa-oscuro.webp' },
+      { src: '/projects/duometeo/dias.webp', srcDark: '/projects/duometeo/dias-oscuro.webp' },
+    ],
   },
   {
     slug: 'trasteo',
@@ -86,11 +93,12 @@ const projectsBase: ProjectBase[] = [
 ];
 
 /** Un proyecto listo para pintar: sus datos y sus textos en un idioma. */
-export type Project = Omit<ProjectBase, 'links' | 'shots' | 'web'> &
-  Omit<ProjectCopy, 'links' | 'shotAlts' | 'webAlt'> & {
+export type Project = Omit<ProjectBase, 'links' | 'shots' | 'web' | 'webs'> &
+  Omit<ProjectCopy, 'links' | 'shotAlts' | 'webAlt' | 'webAlts'> & {
     links?: { label: string; href: string }[];
     shots?: Shot[];
     web?: Shot;
+    webs?: Shot[];
   };
 
 export const projectUrl = (lang: Lang, p: Pick<ProjectBase, 'slug'>) => localePath(lang, `/apps/${p.slug}/`);
@@ -98,7 +106,7 @@ export const projectUrl = (lang: Lang, p: Pick<ProjectBase, 'slug'>) => localePa
 export function getProjects(lang: Lang): Project[] {
   const copy = useDict(lang).projects;
   return projectsBase.map((b) => {
-    const { links, shotAlts, webAlt, ...text } = copy[b.slug];
+    const { links, shotAlts, webAlt, webAlts, ...text } = copy[b.slug];
     return {
       ...text,
       slug: b.slug,
@@ -108,6 +116,7 @@ export function getProjects(lang: Lang): Project[] {
       links: b.links?.map((href, i) => ({ href, label: links?.[i] ?? href })),
       shots: b.shots?.map((s, i) => ({ ...s, alt: shotAlts?.[i] ?? '' })),
       web: b.web ? { ...b.web, alt: webAlt ?? '' } : undefined,
+      webs: b.webs?.map((s, i) => ({ ...s, alt: webAlts?.[i] ?? '' })),
     };
   });
 }

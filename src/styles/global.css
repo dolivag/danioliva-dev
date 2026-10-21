@@ -268,6 +268,9 @@ footer a { text-decoration: none; }
   .intro > .glance { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
 }
 
+/* Más capturas de escritorio en la página de un proyecto: una debajo de otra. */
+.web-gallery { display: grid; gap: 22px; margin-top: 22px; }
+
 /* El carrusel de proyectos solo existe en pantallas anchas. */
 .car-nav { display: none; }
 

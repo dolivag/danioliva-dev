@@ -106,7 +106,7 @@ header.top {
   letter-spacing: -0.04em; line-height: 1;
 }
 .brand span { color: var(--accent-text); }
-.social { display: flex; gap: 14px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.social { display: flex; align-items: center; gap: 14px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
 .social a { text-decoration: none; }
 
 nav.pill {
@@ -586,3 +586,8 @@ pre.code code { font: inherit; white-space: pre; }
   @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 }
 @media (max-width: 999px) { .entry .more { grid-column: 1; } }
+
+/* Escritorio: el logo, el selector de idioma y los enlaces se alinean con el centro del menú flotante (que está a 14 px del borde y mide ~50). */
+@media (min-width: 1000px) {
+  header.top { padding: 25px 0 11px; }
+}

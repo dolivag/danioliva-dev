@@ -30,6 +30,20 @@ Para un idioma nuevo: `src/i18n/<código>.ts`, añadirlo a `locales` y a `langNa
 
 El contenido de proyectos, experiencia y estudios está en `src/i18n/` (textos) y `src/data/site.ts` (datos).
 
+### Compartir y buscadores
+
+- **Vista previa al compartir:** cada página (portada y proyectos, en los tres idiomas) lleva `og:image` y
+  `twitter:card` con una tarjeta de 1200×630 en `public/og/<idioma>/<home|slug>.png`. Las dibuja
+  `src/pages/og-card/` (solo existe con `astro dev`, no entra en el build) con los mismos textos de `src/i18n/`, y
+  `node scripts/build-social.cjs` las guarda como PNG (y regenera `apple-touch-icon.png` y `favicon.ico`). Hay que
+  volver a lanzarlo al cambiar un texto o una captura de proyecto, y subir los PNG. Necesita Playwright con
+  Chromium (`PW_CHROMIUM_PATH` si ya lo tienes en otro sitio).
+- **Favicon:** `public/favicon.svg` cambia de colores con el tema del navegador (una «D» con punto ámbar).
+- **`theme-color`:** una meta para claro y otra para oscuro (el selector de tema las actualiza).
+- **Buscadores:** `sitemap.xml` (`src/pages/sitemap.xml.ts`) con las tres versiones de cada página (`hreflang`),
+  `robots.txt`, y datos estructurados de schema.org: `Person` en la portada y `SoftwareApplication` en cada proyecto
+  ya público.
+
 ### Páginas de proyecto
 
 Cada proyecto de `src/data/site.ts` tiene su página en `/apps/<slug>/` (y `/ca/…`, `/en/…`; la genera

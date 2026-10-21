@@ -145,7 +145,7 @@ const ca: CvCopy = {
           'Desenvolupament full-stack d’aplicació web: frontend amb Angular i PrimeNG i backend amb NestJS.',
           'Referent de l’equip en CI/CD: disseny de pipelines, automatització de releases i creació de bots.',
           'Impulsor de l’adopció d’IA a l’equip: creació de skills, configuració de MCPs i integració d’eines d’IA en el flux de desenvolupament.',
-          'Col·laboració en l’estandardització de la qualitat del codi a nivell transversal: adopció de merge requests, eines com Prettier, Linter o escaneigs de SonarQube.',
+          'Col·laboració en l’estandardització de la qualitat del codi de manera transversal: adopció de merge requests, eines com Prettier, Linter o escaneigs de SonarQube.',
         ],
       },
       {
@@ -164,7 +164,7 @@ const ca: CvCopy = {
   education: {
     title: 'Educació',
     items: [
-      { school: 'Universitat Oberta de Catalunya', period: 'Setembre 2019 – gener 2024', lines: ['Grau en Enginyeria Informàtica', 'Especialització en Enginyeria del Programari', 'Nota mitjana: 9,36'] },
+      { school: 'Universitat Oberta de Catalunya', period: 'Setembre 2019 – gener 2024', lines: ['Grau d’Enginyeria Informàtica', 'Especialització en Enginyeria del Programari', 'Nota mitjana: 9,36'] },
       { school: 'IT Academy, Barcelona', period: 'Gener 2021 – juliol 2021', lines: ['Fullstack Bootcamp amb PHP i Laravel', 'Addicionalment, Tailwind i VueJS'] },
     ],
   },

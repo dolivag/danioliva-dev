@@ -268,19 +268,32 @@ footer a { text-decoration: none; }
   .intro > .glance { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
 }
 
+/* El carrusel de proyectos solo existe en pantallas anchas. */
+.car-nav { display: none; }
+
 /* ---- Anchas: la portada usa el ancho en vez de una sola columna ---- */
 @media (min-width: 1100px) {
-  main > .pair, main > .col.intro { max-width: 1800px; }
-  /* Experiencia y estudios, lado a lado. */
-  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; align-items: start; }
+  main > #proyectos, main > .col.intro { max-width: 1800px; }
+  /* Proyectos: carrusel horizontal con ajuste a cada tarjeta. */
+  #proyectos { position: relative; }
+  .cards {
+    display: flex; gap: 28px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    padding: 8px 0; margin: -8px 0; align-items: stretch;
+  }
+  .cards::-webkit-scrollbar { display: none; }
+  .cards > .proj { flex: 0 0 clamp(640px, 46%, 760px); scroll-snap-align: start; margin-bottom: 0; }
+  .car-nav { position: absolute; top: 72px; right: 0; gap: 8px; }
+  .js .car-nav { display: flex; }
+  .car-nav button {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--text);
+    font-size: 18px; cursor: pointer; transition: background-color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+  }
+  .car-nav button:hover:not(:disabled) { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  .car-nav button:disabled { opacity: 0.35; cursor: default; }
 }
-/* Con menos de 1440 px las tarjetas de proyecto quedarían estrechas para sus capturas: siguen en una columna. */
+/* Contacto: con mucho ancho, los tres enlaces en una fila. */
 @media (min-width: 1440px) {
-  main > #proyectos, main > #contacto { max-width: 1800px; }
-  /* Proyectos: dos tarjetas por fila. */
-  #proyectos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; align-items: start; }
-  #proyectos > h2 { grid-column: 1 / -1; }
-  /* Contacto: los tres enlaces en una fila. */
+  main > #contacto { max-width: 1800px; }
   #contacto { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; align-items: start; }
   #contacto > h2 { grid-column: 1 / -1; }
 }

@@ -48,6 +48,8 @@ export type Dict = {
     project: string;
     back: string;
     moreProjects: string;
+    /** Carrusel de proyectos de la portada (pantallas anchas). */
+    carousel: { label: string; prev: string; next: string };
     captures: string;
     whatItDoes: string;
     links: string;

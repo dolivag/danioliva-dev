@@ -82,6 +82,8 @@ redirecciones, definidas en `astro.config.mjs`, para que estas URL no cambien nu
 Una captura de escritorio de un proyecto puede ser un vídeo corto (`clip` en `web` de `src/data/site.ts`, con su `clipAlt` en
 los textos). `scripts/optimize-clip.sh` convierte una grabación a MP4 + WebM + póster. `BrowserShot.astro` los reproduce
 en bucle, sin sonido, solo mientras se ven en pantalla; con «reducir movimiento» no arrancan solos y se enseñan con controles.
+En los móviles (`PhoneShots`, `ShotGallery`) una captura puede llevar `clip` y `clipDark` (el mismo vídeo con la web en oscuro; solo corre el del
+tema activo): así está la del medio de QR City, grabada en un iPhone. `src/scripts/clips.ts` se encarga de arrancarlos y pararlos.
 DuoMeteo lo grabé con Playwright (`recordVideo`) y recortando con ffmpeg. Las escenas 3D (QR City) no salen fluidas en un
 navegador sin GPU: ese se graba en un equipo con tarjeta gráfica.
 

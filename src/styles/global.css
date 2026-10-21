@@ -578,10 +578,11 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select:
 
 /* Capturas (tarjetas y páginas de proyecto): la versión oscura aparece con fundido cuando la web está en oscuro */
 .shot-screen { position: relative; overflow: hidden; }
-.shot-screen img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
-.shot-screen img.dark { opacity: 0; transition: opacity 0.6s ease; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .shot-screen img.dark { opacity: 1; } }
-:root[data-theme='dark'] .shot-screen img.dark { opacity: 1; }
+.shot-screen img, .shot-screen video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.shot-screen img.dark, .shot-screen video.dark { opacity: 0; transition: opacity 0.6s ease; }
+.shot-screen video { object-position: center; background: #14161b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .shot-screen img.dark, :root:not([data-theme='light']) .shot-screen video.dark { opacity: 1; } }
+:root[data-theme='dark'] .shot-screen img.dark, :root[data-theme='dark'] .shot-screen video.dark { opacity: 1; }
 
 /* Marco de iPhone */
 .phone-frame {

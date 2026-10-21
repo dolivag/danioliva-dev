@@ -11,13 +11,34 @@ const shots = Astro.props.shots.slice(0, 3);
     shots.map((s, i) => (
       <figure class="phone phone-frame" style={`--i:${i}`}>
         <div class="shot-screen">
-          <img class="light" src={s.src} alt={s.alt} width="390" height="844" loading="lazy" decoding="async" />
-          {s.srcDark && <img class="dark" src={s.srcDark} alt="" width="390" height="844" loading="lazy" decoding="async" />}
+          {s.clip ? (
+            <>
+              <video class="clip light" data-clip muted loop playsinline preload="none" width="390" height="844" poster={`${s.clip}.jpg`} role="img" aria-label={s.alt}>
+                <source src={`${s.clip}.mp4`} type="video/mp4" />
+                <source src={`${s.clip}.webm`} type="video/webm" />
+              </video>
+              {s.clipDark && (
+                <video class="clip dark" data-clip muted loop playsinline preload="none" width="390" height="844" poster={`${s.clipDark}.jpg`} aria-hidden="true">
+                  <source src={`${s.clipDark}.mp4`} type="video/mp4" />
+                  <source src={`${s.clipDark}.webm`} type="video/webm" />
+                </video>
+              )}
+            </>
+          ) : (
+            <>
+              <img class="light" src={s.src} alt={s.alt} width="390" height="844" loading="lazy" decoding="async" />
+              {s.srcDark && <img class="dark" src={s.srcDark} alt="" width="390" height="844" loading="lazy" decoding="async" />}
+            </>
+          )}
         </div>
       </figure>
     ))
   }
 </div>
+
+<script>
+  import '../scripts/clips';
+</script>
 
 <style>
   /* Los móviles asoman por abajo a la derecha de la tarjeta; al pasar el cursor suben y se abren. */

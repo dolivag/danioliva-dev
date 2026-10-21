@@ -19,8 +19,8 @@ const { shot, host, full = false } = Astro.props;
     {
       shot.clip ? (
         <video class="clip" data-clip muted loop playsinline preload="none" width="960" height="600" poster={`${shot.clip}.jpg`} role="img" aria-label={shot.clipAlt ?? shot.alt}>
-          <source src={`${shot.clip}.webm`} type="video/webm" />
           <source src={`${shot.clip}.mp4`} type="video/mp4" />
+          <source src={`${shot.clip}.webm`} type="video/webm" />
         </video>
       ) : (
         <>
@@ -33,23 +33,7 @@ const { shot, host, full = false } = Astro.props;
 </div>
 
 <script>
-  // Vídeos en bucle: solo corren mientras se ven (ahorra batería y datos). Con «reducir movimiento»
-  // no arrancan solos: se enseña el póster y el vídeo con controles.
-  const clips = document.querySelectorAll<HTMLVideoElement>('video[data-clip]');
-  if (clips.length) {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      clips.forEach((v) => {
-        v.controls = true;
-        v.loop = false;
-      });
-    } else {
-      const io = new IntersectionObserver(
-        (entries) => entries.forEach((e) => (e.isIntersecting ? (e.target as HTMLVideoElement).play().catch(() => {}) : (e.target as HTMLVideoElement).pause())),
-        { threshold: 0.35 },
-      );
-      clips.forEach((v) => io.observe(v));
-    }
-  }
+  import '../scripts/clips';
 </script>
 
 <style>

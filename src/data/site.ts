@@ -18,6 +18,8 @@ export type Shot = {
   alt: string;
   /** Vídeo corto en bucle en lugar de la imagen: ruta sin extensión (`<ruta>.webm`, `.mp4` y el póster `.jpg`; ver `scripts/optimize-clip.sh`). */
   clip?: string;
+  /** El mismo vídeo grabado con la web en oscuro (se enseña con el tema oscuro). */
+  clipDark?: string;
   /** Qué se ve en el vídeo (para lectores de pantalla). */
   clipAlt?: string;
 };
@@ -34,7 +36,7 @@ type ProjectBase = {
   /** Enlaces de su página; las etiquetas, por idioma y en el mismo orden, en `links` de sus textos. */
   links?: string[];
   /** Hasta 3 capturas de iPhone, enmarcadas en la tarjeta y en su página (su `alt`, en `shotAlts`). Sin capturas, solo texto. */
-  shots?: { src: string; srcDark?: string }[];
+  shots?: { src: string; srcDark?: string; clip?: string; clipDark?: string }[];
   /** Captura de escritorio de la web, en una ventana de navegador (alternativa a `shots`; su `alt`, en `webAlt`). */
   web?: { src: string; srcDark?: string; clip?: string };
   /** Más capturas de escritorio, que se enseñan bajo la principal en su página (sus `alt`, en `webAlts`). */
@@ -57,7 +59,7 @@ const projectsBase: ProjectBase[] = [
     ],
     shots: [
       { src: '/projects/qr-city/ciberpunk.webp', srcDark: '/projects/qr-city/ciberpunk-oscuro.webp' },
-      { src: '/projects/qr-city/costera.webp', srcDark: '/projects/qr-city/costera-oscuro.webp' },
+      { src: '/projects/qr-city/costera.webp', srcDark: '/projects/qr-city/costera-oscuro.webp', clip: '/projects/qr-city/clip', clipDark: '/projects/qr-city/clip-oscuro' },
       { src: '/projects/qr-city/laboratorio.webp', srcDark: '/projects/qr-city/laboratorio-oscuro.webp' },
     ],
   },

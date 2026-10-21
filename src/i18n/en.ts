@@ -25,6 +25,7 @@ export const en: Dict = {
     viewDetail: 'See the details',
     email: 'Email',
     newTab: 'opens in a new tab',
+    skip: 'Skip to content',
   },
   theme: {
     group: 'Site theme',
@@ -160,7 +161,7 @@ export const en: Dict = {
     repeat: 'Repeat',
     repeatAria: 'Repeat: {title}',
     stageAria: 'Say hi to the avatar',
-    counterAria: 'Avatar interactions: {n} of {total} unlocked',
+    counterAria: '{n}/{total} avatar interactions unlocked',
     unlocked: 'Unlocked · {title} · {n}/{total}',
     complete: 'Collection complete. You found everything.',
     done: 'You found everything. Shall we talk?',

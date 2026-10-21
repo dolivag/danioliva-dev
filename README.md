@@ -95,7 +95,11 @@ El avatar vive abajo a la derecha y tiene logros que se desbloquean (se guardan 
 datos y el arrastre de palabras están en `src/scripts/game.ts`; las poses de cada reacción, en
 `REACTIONS` de `avatar.ts`; el panel y la lógica, en `Avatar.astro`. Para una palabra arrastrable:
 `data-drag="palabra"` en el HTML y su entrada en `WORDS`. Para un logro nuevo: añadirlo a
-`ACHIEVEMENTS` y una pose con su mismo id en `REACTIONS`. Las interacciones son secretas: el panel solo enseña «???» hasta que se descubren (y entonces
+`ACHIEVEMENTS` y una pose con su mismo id en `REACTIONS`. Además de arrastrar, una palabra se le puede dar al avatar con **doble clic** (las etiquetas) o con **Mayús+Intro**
+con el foco en una palabra o en el enlace de un proyecto (para quien no usa ratón). Hay un enlace «saltar al contenido»
+(`.skip`) y las etiquetas accesibles de botones y enlaces salen de `src/i18n/`.
+
+Las interacciones son secretas: el panel solo enseña «???» hasta que se descubren (y entonces
 permite repetirlas). Sin pistas visuales a propósito.
 
 Las imágenes de partida están en `art/avatar/` (1024x1024, hechas con Gemini a partir de

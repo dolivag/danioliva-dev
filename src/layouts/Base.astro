@@ -7,6 +7,10 @@ import Avatar from '../components/Avatar.astro';
 import LangSwitch from '../components/LangSwitch.astro';
 import Glow from '../components/Glow.astro';
 import Micro from '../components/Micro.astro';
+// Las fuentes de arriba de todo (título, saludo en cursiva y texto) se piden ya, sin esperar a leer el CSS.
+import frauncesFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
+import frauncesItalicFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-italic.woff2?url';
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
   /** Idioma de la página (por defecto, el de su ruta). */
@@ -44,6 +48,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
       } catch {}
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {[frauncesFont, frauncesItalicFont, interFont].map((href) => (<link rel="preload" as="font" type="font/woff2" href={href} crossorigin />))}
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />
@@ -72,6 +77,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
     <link rel="canonical" href={abs(lang)} />
   </head>
   <body>
+    <a class="skip" href="#contenido">{t.common.skip}</a>
     <Glow />
     <Micro />
     <div class="progress" aria-hidden="true"></div>
@@ -102,7 +108,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
           </a>
         </div>
       </header>
-      <main><slot /></main>
+      <main id="contenido" tabindex="-1"><slot /></main>
       <footer>
         © {new Date().getFullYear()} {site.name} ·{' '}
         <a href={site.github} target="_blank" rel="noopener">GitHub<span class="sr-only"> ({t.common.newTab})</span></a> ·{' '}
@@ -130,14 +136,16 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
       // 1. El nombre gigante: cada línea en una máscara y cada letra en su propio trozo, para que
       //    suban desde abajo una detrás de otra.
       document.querySelectorAll<HTMLElement>('[data-fit]').forEach((group) => {
+        // El nombre accesible es el del h1 entero («Hola, soy Daniel Oliva»); las letras sueltas no se leen.
+        group.setAttribute('aria-label', Array.from(group.children, (c) => c.textContent?.trim()).filter(Boolean).join(' '));
         group.querySelectorAll<HTMLElement>('.line').forEach((line, row) => {
           const text = line.textContent ?? '';
-          line.setAttribute('aria-label', text);
           line.innerHTML = Array.from(text)
             .map((ch, i) => `<span class="letter" aria-hidden="true" style="--r:${row};--i:${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`)
             .join('');
           const mask = document.createElement('span');
           mask.className = 'row';
+          mask.setAttribute('aria-hidden', 'true');
           line.replaceWith(mask);
           mask.append(line);
         });

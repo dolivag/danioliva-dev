@@ -606,3 +606,8 @@ pre.code code { font: inherit; white-space: pre; }
 
 /* Texto solo para lectores de pantalla (p. ej. «se abre en una pestaña nueva») */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* Enlace «saltar al contenido»: invisible hasta que recibe el foco con el teclado */
+.skip { position: fixed; z-index: 100; left: 12px; top: 12px; padding: 10px 16px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: 600 13px/1 var(--font); text-decoration: none; transform: translateY(-200%); transition: transform 0.25s var(--ease); }
+.skip:focus { transform: none; }
+main:focus { outline: none; }

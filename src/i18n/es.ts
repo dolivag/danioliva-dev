@@ -12,7 +12,7 @@ export const es: Dict = {
     text: 'Trabajo con Angular, Node.js, NestJS, React y React Native, y me encargo también de herramientas de automatización y CI/CD. Fuera del trabajo construyo mis propios proyectos.',
     viewProjects: 'Ver proyectos',
     contact: 'Contacto',
-    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL' }, { k: 'Idiomas', v: 'Castellano, català, English' }] },
+    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL · GitLab CI/CD' }, { k: 'Idiomas', v: 'Castellano, català, English' }] },
   },
   marquee: ['Software engineer', 'Fullstack', 'Angular', 'NestJS', 'React Native', 'Automatización', 'CI/CD', 'Apps pequeñas'],
   common: {
@@ -46,35 +46,41 @@ export const es: Dict = {
   experience: [
     {
       company: 'Zennio',
-      role: 'Fullstack engineer',
+      role: 'Software engineer',
       period: 'Desde enero de 2024',
       description:
-        'Desarrollo full-stack end-to-end de una plataforma de gestión de edificios: Angular + PrimeNG en frontend, NestJS + TypeScript y PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. Responsable de arquitectura de features, calidad (Jest, Cypress, SonarQube) y CI/CD en GitLab.',
+        'Desarrollo de una plataforma de gestión de edificios: frontend con Angular y PrimeNG y, cuando el equipo lo necesita, backend con NestJS, TypeScript y PostgreSQL/TimescaleDB, dentro de un monorepo Nx. Referente del equipo en CI/CD y automatizaciones, e impulsor de la adopción de IA.',
       bullets: [
-        'Desarrollo end-to-end de funcionalidades: modelo de datos, API, UI y pruebas.',
-        'Frontend con Angular y PrimeNG; backend con NestJS, TypeScript, Sequelize y PostgreSQL/TimescaleDB.',
+        'Funcionalidades de principio a fin cuando hace falta: modelo de datos, API, UI y pruebas.',
+        'Frontend con Angular y PrimeNG; backend, en momentos de sobrecarga del equipo, con NestJS, TypeScript, Sequelize y PostgreSQL/TimescaleDB.',
         'Diseño y evolución del esquema de base de datos, incluidas migraciones y consultas de alto volumen.',
         'Optimización de rendimiento: diagnóstico y resolución de consultas lentas y cuellos de botella en API.',
         'Estrategia de pruebas: unitarias (Jest), integración y E2E con Cypress en pipelines de CI.',
-        'CI/CD en GitLab, quality gates con SonarQube y automatización de releases.',
+        'Referente de CI/CD: pipelines en GitLab, quality gates con SonarQube, automatización de releases y creación de bots.',
+        'Adopción de IA en el equipo: creación de skills, configuración de MCPs e integración de herramientas de IA en el flujo de desarrollo.',
         'Monorepo Nx con pnpm: build, lint, test y documentación (Docusaurus) unificados.',
-        'Estandarización técnica del equipo: convenciones, documentación y revisión de código.',
+        'Estandarización de la calidad de código: merge requests, Prettier, linter, scans de SonarQube, convenciones y documentación.',
       ],
     },
     {
       company: 'Vanadys',
       role: 'Consultor asociado',
       period: 'Julio 2021 – enero 2024',
-      description: 'Consultoría en proyectos con Avaloq.',
+      description: 'Consultoría en proyectos con Avaloq: soluciones para el Output de un banco.',
+      bullets: [
+        'Desarrollo de soluciones para el Output de un banco mediante Avaloq.',
+        'Comunicación con clientes y recogida de requisitos funcionales.',
+        'Gestión y edición de plantillas de Assentis para crear documentos dinámicos según las preferencias del cliente.',
+      ],
     },
   ],
   studies: [
     {
       school: 'Universitat Oberta de Catalunya',
       when: 'Graduado en 2024',
-      title: 'Grado en Ingeniería Informática, especialidad en Ingeniería del Software',
+      title: 'Grado en Ingeniería Informática, especialidad en Ingeniería del Software. Nota media: 9,36',
     },
-    { school: 'IT Academy', when: '2021', title: 'Bootcamp fullstack PHP con Laravel' },
+    { school: 'IT Academy', when: '2021', title: 'Bootcamp fullstack PHP con Laravel, además de Tailwind y VueJS' },
   ],
   projects: {
     'qr-city': {
@@ -154,6 +160,19 @@ export const es: Dict = {
         { title: 'Todo en su sitio', text: 'Ubicaciones dentro de ubicaciones —casa, habitación, mueble, caja— y objetos con foto.' },
         { title: 'Fácil de encontrar', text: 'Una búsqueda que te dice dónde está cada cosa, también con una foto.' },
         { title: 'Para toda la casa', text: 'Un hogar compartido: uno guarda y otro busca.' },
+      ],
+    },
+    storia: {
+      status: 'En pausa',
+      description: 'App que genera historias infantiles con IA: eliges los conceptos y los personajes, y también crea las ilustraciones.',
+      openLabel: '',
+      tags: ['En pausa', 'IA', 'Historias', 'Personajes', 'Imágenes'],
+      lead: 'Una app que genera historias infantiles con IA: eliges los conceptos narrativos, personalizas a los personajes y la app crea también las imágenes. La empecé en marzo de 2026 como banco de pruebas para nuevas herramientas y tendencias de IA. Ahora está en pausa.',
+      facts: [
+        { title: 'Conceptos narrativos', text: 'Cada historia parte de los conceptos que seleccionas.' },
+        { title: 'Personajes personalizados', text: 'Los protagonistas del cuento se adaptan a lo que quieres contar.' },
+        { title: 'Con ilustraciones', text: 'Además del texto, la IA genera las imágenes de la historia.' },
+        { title: 'Banco de pruebas', text: 'Un proyecto personal para probar herramientas y tendencias de IA. Empezó en marzo de 2026 y está en pausa.' },
       ],
     },
   },

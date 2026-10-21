@@ -91,7 +91,7 @@ const es: CvCopy = {
     title: 'Información adicional',
     paragraphs: [
       'Trabajo de Fin de Grado: aplicación móvil multiplataforma (iOS, Android, web) con React Native y Expo.',
-      'Actualmente, desarrollando Storia: app de generación de historias infantiles con IA, con selección de conceptos narrativos, personajes personalizados y generación de imágenes. Proyecto personal usado como banco de pruebas para nuevas herramientas y tendencias de IA.',
+      'Storia (desde marzo de 2026): app de generación de historias infantiles con IA, con selección de conceptos narrativos, personajes personalizados y generación de imágenes. Proyecto personal usado como banco de pruebas para nuevas herramientas y tendencias de IA.',
       'Además, me preparo para la certificación GitLab Certified CI/CD Associate.',
     ],
   },
@@ -172,7 +172,7 @@ const ca: CvCopy = {
     title: 'Informació addicional',
     paragraphs: [
       'Treball de Final de Grau: aplicació mòbil multiplataforma (iOS, Android, web) amb React Native i Expo.',
-      'Actualment, desenvolupant Storia: app de generació d’històries infantils amb IA, amb selecció de conceptes narratius, personatges personalitzats i generació d’imatges. Projecte personal usat com a banc de proves per a noves eines i tendències d’IA.',
+      'Storia (des del març de 2026): app de generació d’històries infantils amb IA, amb selecció de conceptes narratius, personatges personalitzats i generació d’imatges. Projecte personal usat com a banc de proves per a noves eines i tendències d’IA.',
       'A més, em preparo per a la certificació GitLab Certified CI/CD Associate.',
     ],
   },
@@ -253,7 +253,7 @@ const en: CvCopy = {
     title: 'Additional information',
     paragraphs: [
       'Final-year project: a cross-platform mobile app (iOS, Android, web) built with React Native and Expo.',
-      'Currently building Storia: an AI app that generates children’s stories, with narrative concept selection, custom characters and image generation. A personal project used as a testbed for new AI tools and trends.',
+      'Storia (since March 2026): an AI app that generates children’s stories, with narrative concept selection, custom characters and image generation. A personal project used as a testbed for new AI tools and trends.',
       'I am also preparing for the GitLab Certified CI/CD Associate certification.',
     ],
   },

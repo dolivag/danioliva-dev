@@ -64,7 +64,7 @@ function ico(png) {
       try { if ((await fetch(base + '/')).ok) break; } catch {}
       await new Promise((r) => setTimeout(r, 1000));
     }
-    const slugs = ['home', 'qr-city', 'hogarnizer', 'duometeo', 'trasteo'];
+    const slugs = ['home', 'qr-city', 'hogarnizer', 'duometeo', 'trasteo', 'storia'];
     const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
     for (const lang of ['es', 'ca', 'en']) {
       fs.mkdirSync(path.join(ROOT, 'public', 'og', lang), { recursive: true });

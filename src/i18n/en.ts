@@ -12,7 +12,7 @@ export const en: Dict = {
     text: 'I work with Angular, Node.js, NestJS, React and React Native, and I also take care of automation tooling and CI/CD. Outside work I build my own projects.',
     viewProjects: 'See projects',
     contact: 'Contact',
-    glance: { label: 'At a glance', items: [{ k: 'Now', v: 'Zennio · frontend, backend and CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL' }, { k: 'Languages', v: 'Spanish, Catalan, English' }] },
+    glance: { label: 'At a glance', items: [{ k: 'Now', v: 'Zennio · frontend, backend and CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL · GitLab CI/CD' }, { k: 'Languages', v: 'Spanish, Catalan, English' }] },
   },
   marquee: ['Software engineer', 'Fullstack', 'Angular', 'NestJS', 'React Native', 'Automation', 'CI/CD', 'Small apps'],
   common: {
@@ -46,35 +46,41 @@ export const en: Dict = {
   experience: [
     {
       company: 'Zennio',
-      role: 'Fullstack engineer',
+      role: 'Software engineer',
       period: 'Since January 2024',
       description:
-        'End-to-end full-stack development of a building management platform: Angular + PrimeNG on the frontend, NestJS + TypeScript and PostgreSQL/TimescaleDB on the backend, in an Nx monorepo. In charge of feature architecture, quality (Jest, Cypress, SonarQube) and CI/CD on GitLab.',
+        'Development of a building management platform: frontend with Angular and PrimeNG and, when the team needs it, backend with NestJS, TypeScript and PostgreSQL/TimescaleDB, in an Nx monorepo. The team’s reference for CI/CD and automation, and a driver of AI adoption.',
       bullets: [
-        'End-to-end feature development: data model, API, UI and tests.',
-        'Frontend with Angular and PrimeNG; backend with NestJS, TypeScript, Sequelize and PostgreSQL/TimescaleDB.',
+        'Features from start to finish when needed: data model, API, UI and tests.',
+        'Frontend with Angular and PrimeNG; backend, when the team is overloaded, with NestJS, TypeScript, Sequelize and PostgreSQL/TimescaleDB.',
         'Design and evolution of the database schema, including migrations and high-volume queries.',
         'Performance tuning: diagnosing and fixing slow queries and API bottlenecks.',
         'Testing strategy: unit (Jest), integration and E2E with Cypress in CI pipelines.',
-        'CI/CD on GitLab, SonarQube quality gates and release automation.',
+        'CI/CD reference: GitLab pipelines, SonarQube quality gates, release automation and bots.',
+        'AI adoption in the team: building skills, configuring MCPs and integrating AI tools into the development workflow.',
         'Nx monorepo with pnpm: unified build, lint, test and documentation (Docusaurus).',
-        'Team-wide technical standards: conventions, documentation and code review.',
+        'Code quality standards: merge requests, Prettier, linters, SonarQube scans, conventions and documentation.',
       ],
     },
     {
       company: 'Vanadys',
       role: 'Associate consultant',
       period: 'July 2021 – January 2024',
-      description: 'Consulting on Avaloq projects.',
+      description: 'Consulting on Avaloq projects: solutions for a bank’s Output.',
+      bullets: [
+        'Developing solutions for a bank’s Output using Avaloq.',
+        'Client communication and gathering of functional requirements.',
+        'Managing and editing Assentis templates to create dynamic documents according to client preferences.',
+      ],
     },
   ],
   studies: [
     {
       school: 'Universitat Oberta de Catalunya',
       when: 'Graduated in 2024',
-      title: 'BSc in Computer Engineering, specialising in Software Engineering',
+      title: 'BSc in Computer Engineering, specialising in Software Engineering. Grade average: 9.36',
     },
-    { school: 'IT Academy', when: '2021', title: 'Full-stack PHP bootcamp with Laravel' },
+    { school: 'IT Academy', when: '2021', title: 'Full-stack PHP bootcamp with Laravel, plus Tailwind and VueJS' },
   ],
   projects: {
     'qr-city': {
@@ -154,6 +160,19 @@ export const en: Dict = {
         { title: 'Everything in its place', text: 'Locations inside locations —house, room, furniture, box— and objects with a photo.' },
         { title: 'Easy to find', text: 'A search that tells you where each thing is, also with a photo.' },
         { title: 'For the whole household', text: 'A shared home: one person stores, another looks.' },
+      ],
+    },
+    storia: {
+      status: 'On hold',
+      description: 'An app that generates children’s stories with AI: you pick the concepts and characters, and it creates the illustrations too.',
+      openLabel: '',
+      tags: ['On hold', 'AI', 'Stories', 'Characters', 'Images'],
+      lead: 'An app that generates children’s stories with AI: you pick the narrative concepts, customise the characters and the app creates the images too. I started it in March 2026 as a testbed for new AI tools and trends. It is on hold for now.',
+      facts: [
+        { title: 'Narrative concepts', text: 'Each story starts from the concepts you select.' },
+        { title: 'Custom characters', text: 'The story’s characters adapt to what you want to tell.' },
+        { title: 'With illustrations', text: 'Besides the text, AI generates the story’s images.' },
+        { title: 'A testbed', text: 'A personal project to try out AI tools and trends. Started in March 2026 and on hold.' },
       ],
     },
   },

@@ -3,6 +3,7 @@ import type { Dict } from './types';
 export const ca: Dict = {
   meta: { description: 'Enginyer de programari fullstack. Aplicacions i eines petites.' },
   role: 'Enginyer de programari fullstack',
+  notFound: { hi: 'Ups…', text: 'Aquesta pàgina no existeix o ja no és aquí. Potser l’enllaç està mal escrit.', say: 'On era aquesta pàgina? Jo tampoc la trobo…', home: 'Tornar a l’inici', projects: 'Veure projectes' },
   hero: { hi: 'Hola, sóc', role: 'Software engineer' },
   nav: { label: 'Principal', index: 'Inici', projects: 'Projectes', experience: 'Experiència', contact: 'Contacte' },
   sections: { projects: 'Projectes', experience: 'Experiència', studies: 'Estudis', contact: 'Contacte' },

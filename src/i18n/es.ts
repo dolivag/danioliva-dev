@@ -3,6 +3,7 @@ import type { Dict } from './types';
 export const es: Dict = {
   meta: { description: 'Software engineer fullstack. Aplicaciones y herramientas pequeñas.' },
   role: 'Software engineer fullstack',
+  notFound: { hi: 'Ups…', text: 'Esta página no existe o ya no está aquí. Puede que el enlace esté mal escrito.', say: '¿Dónde estaba esa página? Yo tampoco la encuentro…', home: 'Volver al inicio', projects: 'Ver proyectos' },
   hero: { hi: 'Hola, soy', role: 'Software engineer' },
   nav: { label: 'Principal', index: 'Índice', projects: 'Proyectos', experience: 'Experiencia', contact: 'Contacto' },
   sections: { projects: 'Proyectos', experience: 'Experiencia', studies: 'Estudios', contact: 'Contacto' },

@@ -23,8 +23,10 @@ interface Props {
   og?: string;
   /** Datos estructurados (schema.org) de la página. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Página que no debe indexarse ni tener versiones por idioma (la 404). */
+  noindex?: boolean;
 }
-const { title, frame, og = 'home', jsonLd } = Astro.props;
+const { title, frame, og = 'home', jsonLd, noindex = false } = Astro.props;
 const lang: Lang = Astro.props.lang ?? langFromPath(Astro.url.pathname);
 const t = useDict(lang);
 const description = Astro.props.description ?? t.meta.description;
@@ -65,16 +67,17 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta property="og:locale" content={ogLocale[lang]} />
+    {noindex && (<meta name="robots" content="noindex" />)}
     {locales.filter((l) => l !== lang).map((l) => (<meta property="og:locale:alternate" content={ogLocale[l]} />))}
-    {locales.map((l) => (<link rel="alternate" hreflang={l} href={abs(l)} />))}
-    <link rel="alternate" hreflang="x-default" href={abs(defaultLang)} />
+    {!noindex && locales.map((l) => (<link rel="alternate" hreflang={l} href={abs(l)} />))}
+    {!noindex && (<link rel="alternate" hreflang="x-default" href={abs(defaultLang)} />)}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#f3f1ec" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
     {jsonLd && (<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />)}
-    <link rel="canonical" href={abs(lang)} />
+    {!noindex && (<link rel="canonical" href={abs(lang)} />)}
   </head>
   <body>
     <a class="skip" href="#contenido">{t.common.skip}</a>

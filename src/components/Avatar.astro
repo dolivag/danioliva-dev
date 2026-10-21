@@ -238,8 +238,10 @@ const total = ACHIEVEMENT_IDS.length;
     // Quedarse quieto: se duerme; al volver a moverte, se despierta.
     let lastActive = performance.now();
     let asleep = false;
+    let yawned = false;
     const active = () => {
       lastActive = performance.now();
+      yawned = false;
       if (asleep) {
         asleep = false;
         avatar.stop();
@@ -249,9 +251,15 @@ const total = ACHIEVEMENT_IDS.length;
     for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart'])
       addEventListener(ev, active, { passive: true });
     setInterval(() => {
-      if (!asleep && !document.hidden && performance.now() - lastActive > 25000) {
+      if (asleep || document.hidden) return;
+      const idle = performance.now() - lastActive;
+      if (idle > 25000) {
         asleep = true;
         trigger('sueno');
+      } else if (idle > 16000 && !yawned) {
+        // Antes de dormirse, bosteza (sin logro ni mensaje: es solo un gesto).
+        yawned = true;
+        avatar.react('bostezo', '', 3400);
       }
     }, 2000);
 

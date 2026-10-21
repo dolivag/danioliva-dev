@@ -225,6 +225,9 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
 };
 
+/** El bostezo de antes de dormirse: el del noctámbulo, sin las «z». */
+REACTIONS.bostezo = (k) => ({ ...REACTIONS.noctambulo(k), rects: undefined });
+
 /**
  * Miradas disponibles y hacia dónde apuntan (x: izquierda -1 / derecha 1; y: arriba -1 / abajo 1,
  * vistas desde la pantalla de quien visita). Solo se usan las que existan en avatar.json.

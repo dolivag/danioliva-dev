@@ -69,6 +69,11 @@ const jsonLd = p.href && APP_TYPE[p.slug]
       <h2>{t.common.captures}</h2>
       {p.shots?.length ? <ShotGallery shots={p.shots} /> : null}
       {p.web && p.href ? <BrowserShot shot={p.web} host={new URL(p.href).host} full /> : null}
+      {p.webs?.length && p.href ? (
+        <div class="web-gallery">
+          {p.webs.map((s) => (<BrowserShot shot={s} host={new URL(p.href).host} full />))}
+        </div>
+      ) : null}
     </section>
   )}
 

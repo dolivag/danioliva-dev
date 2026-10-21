@@ -190,7 +190,7 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
   },
   // Café: la taza de la mesa se desvanece mientras aparece en su mano (pecho), sube con un fotograma de estela, da el
   // sorbo y vuelve a la mesa. Las posturas con la cara van con la cabeza fija.
-  cafe: (k) => {
+  cafe: (k): Pose => {
     const still: [number, number] = [0, 0];
     if (k < 2) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: still, alpha: { 'taza-sube': k === 0 ? 0.4 : 0.8 } };
     if (k < 6) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: still };

@@ -56,12 +56,12 @@ const es: CvCopy = {
     title: 'Experiencia laboral',
     jobs: [
       {
-        role: 'Software engineer',
+        role: 'Fullstack engineer',
         company: 'Zennio',
         place: 'Toledo (remoto desde Barcelona)',
         period: 'Enero 2024 – actualidad',
         bullets: [
-          'Desarrollo frontend de aplicación web (Angular, PrimeNG) asumiendo funciones backend (NestJS) en momentos de sobrecarga o falta de recursos del equipo.',
+          'Desarrollo full-stack de aplicación web: frontend con Angular y PrimeNG y backend con NestJS.',
           'Referente del equipo en CI/CD: diseño de pipelines, automatización de releases y creación de bots.',
           'Impulsor de la adopción de IA en el equipo: creación de skills, configuración de MCPs e integración de herramientas de IA en el flujo de desarrollo.',
           'Colaboración en la estandarización de calidad de código a nivel transversal: adopción de merge requests, herramientas como Prettier, Linter o scans de SonarQube.',
@@ -91,7 +91,7 @@ const es: CvCopy = {
     title: 'Información adicional',
     paragraphs: [
       'Trabajo de Fin de Grado: aplicación móvil multiplataforma (iOS, Android, web) con React Native y Expo.',
-      'Actualmente, desarrollando Storia: app de generación de historias infantiles con IA, con selección de conceptos narrativos, personajes personalizados y generación de imágenes. Proyecto personal usado como banco de pruebas para nuevas herramientas y tendencias de IA.',
+      'Storia (desde marzo de 2026): app de generación de historias infantiles con IA, con selección de conceptos narrativos, personajes personalizados y generación de imágenes. Proyecto personal usado como banco de pruebas para nuevas herramientas y tendencias de IA.',
       'Además, me preparo para la certificación GitLab Certified CI/CD Associate.',
     ],
   },
@@ -137,12 +137,12 @@ const ca: CvCopy = {
     title: 'Experiència laboral',
     jobs: [
       {
-        role: 'Software engineer',
+        role: 'Fullstack engineer',
         company: 'Zennio',
         place: 'Toledo (en remot des de Barcelona)',
         period: 'Gener 2024 – actualitat',
         bullets: [
-          'Desenvolupament frontend d’aplicació web (Angular, PrimeNG) assumint funcions de backend (NestJS) en moments de sobrecàrrega o manca de recursos de l’equip.',
+          'Desenvolupament full-stack d’aplicació web: frontend amb Angular i PrimeNG i backend amb NestJS.',
           'Referent de l’equip en CI/CD: disseny de pipelines, automatització de releases i creació de bots.',
           'Impulsor de l’adopció d’IA a l’equip: creació de skills, configuració de MCPs i integració d’eines d’IA en el flux de desenvolupament.',
           'Col·laboració en l’estandardització de la qualitat del codi a nivell transversal: adopció de merge requests, eines com Prettier, Linter o escaneigs de SonarQube.',
@@ -172,7 +172,7 @@ const ca: CvCopy = {
     title: 'Informació addicional',
     paragraphs: [
       'Treball de Final de Grau: aplicació mòbil multiplataforma (iOS, Android, web) amb React Native i Expo.',
-      'Actualment, desenvolupant Storia: app de generació d’històries infantils amb IA, amb selecció de conceptes narratius, personatges personalitzats i generació d’imatges. Projecte personal usat com a banc de proves per a noves eines i tendències d’IA.',
+      'Storia (des del març de 2026): app de generació d’històries infantils amb IA, amb selecció de conceptes narratius, personatges personalitzats i generació d’imatges. Projecte personal usat com a banc de proves per a noves eines i tendències d’IA.',
       'A més, em preparo per a la certificació GitLab Certified CI/CD Associate.',
     ],
   },
@@ -218,12 +218,12 @@ const en: CvCopy = {
     title: 'Work experience',
     jobs: [
       {
-        role: 'Software engineer',
+        role: 'Fullstack engineer',
         company: 'Zennio',
         place: 'Toledo (remote from Barcelona)',
         period: 'January 2024 – present',
         bullets: [
-          'Frontend development of a web application (Angular, PrimeNG), taking on backend work (NestJS) when the team is overloaded or short on resources.',
+          'Full-stack development of a web application: frontend with Angular and PrimeNG and backend with NestJS.',
           'Team reference for CI/CD: pipeline design, release automation and bot creation.',
           'Driving AI adoption in the team: building skills, configuring MCPs and integrating AI tools into the development workflow.',
           'Helping standardise code quality across teams: adoption of merge requests, tools such as Prettier and linters, and SonarQube scans.',
@@ -253,7 +253,7 @@ const en: CvCopy = {
     title: 'Additional information',
     paragraphs: [
       'Final-year project: a cross-platform mobile app (iOS, Android, web) built with React Native and Expo.',
-      'Currently building Storia: an AI app that generates children’s stories, with narrative concept selection, custom characters and image generation. A personal project used as a testbed for new AI tools and trends.',
+      'Storia (since March 2026): an AI app that generates children’s stories, with narrative concept selection, custom characters and image generation. A personal project used as a testbed for new AI tools and trends.',
       'I am also preparing for the GitLab Certified CI/CD Associate certification.',
     ],
   },

@@ -12,7 +12,7 @@ export const es: Dict = {
     text: 'Trabajo con Angular, Node.js, NestJS, React y React Native, y me encargo también de herramientas de automatización y CI/CD. Fuera del trabajo construyo mis propios proyectos.',
     viewProjects: 'Ver proyectos',
     contact: 'Contacto',
-    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL' }, { k: 'Idiomas', v: 'Castellano, català, English' }] },
+    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL · GitLab CI/CD' }, { k: 'Idiomas', v: 'Castellano, català, English' }] },
   },
   marquee: ['Software engineer', 'Fullstack', 'Angular', 'NestJS', 'React Native', 'Automatización', 'CI/CD', 'Apps pequeñas'],
   common: {
@@ -49,32 +49,38 @@ export const es: Dict = {
       role: 'Fullstack engineer',
       period: 'Desde enero de 2024',
       description:
-        'Desarrollo full-stack end-to-end de una plataforma de gestión de edificios: Angular + PrimeNG en frontend, NestJS + TypeScript y PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. Responsable de arquitectura de features, calidad (Jest, Cypress, SonarQube) y CI/CD en GitLab.',
+        'Desarrollo full-stack de una plataforma de gestión de edificios: Angular + PrimeNG en frontend y NestJS + TypeScript con PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. Referente del equipo en CI/CD y automatizaciones, e impulsor de la adopción de IA.',
       bullets: [
         'Desarrollo end-to-end de funcionalidades: modelo de datos, API, UI y pruebas.',
         'Frontend con Angular y PrimeNG; backend con NestJS, TypeScript, Sequelize y PostgreSQL/TimescaleDB.',
         'Diseño y evolución del esquema de base de datos, incluidas migraciones y consultas de alto volumen.',
         'Optimización de rendimiento: diagnóstico y resolución de consultas lentas y cuellos de botella en API.',
         'Estrategia de pruebas: unitarias (Jest), integración y E2E con Cypress en pipelines de CI.',
-        'CI/CD en GitLab, quality gates con SonarQube y automatización de releases.',
+        'Referente de CI/CD: pipelines en GitLab, quality gates con SonarQube, automatización de releases y creación de bots.',
+        'Adopción de IA en el equipo: creación de skills, configuración de MCPs e integración de herramientas de IA en el flujo de desarrollo.',
         'Monorepo Nx con pnpm: build, lint, test y documentación (Docusaurus) unificados.',
-        'Estandarización técnica del equipo: convenciones, documentación y revisión de código.',
+        'Estandarización de la calidad de código: merge requests, Prettier, linter, scans de SonarQube, convenciones y documentación.',
       ],
     },
     {
       company: 'Vanadys',
       role: 'Consultor asociado',
       period: 'Julio 2021 – enero 2024',
-      description: 'Consultoría en proyectos con Avaloq.',
+      description: 'Consultoría en proyectos con Avaloq: soluciones para el Output de un banco.',
+      bullets: [
+        'Desarrollo de soluciones para el Output de un banco mediante Avaloq.',
+        'Comunicación con clientes y recogida de requisitos funcionales.',
+        'Gestión y edición de plantillas de Assentis para crear documentos dinámicos según las preferencias del cliente.',
+      ],
     },
   ],
   studies: [
     {
       school: 'Universitat Oberta de Catalunya',
       when: 'Graduado en 2024',
-      title: 'Grado en Ingeniería Informática, especialidad en Ingeniería del Software',
+      title: 'Grado en Ingeniería Informática, especialidad en Ingeniería del Software. Nota media: 9,36',
     },
-    { school: 'IT Academy', when: '2021', title: 'Bootcamp fullstack PHP con Laravel' },
+    { school: 'IT Academy', when: '2021', title: 'Bootcamp fullstack PHP con Laravel, además de Tailwind y VueJS' },
   ],
   projects: {
     'qr-city': {
@@ -154,6 +160,19 @@ export const es: Dict = {
         { title: 'Todo en su sitio', text: 'Ubicaciones dentro de ubicaciones —casa, habitación, mueble, caja— y objetos con foto.' },
         { title: 'Fácil de encontrar', text: 'Una búsqueda que te dice dónde está cada cosa, también con una foto.' },
         { title: 'Para toda la casa', text: 'Un hogar compartido: uno guarda y otro busca.' },
+      ],
+    },
+    storia: {
+      status: 'En pausa',
+      description: 'App para padres que genera cuentos infantiles con IA: eliges nueve conceptos y crea el cuento con una ilustración por sección.',
+      openLabel: '',
+      tags: ['En pausa', 'Expo', 'React Native', 'Supabase', 'IA', 'Cuentos', 'Ilustraciones'],
+      lead: 'Inspirada en el juego Story Cubes: una app para padres que genera cuentos infantiles con IA: eliges nueve conceptos —personajes, lugares, objetos, valores— repartidos en introducción, nudo y desenlace, y la IA escribe un cuento corto para niños de 3 a 8 años, con una ilustración por sección. La empecé en marzo de 2026; ahora está en pausa y pienso retomarla.',
+      facts: [
+        { title: 'Nueve conceptos, tres actos', text: 'Tres conceptos para la introducción, tres para el nudo y tres para el desenlace, sin repetir ninguno. Hay más de cien de partida y puedes añadir los tuyos.' },
+        { title: 'Cuentos a medida', text: 'La IA escribe un cuento corto adaptado a niños de 3 a 8 años, con contenido pensado para ellos.' },
+        { title: 'Con ilustraciones', text: 'Una imagen generada con IA para cada parte del cuento.' },
+        { title: 'Banco de pruebas', text: 'Una función de Supabase habla con el proveedor de IA (Claude, Gemini o Groq), que se cambia sin tocar la app. Un proyecto personal para probar herramientas y tendencias de IA.' },
       ],
     },
   },

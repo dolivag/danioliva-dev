@@ -77,6 +77,12 @@ const projectsBase: ProjectBase[] = [
     stack: 'Expo · React Native · Supabase',
     href: '',
   },
+  {
+    slug: 'storia',
+    name: 'Storia',
+    stack: 'Expo · React Native · Supabase',
+    href: '',
+  },
 ];
 
 /** Un proyecto listo para pintar: sus datos y sus textos en un idioma. */

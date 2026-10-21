@@ -21,6 +21,7 @@ export const en: Dict = {
     project: 'Project',
     back: 'Back',
     moreProjects: 'More projects',
+    carousel: { label: 'Projects', prev: 'Previous project', next: 'Next project' },
     captures: 'Screenshots',
     whatItDoes: 'What it does',
     links: 'Links',

@@ -68,6 +68,11 @@ const person = {
 
   <section class="col" id="proyectos" data-avatar="projects">
     <h2>{t.sections.projects}</h2>
+    <div class="car-nav" aria-label={t.common.carousel.label}>
+      <button type="button" data-dir="-1" aria-label={t.common.carousel.prev}>←</button>
+      <button type="button" data-dir="1" aria-label={t.common.carousel.next}>→</button>
+    </div>
+    <div class="cards" data-cards>
     {projects.map((p, i) => (
       <article class:list={['proj', { 'has-shots': p.shots?.length, 'has-web': p.web }]}>
         <div class="meta">
@@ -82,6 +87,7 @@ const person = {
         {p.web && p.href ? <BrowserShot shot={p.web} host={new URL(p.href).host} /> : null}
       </article>
     ))}
+    </div>
   </section>
 
   <section class="col" id="experiencia" data-avatar="experience">
@@ -118,4 +124,23 @@ const person = {
     <a class="contact-link" href={site.linkedin} target="_blank" rel="noopener"><small>{t.contact.profile}</small>LinkedIn / daniel-oliva-gomez<span class="sr-only"> ({t.common.newTab})</span></a>
     <a class="contact-link" href={site.github} target="_blank" rel="noopener"><small>{t.contact.code}</small>GitHub / dolivag<span class="sr-only"> ({t.common.newTab})</span></a>
   </section>
+  <script>
+    // Carrusel de proyectos (pantallas anchas): los botones avanzan una tarjeta y se desactivan en los extremos.
+    const cards = document.querySelector<HTMLElement>('[data-cards]');
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.car-nav button');
+    if (cards && buttons.length) {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+      const step = () => (cards.querySelector<HTMLElement>('.proj')?.offsetWidth ?? 600) + 28;
+      const update = () => {
+        buttons[0].disabled = cards.scrollLeft < 4;
+        buttons[1].disabled = cards.scrollLeft + cards.clientWidth > cards.scrollWidth - 4;
+      };
+      buttons.forEach((b) =>
+        b.addEventListener('click', () => cards.scrollBy({ left: Number(b.dataset.dir) * step(), behavior: reduced.matches ? 'auto' : 'smooth' })),
+      );
+      cards.addEventListener('scroll', update, { passive: true });
+      addEventListener('resize', update);
+      update();
+    }
+  </script>
 </Base>

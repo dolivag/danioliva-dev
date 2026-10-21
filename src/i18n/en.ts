@@ -64,7 +64,7 @@ export const en: Dict = {
     {
       company: 'Vanadys',
       role: 'Associate consultant',
-      period: 'July 2022 – January 2024',
+      period: 'July 2021 – January 2024',
       description: 'Consulting on Avaloq projects.',
     },
   ],

@@ -253,6 +253,8 @@ export type AvatarApi = {
   /** Pone el marco del proyecto sobre el escritorio (cae y se posa); `quitarMarco` lo retira. */
   placeFrame: () => void;
   removeFrame: () => void;
+  /** La planta regada se queda crecida (con sus guindillas). */
+  setGrown: (grown: boolean) => void;
 };
 
 /**
@@ -313,9 +315,13 @@ export async function startAvatar(
   let blinkUntil = -1;
   let nextBlink = 25;
   let reaction: { key: string; start: number; end: number } | null = null;
+  let grown = false; // la planta ya está regada y se queda crecida
 
   function draw(t: number) {
-    if (reaction && reaction.end && performance.now() > reaction.end) reaction = null;
+    if (reaction && reaction.end && performance.now() > reaction.end) {
+      if (reaction.key === 'planta') grown = true; // al acabar de regar, la planta se queda crecida
+      reaction = null;
+    }
     const k = reaction ? (reduced ? 0 : t - reaction.start) : 0;
     const pose = reaction
       ? REACTIONS[reaction.key](k)
@@ -343,6 +349,8 @@ export async function startAvatar(
         on = [...on, best];
       }
     }
+    // Planta crecida: va la primera, para que las manos y la regadera queden por delante de sus hojas.
+    if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) on = ['planta-feliz', ...on];
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);
@@ -437,6 +445,10 @@ export async function startAvatar(
     },
     removeFrame() {
       frameFrom = -1;
+      draw(tick);
+    },
+    setGrown(v: boolean) {
+      grown = v;
       draw(tick);
     },
   };

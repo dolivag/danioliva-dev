@@ -99,6 +99,9 @@ const total = ACHIEVEMENT_IDS.length;
       toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3800);
     };
 
+    // La planta que ya se ha regado se queda crecida (también en las visitas siguientes).
+    if (unlocked.has('planta')) avatar.setGrown(true);
+
     /** Reacciona y, si es la primera vez, desbloquea. Devuelve si era nuevo. */
     // En la página de un proyecto: pone su marco de fotos sobre el escritorio.
     if (root.dataset.frame) {

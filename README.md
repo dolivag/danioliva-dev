@@ -73,6 +73,12 @@ redirecciones, definidas en `astro.config.mjs`, para que estas URL no cambien nu
 - `/apps/hogarnizer/soporte`
 - `/apps/hogarnizer/eliminar-cuenta`
 
+## Comprobaciones y analítica
+
+- **CI** (`.github/workflows/ci.yml`): en cada PR y en cada push a `main` ejecuta `npm run check` (tipos y plantillas; `astro build` por sí solo no los revisa) y `npm run build`.
+- **Analítica:** Vercel Web Analytics, sin cookies y anónima. El script solo se añade en producción (`Base.astro`) y empieza a contar cuando se activa «Web Analytics» en el panel del proyecto en Vercel.
+- **Proyecto anterior y siguiente** al pie de cada página de proyecto (`.pn`; el último enlaza con el primero).
+
 ## Currículum
 
 `/cv/`, `/ca/cv/` y `/en/cv/` (`src/pages/[...lang]/cv.astro`): una hoja A4 que se imprime o se guarda como PDF desde el botón de la página (sin teléfono). Los textos están en `src/i18n/cv.ts` (aparte del resto de diccionarios) y la foto en `public/cv/foto.webp`. Para que siga cabiendo en una sola página, si añades contenido conviene comprobar la vista de impresión (`Ctrl+P`) en los tres idiomas.

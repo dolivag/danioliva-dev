@@ -22,6 +22,9 @@ const t = useDict(lang);
 const projects = getProjects(lang);
 const index = projects.findIndex((x) => x.slug === p.slug);
 const others = projects.filter((x) => x.slug !== p.slug);
+// El anterior y el siguiente (el último enlaza con el primero y al revés).
+const prev = projects[(index - 1 + projects.length) % projects.length];
+const next = projects[(index + 1) % projects.length];
 const pad = String(index + 1).padStart(2, '0');
 const APP_TYPE: Record<string, string> = { 'qr-city': 'WebApplication', duometeo: 'WebApplication', hogarnizer: 'MobileApplication' };
 const jsonLd = p.href && APP_TYPE[p.slug]
@@ -112,4 +115,15 @@ const jsonLd = p.href && APP_TYPE[p.slug]
       {others.map((o) => (<li><a href={projectUrl(lang, o)}>{o.name}</a></li>))}
     </ul>
   </section>
+
+  <nav class="col pn" aria-label={t.common.moreProjects}>
+    <a rel="prev" href={projectUrl(lang, prev)}>
+      <small>← {t.common.carousel.prev}</small>
+      <span>{prev.name}</span>
+    </a>
+    <a rel="next" href={projectUrl(lang, next)}>
+      <small>{t.common.carousel.next} →</small>
+      <span>{next.name}</span>
+    </a>
+  </nav>
 </Base>

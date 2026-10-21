@@ -268,6 +268,18 @@ footer a { text-decoration: none; }
   .intro > .glance { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
 }
 
+/* Proyecto anterior y siguiente, al pie de la página de un proyecto. */
+.pn { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding-top: 40px; }
+.pn a { display: grid; gap: 6px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-decoration: none; color: var(--text); transition: border-color 0.3s ease, background-color 0.3s ease, translate 0.5s var(--ease); }
+.pn a[rel='next'] { text-align: right; }
+.pn small { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pn span { font-family: var(--display); font-size: clamp(24px, 3vw, 36px); font-weight: 420; letter-spacing: -0.025em; line-height: 1.1; }
+.pn a:hover { border-color: var(--accent); background: var(--card); translate: 0 -3px; }
+.pn a:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+@media (max-width: 560px) { .pn { grid-template-columns: 1fr; } .pn a[rel='next'] { text-align: left; } }
+@media (prefers-reduced-motion: reduce) { .pn a { transition: none; } }
+@media (min-width: 1100px) { main > .pn { max-width: 1800px; } }
+
 /* Más capturas de escritorio en la página de un proyecto: una debajo de otra. */
 .web-gallery { display: grid; gap: 22px; margin-top: 22px; }
 

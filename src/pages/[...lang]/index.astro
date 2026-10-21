@@ -134,7 +134,9 @@ const person = {
       const step = () => (cards.querySelector<HTMLElement>('.proj')?.offsetWidth ?? 600) + 28;
       const update = () => {
         buttons[0].disabled = cards.scrollLeft < 4;
-        buttons[1].disabled = cards.scrollLeft + cards.clientWidth > cards.scrollWidth - 4;
+        const end = cards.scrollLeft + cards.clientWidth > cards.scrollWidth - 4;
+        buttons[1].disabled = end;
+        cards.classList.toggle('at-end', end);
       };
       buttons.forEach((b) =>
         b.addEventListener('click', () => cards.scrollBy({ left: Number(b.dataset.dir) * step(), behavior: reduced.matches ? 'auto' : 'smooth' })),

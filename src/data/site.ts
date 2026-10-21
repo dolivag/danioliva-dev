@@ -70,9 +70,9 @@ const projectsBase: ProjectBase[] = [
     href: site.appUrl,
     links: ['/apps/hogarnizer/privacidad', '/apps/hogarnizer/soporte', '/apps/hogarnizer/eliminar-cuenta'],
     shots: [
-      { src: '/projects/hogarnizer/compra.webp', srcDark: '/projects/hogarnizer/compra-oscuro.webp' },
-      { src: '/projects/hogarnizer/tareas.webp', srcDark: '/projects/hogarnizer/tareas-oscuro.webp' },
-      { src: '/projects/hogarnizer/gastos.webp', srcDark: '/projects/hogarnizer/gastos-oscuro.webp' },
+      { src: '/projects/hogarnizer/compra.webp', srcDark: '/projects/hogarnizer/compra-oscuro.webp', clip: '/projects/hogarnizer/compra-clip', clipDark: '/projects/hogarnizer/compra-clip-oscuro' },
+      { src: '/projects/hogarnizer/tareas.webp', srcDark: '/projects/hogarnizer/tareas-oscuro.webp', clip: '/projects/hogarnizer/tareas-clip', clipDark: '/projects/hogarnizer/tareas-clip-oscuro' },
+      { src: '/projects/hogarnizer/gastos.webp', srcDark: '/projects/hogarnizer/gastos-oscuro.webp', clip: '/projects/hogarnizer/gastos-clip', clipDark: '/projects/hogarnizer/gastos-clip-oscuro' },
     ],
   },
   {

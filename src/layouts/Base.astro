@@ -92,6 +92,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
         <div class="social">
           <LangSwitch lang={lang} path={path} variant="header" />
           <a href={site.github}>GitHub</a>
+          <a href={site.linkedin}>LinkedIn</a>
           <a href={`mailto:${site.email}`}>{t.common.email}</a>
         </div>
       </header>
@@ -99,6 +100,7 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
       <footer>
         © {new Date().getFullYear()} {site.name} ·{' '}
         <a href={site.github}>GitHub</a> ·{' '}
+        <a href={site.linkedin}>LinkedIn</a> ·{' '}
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </footer>
     </div>

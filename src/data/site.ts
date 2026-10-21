@@ -6,6 +6,7 @@ export const site = {
   name: 'Daniel Oliva',
   email: 'hola@danioliva.dev',
   github: 'https://github.com/dolivag',
+  linkedin: 'https://www.linkedin.com/in/daniel-oliva-gomez/',
   appUrl: 'https://hogarnizer.danioliva.dev',
 };
 

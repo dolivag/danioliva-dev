@@ -37,7 +37,7 @@ export const es: Dict = {
     systemShort: 'Sistema',
   },
   lang: { label: 'Idioma' },
-  contact: { writeMe: 'Escríbeme', code: 'Código' },
+  contact: { writeMe: 'Escríbeme', code: 'Código', profile: 'Perfil profesional' },
   experience: [
     {
       company: 'Zennio',

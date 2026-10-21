@@ -4,16 +4,17 @@
  * de palabras; las poses de cada reacción están en avatar.ts.
  */
 
-export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami' | 'agitar';
+export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami' | 'agitar' | 'poliglota' | 'planta' | 'cafe' | 'portatil' | 'noctambulo' | 'cuento' | 'terminal' | 'curioso';
 
 /** Los logros, en el orden del panel. Sus textos (título, pista y frase) están en `src/i18n/<idioma>.ts`. */
-export const ACHIEVEMENT_IDS: AchievementId[] = ['hola', 'orden', 'tiempo', 'trastero', 'mareo', 'sueno', 'final', 'tema', 'agitar', 'konami'];
+export const ACHIEVEMENT_IDS: AchievementId[] = ['hola', 'orden', 'tiempo', 'trastero', 'mareo', 'sueno', 'final', 'tema', 'agitar', 'konami', 'poliglota', 'planta', 'cafe', 'portatil', 'noctambulo', 'cuento', 'terminal', 'curioso'];
 
 /** Palabras que se pueden arrastrar (`data-drag` en el HTML). Las que no dan logro solo reaccionan (frase en `game.words`). */
 export const WORDS: Record<string, { achievement?: AchievementId }> = {
   hogarnizer: { achievement: 'orden' },
   duometeo: { achievement: 'tiempo' },
   trasteo: { achievement: 'trastero' },
+  storia: { achievement: 'cuento' },
   'qr city': {},
   'three.js': {},
   expo: {},

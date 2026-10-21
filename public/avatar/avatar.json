@@ -67,9 +67,81 @@
       "head": true
     },
     "saludo": {
-      "x": 243,
-      "y": 463,
+      "x": 194,
+      "y": 323,
       "head": false
+    },
+    "saludo-2": {
+      "x": 193,
+      "y": 323,
+      "head": false
+    },
+    "taza-sube": {
+      "x": 83,
+      "y": 296,
+      "head": false,
+      "erase": {
+        "x": 95,
+        "y": 640
+      }
+    },
+    "taza-cerca": {
+      "x": 83,
+      "y": 253,
+      "head": true,
+      "erase": {
+        "x": 95,
+        "y": 640
+      }
+    },
+    "taza-boca": {
+      "x": 83,
+      "y": 253,
+      "head": true,
+      "erase": {
+        "x": 95,
+        "y": 640
+      }
+    },
+    "ojos-felices": {
+      "x": 490,
+      "y": 234,
+      "head": true
+    },
+    "boca-ahh": {
+      "x": 490,
+      "y": 339,
+      "head": true
+    },
+    "regadera": {
+      "x": 293,
+      "y": 433,
+      "head": false
+    },
+    "planta-feliz": {
+      "x": 573,
+      "y": 559,
+      "head": false
+    },
+    "ojos-somnolientos": {
+      "x": 490,
+      "y": 233,
+      "head": true
+    },
+    "ojos-bostezo": {
+      "x": 488,
+      "y": 233,
+      "head": true
+    },
+    "boca-bostezo": {
+      "x": 490,
+      "y": 338,
+      "head": true
+    },
+    "mano-boca": {
+      "x": 313,
+      "y": 243,
+      "head": true
     },
     "manos": {
       "x": 416,

@@ -199,6 +199,14 @@ export const en: Dict = {
       tema: { title: 'Lights and shadows', how: 'You switched theme several times.', say: 'Light or dark? Make up your mind.' },
       agitar: { title: 'Earthquake', how: 'You shook your phone.', say: 'Hey! I’m falling off the desk!' },
       konami: { title: 'Secret code', how: 'You typed the classic code.', say: '+30 lives. Code unlocked.' },
+      poliglota: { title: 'Polyglot', how: 'You visited the site in all three languages.', say: 'Hola! Bon dia! Hi!' },
+      planta: { title: 'Green thumb', how: 'You tapped the plant.', say: 'I’ll water it, I’ll water it…' },
+      cafe: { title: 'Caffeine', how: 'You tapped the mug.', say: 'Coffee number… I lost count.' },
+      portatil: { title: 'Live coding', how: 'You tapped the laptop.', say: 'Shh, I’m in the middle of a deploy.' },
+      noctambulo: { title: 'Night owl', how: 'You came in after midnight.', say: 'It’s late and we’re still here… can’t you sleep either?' },
+      cuento: { title: 'Once upon a time', how: 'You dragged “Storia” onto it.', say: 'Once upon a time, a dev who just wanted to compile in peace…' },
+      terminal: { title: 'Terminal', how: 'You typed a command on the keyboard.', say: 'Permission denied.' },
+      curioso: { title: 'Curious', how: 'You opened every project page.', say: 'You’ve seen them all! What do you think?' },
     },
     words: {
       'qr city': 'Scanning… it’s a whole city!',
@@ -208,5 +216,6 @@ export const en: Dict = {
       supabase: 'Backend without the sweat.',
     },
     jokes: ['Compiling…', 'Works on my machine.', 'git push --force (just kidding).', 'Hey! You’re distracting me.'],
+    commands: { sudo: 'Permission denied.', 'npm install': 'added 1 avatar in 0.3s' },
   },
 };

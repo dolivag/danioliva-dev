@@ -199,6 +199,14 @@ export const ca: Dict = {
       tema: { title: 'Llums i ombres', how: 'Vas canviar diverses vegades de tema.', say: 'Clar o fosc? Decideix-te.' },
       agitar: { title: 'Terratrèmol', how: 'Vas sacsejar el mòbil.', say: 'Ei! Que em cauré de la taula!' },
       konami: { title: 'Codi secret', how: 'Vas teclejar el codi clàssic.', say: '+30 vides. Codi desbloquejat.' },
+      poliglota: { title: 'Políglota', how: 'Vas visitar el web en els tres idiomes.', say: 'Hola! Bon dia! Hi!' },
+      planta: { title: 'Mà verda', how: 'Li vas tocar la planta.', say: 'Ja la rego, ja la rego…' },
+      cafe: { title: 'Cafeïna', how: 'Li vas tocar la tassa.', say: 'Cafè número… he perdut el compte.' },
+      portatil: { title: 'Codi en directe', how: 'Li vas tocar el portàtil.', say: 'Xxt, que estic enmig d’un deploy.' },
+      noctambulo: { title: 'Noctàmbul', how: 'Vas entrar de matinada.', say: 'Quina hora és i aquí seguim… Tu tampoc dorms?' },
+      cuento: { title: 'Una vegada', how: 'Li vas arrossegar «Storia».', say: 'Una vegada hi havia un dev que volia compilar en pau…' },
+      terminal: { title: 'Terminal', how: 'Vas escriure una ordre amb el teclat.', say: 'Permission denied.' },
+      curioso: { title: 'Curiós', how: 'Vas obrir la pàgina de cada projecte.', say: 'Els has vist tots! Què tal?' },
     },
     words: {
       'qr city': 'Escanejant… és una ciutat sencera!',
@@ -208,5 +216,6 @@ export const ca: Dict = {
       supabase: 'Backend sense suar.',
     },
     jokes: ['Compilant…', 'A la meva màquina funciona.', 'git push --force (és broma).', 'Ei! Que em desconcentres.'],
+    commands: { sudo: 'Permission denied.', 'npm install': 'added 1 avatar in 0.3s' },
   },
 };

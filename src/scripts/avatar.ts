@@ -9,9 +9,11 @@
 
 const TICK_MS = 110;
 
-type PieceMeta = { x: number; y: number; head: boolean };
+type PieceMeta = { x: number; y: number; head: boolean; erase?: { x: number; y: number } };
 type Meta = { size: number; pieces: Record<string, PieceMeta> };
-type Pose = { pieces: string[]; head: [number, number] };
+/** Un rectángulo suelto (x, y, ancho, alto, color) en coordenadas del lienzo: gotas, «z»… */
+type Rect = [number, number, number, number, string];
+type Pose = { pieces: string[]; head: [number, number]; rects?: Rect[]; /** Opacidad de las piezas que no van al 100 % (fundidos y estelas). */ alpha?: Record<string, number> };
 
 export type AvatarState = 'hero' | 'projects' | 'experience' | 'studies' | 'contact' | 'hogarnizer';
 
@@ -21,6 +23,42 @@ const steam = (t: number) => [[], ['vapor-2'], ['vapor-3']][Math.floor(t / 4) % 
 const typing = (t: number, every: number) => (Math.floor(t / every) % 2 ? ['manos'] : []);
 /** Mirada al teclear: a la pantalla del portátil (o parpadeando). */
 const onScreen = (blink: boolean) => [blink ? 'ojos-cerrados' : 'ojos-pantalla'];
+/** Saludo: la mano en alto alterna dos fotogramas, así se agita. */
+const wave = (t: number) => [Math.floor(t / 3) % 2 ? 'saludo' : 'saludo-2'];
+
+const PX = 8; // un píxel de la ilustración, en píxeles del lienzo
+/** Una «z» de píxeles (5×5) con su contorno; (x, y) es la esquina de arriba a la izquierda. */
+const zeta = (x: number, y: number, size = 1): Rect[] => {
+  const cells = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [3, 1], [2, 2], [1, 3], [0, 4], [1, 4], [2, 4], [3, 4], [4, 4]];
+  const u = PX * size;
+  return [
+    ...cells.map(([cx, cy]) => [x + cx * u + 3, y + cy * u + 3, u, u, 'rgba(30,30,70,0.55)'] as Rect),
+    ...cells.map(([cx, cy]) => [x + cx * u, y + cy * u, u, u, '#cdd4ff'] as Rect),
+  ];
+};
+/** Las «z» del sueño: suben una detrás de otra desde la cabeza (a su derecha, para no tapar el pelo). */
+const sleepZ = (k: number): Rect[] => {
+  const out: Rect[] = [];
+  for (let i = 0; i < 3; i++) {
+    const age = (k + i * 14) % 42;
+    if (age > 34) continue;
+    out.push(...zeta(760 + i * 34 + Math.round(Math.sin(age / 5) * 6), 250 - age * 3 - i * 8, [1.4, 1.8, 2.2][i]));
+  }
+  return out;
+};
+/** Gotas de la regadera (cada una de 2×2 píxeles de la ilustración): caen en vertical hasta la planta y salpican. */
+const waterDrops = (k: number): Rect[] => {
+  const out: Rect[] = [];
+  const top = 684;
+  const floor = 716; // donde empieza la planta
+  for (const [i, x] of [632, 654, 676].entries()) {
+    const y = top + ((k * 2 + i * 3) % 5) * 8;
+    const ys = Math.min(y, floor);
+    out.push([x, ys, 16, 16, '#3c8fe0'], [x + 2, ys + 2, 12, 12, '#7ac7ff'], [x + 3, ys + 3, 4, 4, '#e6f6ff']);
+    if (y >= floor) out.push([x - 12, floor + 14, 10, 6, '#7ac7ff'], [x + 18, floor + 14, 10, 6, '#7ac7ff']);
+  }
+  return out;
+};
 /** La cabeza sube y baja `px` píxeles con un periodo de `period` fotogramas. */
 const bob = (t: number, period: number, px = 3): [number, number] => [
   0,
@@ -36,7 +74,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
   hero: (t, since, blink) => {
     const waving = t - since < 16;
     const eyes = blink ? ['ojos-cerrados'] : t % 70 >= 50 ? ['ojos-reojo'] : [];
-    const hands = waving ? (Math.floor(t / 3) % 2 ? ['saludo'] : []) : typing(t, 3);
+    const hands = waving ? wave(t) : typing(t, 3);
     return { pieces: [...steam(t), ...hands, ...eyes], head: bob(t, 18) };
   },
   // Proyectos: tecleando a ritmo normal.
@@ -75,7 +113,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
     return {
       pieces: [
         ...steam(t),
-        ...(waving && Math.floor(t / 3) % 2 ? ['saludo'] : []),
+        ...(waving ? wave(t) : []),
         ...(blink ? ['ojos-cerrados'] : ['ojos-reojo']),
       ],
       head: bob(t, 18),
@@ -91,7 +129,7 @@ const STATES: Record<AvatarState, (t: number, since: number, blink: boolean) => 
 /** Reacciones del juego: poses puntuales que sustituyen a la de la sección. `k` es el fotograma desde que empezó. */
 const REACTIONS: Record<string, (k: number) => Pose> = {
   hola: (k) => ({
-    pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    pieces: [...steam(k), ...(k < 24 ? wave(k) : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
     head: bob(k, 12),
   }),
   orden: (k) => ({
@@ -110,9 +148,9 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
     pieces: [k % 2 ? 'ojos-arriba-izq' : 'ojos-izq', 'boca-o'],
     head: [k % 2 ? -10 : 10, k % 4 < 2 ? 0 : 4],
   }),
-  sueno: (k) => ({ pieces: ['ojos-cerrados', 'boca-seria'], head: [0, k % 40 < 20 ? 0 : 6] }),
+  sueno: (k) => ({ pieces: ['ojos-cerrados', 'boca-seria'], head: [0, k % 40 < 20 ? 0 : 6], rects: sleepZ(k) }),
   final: (k) => ({
-    pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    pieces: [...steam(k), ...(k < 24 ? wave(k) : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
     head: bob(k, 12),
   }),
   tema: (k) => ({
@@ -131,10 +169,57 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
   marco: (k) => ({
     pieces: [
       ...steam(k),
-      ...(k < 8 && Math.floor(k / 2) % 2 === 0 ? ['saludo'] : []),
+      ...(k < 8 ? wave(k) : []),
       k < 6 ? 'ojos-abajo' : 'ojos-camara',
       'boca-sonrisa-cerrada',
     ],
+    head: bob(k, 12),
+  }),
+  poliglota: (k) => ({
+    pieces: [...steam(k), ...(k < 24 ? wave(k) : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 10, 4),
+  }),
+  // Planta: riega (la regadera sobre ella y las gotas), la planta crece y le salen dos guindillas.
+  planta: (k) => {
+    if (k >= 26) return { pieces: [...steam(k), 'planta-feliz', 'ojos-felices', 'boca-sonrisa-cerrada'], head: bob(k, 10, 4) };
+    return {
+      pieces: [...steam(k), 'regadera', 'ojos-abajo', 'boca-sonrisa-cerrada'],
+      head: [6, 4],
+      rects: k >= 5 ? waterDrops(k) : [],
+    };
+  },
+  // Café: la taza de la mesa se desvanece mientras aparece en su mano (pecho), sube con un fotograma de estela, da el
+  // sorbo y vuelve a la mesa. Las posturas con la cara van con la cabeza fija.
+  cafe: (k) => {
+    const still: [number, number] = [0, 0];
+    if (k < 2) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: still, alpha: { 'taza-sube': k === 0 ? 0.4 : 0.8 } };
+    if (k < 6) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: still };
+    if (k === 6) return { pieces: ['taza-sube', 'taza-cerca'], head: still, alpha: { 'taza-sube': 0.55, 'taza-cerca': 0.55 } };
+    if (k === 7) return { pieces: ['taza-cerca'], head: still };
+    if (k < 10) return { pieces: ['taza-boca'], head: still };
+    if (k < 20) return { pieces: k === 15 || k === 16 ? ['taza-cerca'] : ['taza-boca'], head: still }; // un trago: baja un poco la taza
+    if (k === 20) return { pieces: ['taza-cerca'], head: still };
+    if (k === 21) return { pieces: ['taza-sube', 'taza-cerca'], head: still, alpha: { 'taza-sube': 0.55, 'taza-cerca': 0.55 } };
+    if (k < 24) return { pieces: ['taza-sube', 'ojos-felices', 'boca-ahh'], head: bob(k, 6, 3) };
+    if (k < 31) return { pieces: ['taza-sube', 'ojos-felices', 'boca-ahh'], head: bob(k, 6, 3) };
+    if (k < 33) return { pieces: ['taza-sube', 'ojos-felices', 'boca-ahh'], head: bob(k, 6, 3), alpha: { 'taza-sube': k === 31 ? 0.6 : 0.25 } };
+    return { pieces: [...steam(k), 'ojos-felices', 'boca-sonrisa-cerrada'], head: bob(k, 8, 3) };
+  },
+  portatil: (k) => ({ pieces: [...steam(k), ...typing(k, 1), 'cejas-fruncidas', 'ojos-pantalla'], head: [-14, 12 + (k % 2) * 2] }),
+  // Noctámbulo: ojos de sueño, bostezo con la mano delante de la boca y las «z».
+  noctambulo: (k) => {
+    if (k < 9) return { pieces: [...steam(k), 'ojos-somnolientos', 'boca-seria'], head: [0, 6 + (k % 6 < 3 ? 0 : 2)] };
+    if (k < 17) return { pieces: ['ojos-bostezo', 'boca-bostezo'], head: [0, -4], rects: k > 12 ? sleepZ(k) : [] };
+    if (k < 31) return { pieces: ['mano-boca'], head: [0, 0], rects: sleepZ(k) };
+    return { pieces: [...steam(k), 'ojos-somnolientos', 'boca-seria'], head: [0, 6], rects: sleepZ(k) };
+  },
+  cuento: (k) => ({
+    pieces: [...steam(k), ...(Math.floor(k / 5) % 3 === 0 ? wave(k) : []), k % 20 < 10 ? 'ojos-arriba' : 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 12, 4),
+  }),
+  terminal: (k) => ({ pieces: [...steam(k), ...typing(k, 1), 'cejas-fruncidas', 'boca-seria', 'ojos-pantalla'], head: [-14, 12 + (k % 2) * 2] }),
+  curioso: (k) => ({
+    pieces: [...steam(k), ...(k < 24 ? wave(k) : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
     head: bob(k, 12),
   }),
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
@@ -175,6 +260,8 @@ export type AvatarApi = {
   /** Pone el marco del proyecto sobre el escritorio (cae y se posa); `quitarMarco` lo retira. */
   placeFrame: () => void;
   removeFrame: () => void;
+  /** La planta regada se queda crecida (con sus guindillas). */
+  setGrown: (grown: boolean) => void;
 };
 
 /**
@@ -203,6 +290,11 @@ export async function startAvatar(
     ...names.map((n) => load(`/avatar/piezas/${n}.webp`)),
   ]);
   const piece = Object.fromEntries(names.map((n, i) => [n, images[i]]));
+  // Máscaras de borrado: las piezas solo añaden píxeles; las que se llevan algo de la escena (la taza) traen su máscara.
+  const erased = names.filter((n) => meta.pieces[n].erase);
+  const erasers = Object.fromEntries(
+    await Promise.all(erased.map(async (n) => [n, await load(`/avatar/piezas/${n}.borra.webp`)] as const)),
+  );
   const frameImg = frameName ? await load(`/avatar/marcos/${frameName}.png`).catch(() => null) : null;
   let frameFrom = -1; // fotograma en que se puso el marco (-1: sin marco)
   canvas.width = meta.size;
@@ -230,9 +322,13 @@ export async function startAvatar(
   let blinkUntil = -1;
   let nextBlink = 25;
   let reaction: { key: string; start: number; end: number } | null = null;
+  let grown = false; // la planta ya está regada y se queda crecida
 
   function draw(t: number) {
-    if (reaction && reaction.end && performance.now() > reaction.end) reaction = null;
+    if (reaction && reaction.end && performance.now() > reaction.end) {
+      if (reaction.key === 'planta') grown = true; // al acabar de regar, la planta se queda crecida
+      reaction = null;
+    }
     const k = reaction ? (reduced ? 0 : t - reaction.start) : 0;
     const pose = reaction
       ? REACTIONS[reaction.key](k)
@@ -260,9 +356,22 @@ export async function startAvatar(
         on = [...on, best];
       }
     }
+    // Planta crecida: por delante de las manos del teclado (están detrás de ella), pero por detrás de la regadera.
+    if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) {
+      on = on.includes('regadera') ? ['planta-feliz', ...on] : [...on, 'planta-feliz'];
+    }
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);
+    for (const p of on) {
+      const e = meta.pieces[p].erase;
+      if (!e) continue;
+      c.globalCompositeOperation = 'destination-out';
+      c.globalAlpha = pose.alpha?.[p] ?? 1;
+      c.drawImage(erasers[p], e.x, e.y);
+      c.globalAlpha = 1;
+      c.globalCompositeOperation = 'source-over';
+    }
     if (frameImg && frameFrom >= 0) {
       const k = reduced ? FRAME_FALL.length : Math.max(0, t - frameFrom);
       const off = (FRAME_FALL[Math.min(k, FRAME_FALL.length - 1)] ?? 0) * FRAME.scale;
@@ -276,11 +385,23 @@ export async function startAvatar(
       c.imageSmoothingEnabled = true;
     }
     // Primero lo que va fuera de la cabeza (manos, vapor…), luego la cabeza y sus piezas.
-    for (const p of on) if (!meta.pieces[p].head) c.drawImage(piece[p], meta.pieces[p].x, meta.pieces[p].y);
+    const draw1 = (p: string, dx: number, dy: number) => {
+      c.globalAlpha = pose.alpha?.[p] ?? 1;
+      c.drawImage(piece[p], meta.pieces[p].x + dx, meta.pieces[p].y + dy);
+      c.globalAlpha = 1;
+    };
+    for (const p of on) if (!meta.pieces[p].head) draw1(p, 0, 0);
     c.drawImage(head, hx, hy);
     for (const p of on) {
       const m = meta.pieces[p];
-      if (m.head) c.drawImage(piece[p], m.x + hx, m.y + hy);
+      if (m.head) draw1(p, hx, hy);
+    }
+    // Lo dibujado a mano (gotas, «z»…): rectángulos del tamaño de un píxel de la ilustración.
+    if (pose.rects) {
+      for (const [x, y, w, h, color] of pose.rects) {
+        c.fillStyle = color;
+        c.fillRect(x, y, w, h);
+      }
     }
   }
 
@@ -340,6 +461,10 @@ export async function startAvatar(
     },
     removeFrame() {
       frameFrom = -1;
+      draw(tick);
+    },
+    setGrown(v: boolean) {
+      grown = v;
       draw(tick);
     },
   };

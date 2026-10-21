@@ -95,5 +95,7 @@ export type Dict = {
     /** Lo que dice el avatar al arrastrarle una palabra que no da logro. */
     words: Record<string, string>;
     jokes: string[];
+    /** Lo que responde al escribir un comando con el teclado (`sudo`, `npm install`). */
+    commands: Record<string, string>;
   };
 };

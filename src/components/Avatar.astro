@@ -2,7 +2,7 @@
 import { ACHIEVEMENT_IDS } from '../scripts/game';
 import { useDict, fmt } from '../i18n';
 import type { Lang } from '../i18n';
-import { site } from '../data/site';
+import { site, getProjects } from '../data/site';
 
 interface Props {
   /** Idioma de los textos del panel, los avisos y lo que dice el avatar. */
@@ -14,7 +14,7 @@ const { frame, lang } = Astro.props;
 const g = useDict(lang).game;
 const total = ACHIEVEMENT_IDS.length;
 ---
-<div class="avatar" data-state="hero" data-frame={frame}>
+<div class="avatar" data-state="hero" data-frame={frame} data-slugs={getProjects(lang).map((p) => p.slug).join(',')}>
   <div class="bubble" id="avatar-bubble" aria-hidden="true"></div>
   <div class="panel" id="avatar-panel" role="dialog" aria-label={g.panelAria} hidden>
     <p class="panel-title">{g.panelTitle} <span id="avatar-score"></span></p>
@@ -99,6 +99,9 @@ const total = ACHIEVEMENT_IDS.length;
       toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3800);
     };
 
+    // La planta que ya se ha regado se queda crecida (también en las visitas siguientes).
+    if (unlocked.has('planta')) avatar.setGrown(true);
+
     /** Reacciona y, si es la primera vez, desbloquea. Devuelve si era nuevo. */
     // En la página de un proyecto: pone su marco de fotos sobre el escritorio.
     if (root.dataset.frame) {
@@ -129,7 +132,10 @@ const total = ACHIEVEMENT_IDS.length;
     );
     stage.addEventListener('click', () => root.classList.remove('tucked'));
 
-    const trigger = (id: AchievementId, ms = 3200) => {
+    // Lo que dura cada reacción (las de varias poses necesitan más que las de un gesto).
+    const DURATION: Partial<Record<AchievementId, number>> = { cafe: 4100, planta: 3800, noctambulo: 4000 };
+    const trigger = (id: AchievementId, ms?: number, say?: string) => {
+      ms ??= DURATION[id] ?? 3200;
       const a = g.achievements[id];
       const isNew = !unlocked.has(id);
       if (isNew) {
@@ -142,13 +148,30 @@ const total = ACHIEVEMENT_IDS.length;
         const n = unlocked.size;
         announce(n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
       }
-      avatar.react(id, a.say, id === 'sueno' ? 0 : ms);
+      avatar.react(id, say ?? a.say, id === 'sueno' ? 0 : ms);
       return isNew;
     };
 
     // Clic: el primero es el saludo; muchos seguidos, mareo; el resto, un chiste.
     const clicks: number[] = [];
-    stage.addEventListener('click', () => {
+    // Las cosas del escritorio (en coordenadas del lienzo de 1024): la taza, la planta y el portátil.
+    const ZONES: { id: AchievementId; x: [number, number]; y: [number, number] }[] = [
+      { id: 'cafe', x: [95, 215], y: [640, 820] },
+      { id: 'planta', x: [625, 730], y: [735, 860] },
+      { id: 'portatil', x: [190, 500], y: [600, 830] },
+    ];
+    stage.addEventListener('click', (e) => {
+      // Con ratón o dedo el botón no se queda con el foco: si no, la barra espaciadora (p. ej. al escribir «npm install») lo volvería a pulsar.
+      if (e.detail > 0) stage.blur();
+      const r = canvas.getBoundingClientRect();
+      const px = ((e.clientX - r.left) / r.width) * 1024;
+      const py = ((e.clientY - r.top) / r.height) * 1024;
+      const zone = e.detail > 0 && ZONES.find((z) => px >= z.x[0] && px <= z.x[1] && py >= z.y[0] && py <= z.y[1]);
+      if (zone) {
+        clicks.length = 0;
+        trigger(zone.id);
+        return;
+      }
       const now = performance.now();
       clicks.push(now);
       while (clicks.length && now - clicks[0] > 2500) clicks.shift();
@@ -169,6 +192,47 @@ const total = ACHIEVEMENT_IDS.length;
         if (w.achievement) trigger(w.achievement);
         else avatar.react('asiente', g.words[word] ?? '', 3000);
       },
+    });
+
+    // Visitar la web en los tres idiomas (se recuerdan los que ya se han visto).
+    const seen = (key: string, add?: string) => {
+      let list: string[] = [];
+      try {
+        list = JSON.parse(localStorage.getItem(key) ?? '[]');
+      } catch {}
+      if (add && !list.includes(add)) {
+        list.push(add);
+        try {
+          localStorage.setItem(key, JSON.stringify(list));
+        } catch {}
+      }
+      return list;
+    };
+    if (!unlocked.has('poliglota')) {
+      if (seen('avatar-langs', document.documentElement.lang).length >= 3) setTimeout(() => trigger('poliglota', 4000), 2500);
+    }
+    // Abrir la página de cada proyecto.
+    const slugs = (root.dataset.slugs ?? '').split(',').filter(Boolean);
+    if (root.dataset.frame && !unlocked.has('curioso')) {
+      const visited = seen('avatar-projects', root.dataset.frame);
+      if (slugs.length && slugs.every((s) => visited.includes(s))) setTimeout(() => trigger('curioso', 4000), 2500);
+    }
+    // Entrar de madrugada (hora local).
+    if (!unlocked.has('noctambulo') && new Date().getHours() < 6) setTimeout(() => trigger('noctambulo', 4500), 4000);
+
+    // Escribir un comando con el teclado (fuera de los campos de texto).
+    let keys = '';
+    addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+      if ((e.target as Element).closest('input, textarea, select, [contenteditable]')) return;
+      keys = (keys + e.key.toLowerCase()).slice(-12);
+      for (const cmd of Object.keys(g.commands)) {
+        if (keys.endsWith(cmd)) {
+          keys = '';
+          trigger('terminal', 3200, g.commands[cmd]);
+          break;
+        }
+      }
     });
 
     // Quedarse quieto: se duerme; al volver a moverte, se despierta.

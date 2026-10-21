@@ -19,6 +19,7 @@ cambios sueltos que mete Gemini en el resto) y con el borde suavizado para que n
 Uso: python3 scripts/build-avatar.py   (necesita Pillow con WebP y numpy)
 """
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -30,7 +31,10 @@ OUT = ROOT / "public" / "avatar"
 SIZE = 1024
 PINK = np.array([221, 44, 142], float)  # el fondo de la ilustración
 
-# Zona de cada pieza (x0, y0, x1, y1) y si va pegada a la cabeza (se mueve con ella).
+# Zona de cada pieza (x0, y0, x1, y1), si va pegada a la cabeza (se mueve con ella) y, opcional, un rectángulo
+# de la escena que la pose se lleva (las piezas solo añaden píxeles: para quitar algo se guarda una máscara de borrado).
+MUG = (95, 640, 215, 812)  # donde está la taza (y su vapor) en la escena
+
 PIECES = {
     "ojos-cerrados": ((470, 240, 650, 345), True),
     "ojos-reojo": ((470, 240, 650, 345), True),
@@ -48,7 +52,24 @@ PIECES = {
     "boca-seria": ((480, 345, 650, 480), True),
     "boca-o": ((480, 345, 650, 480), True),
     "birrete": ((380, 30, 850, 320), True),
-    "saludo": ((250, 470, 670, 900), False),
+    # Saludo: la segunda mano en alto (dos fotogramas que se alternan para agitarla).
+    "saludo": ((200, 330, 540, 640), False),
+    "saludo-2": ((200, 330, 540, 640), False),
+    # Café: la taza sale de la mesa (`MUG`: se borra de la escena) y sube a la boca. Las de la cara van con la cabeza.
+    "taza-sube": ((90, 300, 520, 830), False, MUG),
+    "taza-cerca": ((90, 260, 700, 830), True, MUG),
+    "taza-boca": ((90, 260, 700, 830), True, MUG),
+    "ojos-felices": ((470, 240, 650, 345), True),
+    "boca-ahh": ((480, 345, 650, 480), True),
+    # Riego: la regadera sobre la planta y la planta ya crecida, con guindillas.
+    "regadera": ((300, 440, 720, 730), False),
+    # Sin el rectángulo de las manos del teclado: la planta va por delante de ellas y no debe pisarlas.
+    "planta-feliz": ((560, 540, 790, 870), False, None, (470, 722, 632, 810), True),
+    # Bostezo.
+    "ojos-somnolientos": ((470, 240, 650, 345), True),
+    "ojos-bostezo": ((470, 240, 650, 345), True),
+    "boca-bostezo": ((480, 345, 660, 510), True),
+    "mano-boca": ((320, 250, 700, 640), True),
     "manos": ((420, 640, 700, 880), False),
     "vapor-2": ((100, 590, 230, 790), False),
     "vapor-3": ((100, 590, 230, 790), False),
@@ -118,25 +139,33 @@ def save(rgb, alpha, path, crop=None):
 def main():
     (OUT / "piezas").mkdir(parents=True, exist_ok=True)
     base = load("base.jpg")
+    only = set(filter(None, os.environ.get("ONLY", "").split(",")))  # ONLY=pieza,otra: solo esas piezas
 
-    # --- Cabeza: silueta de la capa cian, píxeles de la base (idénticos al dibujo original).
-    head_rgb = load("capa-cabeza.jpg")
-    cyan = (head_rgb[:, :, 0] < 90) & (head_rgb[:, :, 1] > 190) & (head_rgb[:, :, 2] > 190)
-    head = grow(shrink(~cyan, 2), 4)  # sin motas, y con el contorno incluido
-    head_alpha = feather(head, 1.2) * pink_alpha(base)
-    save(base, head_alpha, OUT / "cabeza.webp")
+    if not only:
+        # --- Cabeza: silueta de la capa cian, píxeles de la base (idénticos al dibujo original).
+        head_rgb = load("capa-cabeza.jpg")
+        cyan = (head_rgb[:, :, 0] < 90) & (head_rgb[:, :, 1] > 190) & (head_rgb[:, :, 2] > 190)
+        head = grow(shrink(~cyan, 2), 4)  # sin motas, y con el contorno incluido
+        head_alpha = feather(head, 1.2) * pink_alpha(base)
+        save(base, head_alpha, OUT / "cabeza.webp")
 
-    # --- Escena: la imagen sin cabeza, sin el fondo rosa.
-    scene = load("sin-cabeza.jpg")
-    # Fuera de la zona de la cabeza, mejor la base tal cual (Gemini retoca cosas sueltas).
-    head_zone = grow(head, 30)
-    zone = feather(head_zone, 8)[:, :, None]
-    scene = scene * zone + base * (1 - zone)
-    save(scene, pink_alpha(scene), OUT / "escena.webp")
+        # --- Escena: la imagen sin cabeza, sin el fondo rosa.
+        scene = load("sin-cabeza.jpg")
+        # Fuera de la zona de la cabeza, mejor la base tal cual (Gemini retoca cosas sueltas).
+        head_zone = grow(head, 30)
+        zone = feather(head_zone, 8)[:, :, None]
+        scene = scene * zone + base * (1 - zone)
+        save(scene, pink_alpha(scene), OUT / "escena.webp")
 
     # --- Piezas
-    meta = {"size": SIZE, "pieces": {}}
-    for name, ((x0, y0, x1, y1), on_head) in PIECES.items():
+    meta = json.loads((OUT / "avatar.json").read_text()) if only else {"size": SIZE, "pieces": {}}
+    for name, spec in PIECES.items():
+        if only and name not in only:
+            continue
+        (x0, y0, x1, y1), on_head = spec[0], spec[1]
+        erase_rect = spec[2] if len(spec) > 2 else None
+        exclude = spec[3] if len(spec) > 3 else None
+        tight = spec[4] if len(spec) > 4 else False  # recorte pegado al cambio, sin el margen suave (no vela lo que hay detrás)
         if not (ART / f"{name}.jpg").exists():
             print("sin imagen (se omite):", name)
             continue
@@ -145,9 +174,16 @@ def main():
         region = np.zeros_like(diff)
         region[y0:y1, x0:x1] = True
         diff &= region
+        if exclude:
+            ex0, ey0, ex1, ey1 = exclude
+            diff[ey0:ey1, ex0:ex1] = False
         # Fuera ruido del JPG (motas sueltas) y ensanchado para llevarse el borde del cambio.
-        diff = grow(shrink(grow(diff, 2), 3), 6) & region
-        alpha = feather(diff, 3) * pink_alpha(var)
+        if tight:
+            diff = shrink(grow(diff, 1), 1) & region
+            alpha = feather(diff, 0.7) * pink_alpha(var)
+        else:
+            diff = grow(shrink(grow(diff, 2), 3), 6) & region
+            alpha = feather(diff, 3) * pink_alpha(var)
         ys, xs = np.where(alpha > 0.01)
         if not len(xs):
             print("pieza vacía:", name)
@@ -155,6 +191,15 @@ def main():
         box = (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
         save(var, alpha, OUT / "piezas" / f"{name}.webp", crop=box)
         meta["pieces"][name] = {"x": box[0], "y": box[1], "head": on_head}
+        if erase_rect:
+            # Borrar de la escena lo que la base tiene y esta variante ya no (la taza de la mesa).
+            ex0, ey0, ex1, ey1 = erase_rect
+            gone = (pink_alpha(base) > 0.5) & (pink_alpha(var) < 0.5)
+            keep = np.zeros_like(gone)
+            keep[ey0:ey1, ex0:ex1] = True
+            gone = grow(gone & keep, 3) & keep
+            save(np.zeros_like(base), feather(gone, 1.2), OUT / "piezas" / f"{name}.borra.webp", crop=erase_rect)
+            meta["pieces"][name]["erase"] = {"x": ex0, "y": ey0}
         print(f"pieza {name}: {box[2] - box[0]}x{box[3] - box[1]} en ({box[0]}, {box[1]})")
 
     (OUT / "avatar.json").write_text(json.dumps(meta, indent=2) + "\n")

@@ -77,6 +77,15 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
     <meta name="theme-color" content="#f3f1ec" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
     {jsonLd && (<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />)}
+    {
+      import.meta.env.PROD && (
+        <>
+          {/* Vercel Web Analytics: cuenta visitas de forma anónima, sin cookies ni identificar a nadie. Se activa en el panel de Vercel. */}
+          <script is:inline>{`window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };`}</script>
+          <script is:inline defer src="/_vercel/insights/script.js" />
+        </>
+      )
+    }
     {!noindex && (<link rel="canonical" href={abs(lang)} />)}
   </head>
   <body>

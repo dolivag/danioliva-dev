@@ -116,7 +116,10 @@ fotogramas que se alternan) usan piezas propias de `art/avatar/` (`taza-sube`, `
 `planta-feliz`, `ojos-somnolientos`, `ojos-bostezo`, `boca-bostezo`, `mano-boca`, `ojos-felices`, `boca-ahh`,
 `saludo-2`). Una pieza solo añade píxeles; las que se llevan algo de la escena (la taza de la mesa) llevan su
 máscara de borrado (`*.borra.webp`, se pinta con `destination-out`; el rectángulo está en `PIECES` como tercer
-valor). Las gotas y las «z» no son imágenes: son rectángulos de 1×1 o 2×2 píxeles de ilustración que dibuja
+valor). Al regar, la planta se queda crecida (`planta-feliz`, que se pinta por delante de las manos del teclado y por detrás de
+la regadera; su recorte es ajustado para no velar lo que tiene detrás). El sorbo del café pasa por cuatro posiciones
+(`taza-sube`, `taza-cerca`, `taza-boca`) con fundidos y un fotograma de estela entre ellas (`alpha` de la pose). Para
+regenerar solo alguna pieza: `ONLY=planta-feliz python3 scripts/build-avatar.py`. Las gotas y las «z» no son imágenes: son rectángulos de 1×1 o 2×2 píxeles de ilustración que dibuja
 `avatar.ts` (`rects` de la pose). Las piezas que tapan la cara van «con la cabeza» y se pinta la cabeza fija
 (`head: [0, 0]`) mientras están puestas.
 

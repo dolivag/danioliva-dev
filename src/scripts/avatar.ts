@@ -13,7 +13,7 @@ type PieceMeta = { x: number; y: number; head: boolean; erase?: { x: number; y: 
 type Meta = { size: number; pieces: Record<string, PieceMeta> };
 /** Un rectángulo suelto (x, y, ancho, alto, color) en coordenadas del lienzo: gotas, «z»… */
 type Rect = [number, number, number, number, string];
-type Pose = { pieces: string[]; head: [number, number]; rects?: Rect[] };
+type Pose = { pieces: string[]; head: [number, number]; rects?: Rect[]; /** Opacidad de las piezas que no van al 100 % (fundidos y estelas). */ alpha?: Record<string, number> };
 
 export type AvatarState = 'hero' | 'projects' | 'experience' | 'studies' | 'contact' | 'hogarnizer';
 
@@ -188,14 +188,21 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
       rects: k >= 5 ? waterDrops(k) : [],
     };
   },
-  // Café: coge la taza (desaparece de la mesa), la sube, da un sorbo y pone cara de «ahh».
+  // Café: la taza de la mesa se desvanece mientras aparece en su mano (pecho), sube con un fotograma de estela, da el
+  // sorbo y vuelve a la mesa. Las posturas con la cara van con la cabeza fija.
   cafe: (k) => {
-    if (k < 5) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: [0, 0] };
-    if (k < 22) {
-      const gulp = (k - 5) % 8 === 7; // de vez en cuando baja la taza un momento
-      return { pieces: gulp ? ['taza-sube', 'ojos-cerrados'] : ['taza-boca'], head: [0, 0] };
-    }
+    const still: [number, number] = [0, 0];
+    if (k < 2) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: still, alpha: { 'taza-sube': k === 0 ? 0.4 : 0.8 } };
+    if (k < 6) return { pieces: ['taza-sube', 'ojos-izq', 'boca-sonrisa-cerrada'], head: still };
+    if (k === 6) return { pieces: ['taza-sube', 'taza-cerca'], head: still, alpha: { 'taza-sube': 0.55, 'taza-cerca': 0.55 } };
+    if (k === 7) return { pieces: ['taza-cerca'], head: still };
+    if (k < 10) return { pieces: ['taza-boca'], head: still };
+    if (k < 20) return { pieces: k === 15 || k === 16 ? ['taza-cerca'] : ['taza-boca'], head: still }; // un trago: baja un poco la taza
+    if (k === 20) return { pieces: ['taza-cerca'], head: still };
+    if (k === 21) return { pieces: ['taza-sube', 'taza-cerca'], head: still, alpha: { 'taza-sube': 0.55, 'taza-cerca': 0.55 } };
+    if (k < 24) return { pieces: ['taza-sube', 'ojos-felices', 'boca-ahh'], head: bob(k, 6, 3) };
     if (k < 31) return { pieces: ['taza-sube', 'ojos-felices', 'boca-ahh'], head: bob(k, 6, 3) };
+    if (k < 33) return { pieces: ['taza-sube', 'ojos-felices', 'boca-ahh'], head: bob(k, 6, 3), alpha: { 'taza-sube': k === 31 ? 0.6 : 0.25 } };
     return { pieces: [...steam(k), 'ojos-felices', 'boca-sonrisa-cerrada'], head: bob(k, 8, 3) };
   },
   portatil: (k) => ({ pieces: [...steam(k), ...typing(k, 1), 'cejas-fruncidas', 'ojos-pantalla'], head: [-14, 12 + (k % 2) * 2] }),
@@ -349,8 +356,10 @@ export async function startAvatar(
         on = [...on, best];
       }
     }
-    // Planta crecida: va la primera, para que las manos y la regadera queden por delante de sus hojas.
-    if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) on = ['planta-feliz', ...on];
+    // Planta crecida: por delante de las manos del teclado (están detrás de ella), pero por detrás de la regadera.
+    if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) {
+      on = on.includes('regadera') ? ['planta-feliz', ...on] : [...on, 'planta-feliz'];
+    }
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);
@@ -358,7 +367,9 @@ export async function startAvatar(
       const e = meta.pieces[p].erase;
       if (!e) continue;
       c.globalCompositeOperation = 'destination-out';
+      c.globalAlpha = pose.alpha?.[p] ?? 1;
       c.drawImage(erasers[p], e.x, e.y);
+      c.globalAlpha = 1;
       c.globalCompositeOperation = 'source-over';
     }
     if (frameImg && frameFrom >= 0) {
@@ -374,11 +385,16 @@ export async function startAvatar(
       c.imageSmoothingEnabled = true;
     }
     // Primero lo que va fuera de la cabeza (manos, vapor…), luego la cabeza y sus piezas.
-    for (const p of on) if (!meta.pieces[p].head) c.drawImage(piece[p], meta.pieces[p].x, meta.pieces[p].y);
+    const draw1 = (p: string, dx: number, dy: number) => {
+      c.globalAlpha = pose.alpha?.[p] ?? 1;
+      c.drawImage(piece[p], meta.pieces[p].x + dx, meta.pieces[p].y + dy);
+      c.globalAlpha = 1;
+    };
+    for (const p of on) if (!meta.pieces[p].head) draw1(p, 0, 0);
     c.drawImage(head, hx, hy);
     for (const p of on) {
       const m = meta.pieces[p];
-      if (m.head) c.drawImage(piece[p], m.x + hx, m.y + hy);
+      if (m.head) draw1(p, hx, hy);
     }
     // Lo dibujado a mano (gotas, «z»…): rectángulos del tamaño de un píxel de la ilustración.
     if (pose.rects) {

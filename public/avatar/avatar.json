@@ -85,6 +85,15 @@
         "y": 640
       }
     },
+    "taza-cerca": {
+      "x": 83,
+      "y": 253,
+      "head": true,
+      "erase": {
+        "x": 95,
+        "y": 640
+      }
+    },
     "taza-boca": {
       "x": 83,
       "y": 253,
@@ -110,8 +119,8 @@
       "head": false
     },
     "planta-feliz": {
-      "x": 553,
-      "y": 549,
+      "x": 573,
+      "y": 559,
       "head": false
     },
     "ojos-somnolientos": {

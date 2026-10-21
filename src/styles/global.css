@@ -287,18 +287,19 @@ footer a { text-decoration: none; }
   :root { --ease: cubic-bezier(0.19, 1, 0.22, 1); }
 
   /* Nombre gigante: máscara por línea y letras que suben una tras otra. */
-  .js .hero h1 .row { display: block; overflow: hidden; padding-top: 0.08em; margin-top: -0.08em; padding-bottom: 0.02em; }
+  /* La máscara deja sitio por abajo (y compensa con el margen) para que no corte los rabillos de la g, la y, la j… */
+  .js .hero h1 .row { display: block; overflow: hidden; padding-top: 0.08em; margin-top: -0.08em; padding-bottom: 0.3em; margin-bottom: -0.3em; }
   .js .hero h1 .letter {
     display: inline-block;
-    translate: 0 110%;
+    translate: 0 140%;
     transition: translate 1.1s var(--ease);
     transition-delay: calc(0.1s + var(--r) * 0.16s + var(--i) * 0.045s);
   }
   .js.ready .hero h1 .letter { translate: 0 0; }
 
   /* Títulos de sección: suben desde una máscara al llegar a ellos. */
-  .js .mask { display: block; width: max-content; max-width: none; overflow: hidden; padding-block: 0.06em; margin-block: -0.06em; }
-  .js .mask .inner { display: block; translate: 0 110%; transition: translate 1s var(--ease); transition-delay: inherit; }
+  .js .mask { display: block; width: max-content; max-width: none; overflow: hidden; padding-block: 0.06em 0.3em; margin-block: -0.06em -0.3em; }
+  .js .mask .inner { display: block; translate: 0 140%; transition: translate 1s var(--ease); transition-delay: inherit; }
   .js section > h2.in .inner { translate: 0 0; }
 
   /* Todo lo demás: aparece subiendo un poco. (`translate` y no `transform`: la píldora ya usa transform.) */

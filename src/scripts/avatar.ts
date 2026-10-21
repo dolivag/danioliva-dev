@@ -137,6 +137,29 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
     ],
     head: bob(k, 12),
   }),
+  poliglota: (k) => ({
+    pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 10, 4),
+  }),
+  planta: (k) => ({ pieces: [...steam(k), 'ojos-abajo', 'boca-sonrisa-cerrada'], head: [6, k % 12 < 6 ? 4 : 8] }),
+  cafe: (k) => ({
+    pieces: [...steam(k), k % 24 < 12 ? 'ojos-izq' : 'ojos-cerrados', 'boca-sonrisa-cerrada'],
+    head: [-6, k % 24 < 12 ? 0 : 6],
+  }),
+  portatil: (k) => ({ pieces: [...steam(k), ...typing(k, 1), 'cejas-fruncidas', 'ojos-pantalla'], head: [-14, 12 + (k % 2) * 2] }),
+  noctambulo: (k) => ({
+    pieces: [k % 30 < 18 ? 'ojos-cerrados' : 'ojos-abajo', k % 30 < 18 ? 'boca-o' : 'boca-seria'],
+    head: [0, k % 30 < 18 ? 8 : 2],
+  }),
+  cuento: (k) => ({
+    pieces: [...steam(k), ...(Math.floor(k / 5) % 3 === 0 ? ['saludo'] : []), k % 20 < 10 ? 'ojos-arriba' : 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 12, 4),
+  }),
+  terminal: (k) => ({ pieces: [...steam(k), ...typing(k, 1), 'cejas-fruncidas', 'boca-seria', 'ojos-pantalla'], head: [-14, 12 + (k % 2) * 2] }),
+  curioso: (k) => ({
+    pieces: [...steam(k), ...(Math.floor(k / 3) % 2 ? ['saludo'] : []), 'ojos-camara', 'boca-sonrisa-cerrada'],
+    head: bob(k, 12),
+  }),
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
 };
 

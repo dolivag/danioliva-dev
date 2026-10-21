@@ -199,6 +199,14 @@ export const es: Dict = {
       tema: { title: 'Luces y sombras', how: 'Cambiaste varias veces de tema.', say: '¿Luces o ambiente? Decídete.' },
       agitar: { title: 'Terremoto', how: 'Agitaste el móvil.', say: '¡Eh! ¡Que me caigo de la mesa!' },
       konami: { title: 'Código secreto', how: 'Tecleaste el código clásico.', say: '+30 vidas. Código desbloqueado.' },
+      poliglota: { title: 'Políglota', how: 'Visitaste la web en los tres idiomas.', say: '¡Hola! Bon dia! Hi!' },
+      planta: { title: 'Mano verde', how: 'Le tocaste la planta.', say: 'Ya la riego, ya la riego…' },
+      cafe: { title: 'Cafeína', how: 'Le tocaste la taza.', say: 'Café número… he perdido la cuenta.' },
+      portatil: { title: 'Código en directo', how: 'Le tocaste el portátil.', say: 'Shh, que estoy en medio de un deploy.' },
+      noctambulo: { title: 'Noctámbulo', how: 'Entraste de madrugada.', say: 'Las tantas y aquí seguimos… ¿Tú tampoco duermes?' },
+      cuento: { title: 'Érase una vez', how: 'Le arrastraste «Storia».', say: 'Érase una vez un dev que quería compilar en paz…' },
+      terminal: { title: 'Terminal', how: 'Escribiste un comando con el teclado.', say: 'Permission denied.' },
+      curioso: { title: 'Curioso', how: 'Abriste la página de cada proyecto.', say: '¡Los has visto todos! ¿Qué tal?' },
     },
     words: {
       'qr city': 'Escaneando… ¡es una ciudad entera!',
@@ -208,5 +216,6 @@ export const es: Dict = {
       supabase: 'Backend sin sudar.',
     },
     jokes: ['Compilando…', 'En mi máquina funciona.', 'git push --force (es broma).', '¡Eh! Que me desconcentras.'],
+    commands: { sudo: 'Permission denied.', 'npm install': 'added 1 avatar in 0.3s' },
   },
 };

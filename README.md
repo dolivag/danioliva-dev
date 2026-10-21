@@ -106,6 +106,13 @@ con el foco en una palabra o en el enlace de un proyecto (para quien no usa rat�
 Las interacciones son secretas: el panel solo enseña «???» hasta que se descubren (y entonces
 permite repetirlas). Sin pistas visuales a propósito.
 
+Hay 18 logros. Los que no son de arrastrar ni de clic suelto: **taza, planta y portátil** (clic en esa zona del
+escritorio; las zonas, en coordenadas del lienzo de 1024, están en `ZONES` de `Avatar.astro`), **políglota** y **curioso**
+(se recuerdan en `localStorage` los idiomas y las páginas de proyecto visitados: `avatar-langs`, `avatar-projects`),
+**noctámbulo** (entrar entre las 00:00 y las 06:00, hora local), **terminal** (escribir `sudo` o `npm install` fuera de
+un campo de texto; los comandos y sus respuestas están en `game.commands` de `src/i18n/`) y **Storia** arrastrada
+(`WORDS`). Todas reutilizan las piezas que ya hay: sus poses (`REACTIONS`) no necesitan imágenes nuevas.
+
 Las imágenes de partida están en `art/avatar/` (1024x1024, hechas con Gemini a partir de
 `base.jpg`, todas con el mismo encuadre y fondo rosa). `python3 scripts/build-avatar.py` (Pillow
 con WebP y numpy) genera `public/avatar/`: `escena.webp`, `cabeza.webp`, `piezas/*.webp` y

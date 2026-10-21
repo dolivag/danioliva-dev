@@ -12,6 +12,7 @@ export const es: Dict = {
     text: 'Trabajo con Angular, Node.js, NestJS, React y React Native, y me encargo también de herramientas de automatización y CI/CD. Fuera del trabajo construyo mis propios proyectos.',
     viewProjects: 'Ver proyectos',
     contact: 'Contacto',
+    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL' }, { k: 'Idiomas', v: 'Castellano, català, English' }] },
   },
   marquee: ['Software engineer', 'Fullstack', 'Angular', 'NestJS', 'React Native', 'Automatización', 'CI/CD', 'Apps pequeñas'],
   common: {

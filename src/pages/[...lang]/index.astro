@@ -58,6 +58,12 @@ const person = {
       <a class="btn" href="#proyectos">{t.intro.viewProjects}</a>
       <a class="btn secondary" href="#contacto">{t.intro.contact}</a>
     </div>
+    <aside class="glance" aria-label={t.intro.glance.label}>
+      <p class="glance-title">{t.intro.glance.label}</p>
+      <dl>
+        {t.intro.glance.items.map((i) => (<div><dt>{i.k}</dt><dd>{i.v}</dd></div>))}
+      </dl>
+    </aside>
   </div>
 
   <section class="col" id="proyectos" data-avatar="projects">

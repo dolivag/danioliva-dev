@@ -27,7 +27,9 @@ const description = Astro.props.description ?? t.meta.description;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${t.role}`;
 const path = stripLang(Astro.url.pathname);
 const abs = (l: Lang) => new URL(localePath(l, path), Astro.site).href;
-const ogImage = new URL(`/og/${lang}/${og}.png`, Astro.site).href;
+// Sube la versión al regenerar las tarjetas: WhatsApp y otros guardan la imagen de cada enlace y así la vuelven a pedir.
+const OG_VERSION = 2;
+const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VERSION}`;
 ---
 <!doctype html>
 <html lang={lang}>

@@ -35,8 +35,10 @@ El contenido de proyectos, experiencia y estudios está en `src/i18n/` (textos) 
 - **Vista previa al compartir:** cada página (portada y proyectos, en los tres idiomas) lleva `og:image` y
   `twitter:card` con una tarjeta de 1200×630 en `public/og/<idioma>/<home|slug>.png`. Las dibuja
   `src/pages/og-card/` (solo existe con `astro dev`, no entra en el build) con los mismos textos de `src/i18n/`, y
-  `node scripts/build-social.cjs` las guarda como PNG (y regenera `apple-touch-icon.png` y `favicon.ico`). Hay que
-  volver a lanzarlo al cambiar un texto o una captura de proyecto, y subir los PNG. Necesita Playwright con
+  `node scripts/build-social.cjs` las guarda como PNG (y regenera `apple-touch-icon.png` y `favicon.ico`). Todo lo
+  importante va en el cuadrado central de 630×630, que es lo que recortan WhatsApp Web y otras apps en su miniatura
+  (el móvil enseña la tarjeta entera). Hay que volver a lanzarlo al cambiar un texto o una captura de proyecto, subir
+  los PNG y subir `OG_VERSION` en `Base.astro` (las apps guardan la imagen de cada enlace). Necesita Playwright con
   Chromium (`PW_CHROMIUM_PATH` si ya lo tienes en otro sitio).
 - **Favicon:** `public/favicon.svg`, una «D.» en Fraunces (la serif de los títulos) con el punto de los titulares, sobre ámbar: se ve igual en barras claras y oscuras.
 - **`theme-color`:** una meta para claro y otra para oscuro (el selector de tema las actualiza).

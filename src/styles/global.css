@@ -291,11 +291,15 @@ footer a { text-decoration: none; }
   .car-nav button:hover:not(:disabled) { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
   .car-nav button:disabled { opacity: 0.35; cursor: default; }
 }
-/* Contacto: con mucho ancho, los tres enlaces en una fila. */
-@media (min-width: 1440px) {
-  main > #contacto { max-width: 1800px; }
-  #contacto { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; align-items: start; }
-  #contacto > h2 { grid-column: 1 / -1; }
+/* Experiencia, estudios y contacto: el título a la izquierda (fijo al bajar) y el contenido a la derecha, sin hueco vacío. */
+@media (min-width: 1100px) {
+  main > #experiencia, main > #estudios, main > #contacto {
+    max-width: 1800px; display: grid; grid-template-columns: minmax(320px, 30%) minmax(0, 1fr); column-gap: 56px; align-items: start;
+  }
+  #experiencia > h2, #estudios > h2, #contacto > h2 { grid-column: 1; grid-row: 1 / span 99; position: sticky; top: 96px; align-self: start; }
+  #experiencia > :not(h2), #estudios > :not(h2), #contacto > :not(h2) { grid-column: 2; }
+  #experiencia .entry p, #estudios .entry p { max-width: 46em; }
+  footer { max-width: 1800px; }
 }
 
 /* ---- Móvil ---- */

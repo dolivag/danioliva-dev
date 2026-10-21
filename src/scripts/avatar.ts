@@ -181,7 +181,7 @@ export type AvatarApi = {
  * el escritorio, a la derecha de la maceta: tiene la misma granularidad que la ilustración. Cae con la gravedad
  * y se posa con un pequeño rebote (desplazamientos en píxeles de arte por fotograma).
  */
-const FRAME = { x: 744, base: 856, scale: 8 };
+const FRAME = { x: 724, base: 846, scale: 8 };
 const FRAME_FALL = [-9, -5, -2, 0, -1, 0];
 
 export async function startAvatar(

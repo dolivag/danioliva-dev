@@ -6,34 +6,36 @@ interface Props {
   lang: Lang;
   /** La ruta de la página sin el prefijo de idioma. */
   path: string;
-  /** `inline`: los tres idiomas en la cabecera (escritorio). `pill`: un desplegable dentro del menú (móvil). */
-  variant: 'inline' | 'pill';
+  /** `header`: en la cabecera (escritorio). `pill`: dentro del menú flotante (móvil). */
+  variant: 'header' | 'pill';
 }
 const { lang, path, variant } = Astro.props;
 const label = useDict(lang).lang.label;
 ---
-{
-  variant === 'inline' ? (
-    <nav class="lang lang-inline" aria-label={label}>
-      {locales.map((l) => (
-        <a href={localePath(l, path)} hreflang={l} lang={l} aria-label={langNames[l]} aria-current={l === lang ? 'true' : undefined} data-lang={l}>
-          {l}
+<details class={`lang lang-${variant}`}>
+  <summary aria-label={`${label}: ${langNames[lang]}`}>
+    <svg class="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M3 12h18M12 3c2.6 2.4 3.9 5.4 3.9 9S14.600 18.600 12 21M12 3c-2.600 2.400-3.900 5.400-3.900 9S9.400 18.600 12 21"></path>
+    </svg>
+    <span class="code">{lang}</span>
+    <svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M2.500 4.500 6 8l3.500-3.500"></path>
+    </svg>
+  </summary>
+  <div class="menu" role="group" aria-label={label}>
+    {
+      locales.map((l) => (
+        <a href={localePath(l, path)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-lang={l}>
+          <span>{langNames[l]}</span>
+          <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m5 12.500 4.500 4.500L19 7.500"></path>
+          </svg>
         </a>
-      ))}
-    </nav>
-  ) : (
-    <details class="lang lang-pill">
-      <summary aria-label={`${label}: ${langNames[lang]}`}>{lang}</summary>
-      <div class="menu" role="group" aria-label={label}>
-        {locales.map((l) => (
-          <a href={localePath(l, path)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-lang={l}>
-            {langNames[l]}
-          </a>
-        ))}
-      </div>
-    </details>
-  )
-}
+      ))
+    }
+  </div>
+</details>
 
 <script>
   // Al elegir un idioma se acuerda (cookie `lang`, un año): la redirección automática por idioma del navegador
@@ -44,113 +46,153 @@ const label = useDict(lang).lang.label;
   };
   document.addEventListener('click', remember);
   document.addEventListener('auxclick', remember);
-  // El desplegable del menú se cierra al pulsar fuera o con Escape.
-  const close = () => document.querySelectorAll<HTMLDetailsElement>('details.lang-pill[open]').forEach((d) => (d.open = false));
+  // El desplegable se cierra al pulsar fuera o con Escape (y al abrir uno, se cierra el otro).
+  const close = (except?: Element | null) =>
+    document.querySelectorAll<HTMLDetailsElement>('details.lang[open]').forEach((d) => d !== except && (d.open = false));
   document.addEventListener('click', (e) => {
-    if (!(e.target as Element).closest('details.lang-pill')) close();
+    const inside = (e.target as Element).closest('details.lang');
+    close(inside);
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape') {
+      const open = document.querySelector<HTMLDetailsElement>('details.lang[open]');
+      if (open) {
+        open.open = false;
+        open.querySelector('summary')?.focus();
+      }
+    }
   });
 </script>
 
 <style is:global>
-  /* Escritorio: «ES · CA · EN» junto a GitHub y Email. Móvil: un desplegable dentro del menú. */
-  .lang-inline {
-    display: inline-flex;
-    gap: 2px;
-    margin-right: 10px;
-    padding-right: 14px;
-    border-right: 1px solid var(--line);
-  }
-  .lang-inline a {
-    padding: 2px 5px;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    background: none;
-    color: var(--muted);
-    transition:
-      color 0.2s ease,
-      background-color 0.2s ease;
-  }
-  .lang-inline a:hover {
-    color: var(--text);
-    background: var(--card);
-  }
-  .lang-inline a[aria-current='true'] {
-    color: var(--text);
-    font-weight: 700;
-  }
-  .lang-pill {
-    display: none;
+  /* Selector de idioma: el globo, el idioma actual y un desplegable con una marca en el elegido. */
+  details.lang {
     position: relative;
   }
-  .lang-pill summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 6px 8px;
+  details.lang summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px 6px 9px;
+    border: 1px solid var(--line);
     border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 700;
-    line-height: 1;
+    cursor: pointer;
+    list-style: none;
     user-select: none;
+    color: var(--text);
+    font: 600 11.5px/1 var(--font);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
   }
-  .lang-pill summary::-webkit-details-marker {
+  details.lang summary::-webkit-details-marker {
     display: none;
   }
-  .lang-pill summary::after {
-    content: '';
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    margin: 0 0 2px 6px;
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
-    transform: rotate(45deg);
-    transition: transform 0.3s var(--ease);
+  details.lang summary:hover,
+  details.lang[open] summary {
+    background: var(--card);
+    border-color: rgba(var(--glow), 0.7);
   }
-  .lang-pill[open] summary::after {
-    transform: rotate(-135deg) translate(-1px, -1px);
+  details.lang summary:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 3px;
   }
-  .lang-pill .menu {
+  details.lang .globe {
+    width: 15px;
+    height: 15px;
+    flex: none;
+  }
+  details.lang .chev {
+    width: 9px;
+    height: 9px;
+    flex: none;
+    transition: transform 0.35s var(--ease);
+  }
+  details.lang[open] .chev {
+    transform: rotate(180deg);
+  }
+  details.lang .menu {
     position: absolute;
-    top: calc(100% + 14px);
-    right: -8px;
+    z-index: 60;
+    top: calc(100% + 10px);
+    right: 0;
     display: grid;
-    min-width: 140px;
+    min-width: 168px;
     padding: 6px;
     border: 1px solid var(--glass-line);
     border-radius: 16px;
-    background: var(--glass-bg);
-    box-shadow: 0 14px 40px var(--glass-shadow);
+    background: color-mix(in srgb, var(--bg) 93%, transparent); /* casi opaco: debajo hay titulares grandes */
+    box-shadow: 0 16px 44px var(--glass-shadow);
     backdrop-filter: blur(28px) saturate(1.6);
     text-transform: none;
     letter-spacing: 0;
     font-size: 14px;
   }
-  nav.pill .lang-pill .menu a {
-    display: block; /* `nav.pill a:first-child` la esconde en móvil */
-    padding: 11px 14px;
+  details.lang .menu a,
+  nav.pill details.lang .menu a {
+    display: flex; /* `nav.pill a:first-child` la esconde en móvil */
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 12px;
     border: 0;
     border-radius: 10px;
     background: none;
+    background-image: none;
     color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
   }
-  nav.pill .lang-pill .menu a::after {
+  details.lang .menu a::after,
+  nav.pill details.lang .menu a::after {
     display: none;
   }
-  nav.pill .lang-pill .menu a:hover,
-  nav.pill .lang-pill .menu a[aria-current='true'] {
-    font-weight: 700;
+  details.lang .menu a:hover,
+  nav.pill details.lang .menu a:hover {
     background: var(--card);
     color: var(--text);
   }
+  details.lang .menu a[aria-current='true'] {
+    font-weight: 700;
+  }
+  details.lang .tick {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    color: var(--accent-text);
+    opacity: 0;
+  }
+  details.lang .menu a[aria-current='true'] .tick {
+    opacity: 1;
+  }
+  /* En el menú flotante (móvil) va más compacto y sin borde propio. */
+  details.lang-pill {
+    margin-left: 2px;
+  }
+  details.lang-pill summary {
+    gap: 5px;
+    padding: 6px 7px;
+    border-color: transparent;
+    font-size: 10.5px;
+  }
+  details.lang-pill summary:hover,
+  details.lang-pill[open] summary {
+    border-color: transparent;
+  }
+  details.lang-pill .menu {
+    right: -6px;
+  }
+  @media (min-width: 1000px) {
+    details.lang-pill {
+      display: none;
+    }
+  }
   @media (max-width: 999px) {
-    .lang-pill {
-      display: block;
-      margin-left: 2px;
+    details.lang-header {
+      display: none;
     }
   }
   /* Móvil estrecho: el menú (con textos más largos en catalán) debe caber entero. */
@@ -168,21 +210,18 @@ const label = useDict(lang).lang.label;
     nav.pill.scrolled a {
       padding: 0 6px;
     }
-    .lang-pill summary {
+    details.lang-pill summary {
+      gap: 4px;
       padding: 6px 5px;
     }
-    .lang-pill summary::after {
-      margin-left: 3px;
-    }
-  }
-  @media (min-width: 1000px) {
-    .lang-pill {
-      display: none;
+    details.lang-pill .globe {
+      width: 13px;
+      height: 13px;
     }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .lang-pill[open] .menu {
-      animation: pop 0.35s var(--ease);
+    details.lang[open] .menu {
+      animation: pop 0.3s var(--ease);
     }
   }
 </style>

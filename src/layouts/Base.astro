@@ -68,7 +68,7 @@ const abs = (l: Lang) => new URL(localePath(l, path), Astro.site).href;
           </button>
         </nav>
         <div class="social">
-          <LangSwitch lang={lang} path={path} variant="inline" />
+          <LangSwitch lang={lang} path={path} variant="header" />
           <a href={site.github}>GitHub</a>
           <a href={`mailto:${site.email}`}>{t.common.email}</a>
         </div>

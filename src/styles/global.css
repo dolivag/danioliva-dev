@@ -589,5 +589,16 @@ pre.code code { font: inherit; white-space: pre; }
 
 /* Escritorio: el logo, el selector de idioma y los enlaces se alinean con el centro del menú flotante (que está a 14 px del borde y mide ~50). */
 @media (min-width: 1000px) {
-  header.top { padding: 25px 0 11px; }
+  header.top { padding: 21px 0 7px; }
 }
+
+/* Cabecera: GitHub, LinkedIn y correo como iconos (con su etiqueta para lectores de pantalla y como tooltip) */
+.social { gap: 2px; }
+.social a.ico {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--muted);
+  background: none; transition: color 0.2s ease, background-color 0.2s ease, transform 0.4s var(--ease);
+}
+.social a.ico svg { width: 18px; height: 18px; display: block; }
+.social a.ico:hover { color: var(--text); background: var(--card); transform: translateY(-2px); }
+.social a.ico:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.lang-header { margin-right: 8px; }

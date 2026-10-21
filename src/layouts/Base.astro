@@ -161,7 +161,12 @@ const ogImage = `${new URL(`/og/${lang}/${og}.png`, Astro.site).href}?v=${OG_VER
             line.style.display = '';
           }
           const size = (100 * available) / widest;
-          for (const line of lines) line.style.fontSize = `${Math.floor(size * 10) / 10}px`;
+          // También la máscara (`.row`): su relleno de abajo se mide en `em` y debe ser del tamaño del nombre.
+          for (const line of lines) {
+            const px = `${Math.floor(size * 10) / 10}px`;
+            line.style.fontSize = px;
+            if (line.parentElement?.classList.contains('row')) line.parentElement.style.fontSize = px;
+          }
         });
       };
       fit();

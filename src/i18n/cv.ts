@@ -176,7 +176,7 @@ const ca: CvCopy = {
       'A més, em preparo per a la certificació GitLab Certified CI/CD Associate.',
     ],
   },
-  ui: { print: 'Imprimir / desar en PDF', back: 'Tornar al web', photoAlt: 'Daniel Oliva', langs: 'Idioma del currículum' },
+  ui: { print: 'Imprimir / desar en PDF', back: 'Tornar a la web', photoAlt: 'Daniel Oliva', langs: 'Idioma del currículum' },
 };
 
 const en: CvCopy = {

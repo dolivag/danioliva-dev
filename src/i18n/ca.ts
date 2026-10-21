@@ -1,14 +1,14 @@
 import type { Dict } from './types';
 
 export const ca: Dict = {
-  meta: { description: 'Enginyer de programari fullstack. Aplicacions i eines petites.' },
-  role: 'Enginyer de programari fullstack',
+  meta: { description: 'Software engineer fullstack. Aplicacions i eines petites.' },
+  role: 'Software engineer fullstack',
   notFound: { hi: 'Ups…', text: 'Aquesta pàgina no existeix o ja no és aquí. Potser l’enllaç té algun error.', say: 'On era aquesta pàgina? Jo tampoc la trobo…', home: 'Tornar a l’inici', projects: 'Veure projectes' },
   hero: { hi: 'Hola, sóc', role: 'Software engineer' },
   nav: { label: 'Principal', index: 'Inici', projects: 'Projectes', experience: 'Experiència', contact: 'Contacte' },
   sections: { projects: 'Projectes', experience: 'Experiència', studies: 'Estudis', contact: 'Contacte' },
   intro: {
-    big: 'Graduat el 2024 i enginyer fullstack a Zennio. M’agrada construir aplicacions i eines petites que fan el dia a dia una mica més fàcil.',
+    big: 'Graduat el 2024 i fullstack engineer a Zennio. M’agrada construir aplicacions i eines petites que fan el dia a dia una mica més fàcil.',
     text: 'Treballo amb Angular, Node.js, NestJS, React i React Native, i m’encarrego també d’eines d’automatització i CI/CD. Fora de la feina construeixo els meus propis projectes.',
     viewProjects: 'Veure projectes',
     contact: 'Contacte',
@@ -31,7 +31,7 @@ export const ca: Dict = {
     skip: 'Salta al contingut',
   },
   theme: {
-    group: 'Tema del web',
+    group: 'Tema de la web',
     toggle: 'Canvia entre tema clar i fosc',
     toggleTitle: 'Tema clar / fosc',
     light: 'Tema clar',
@@ -111,17 +111,17 @@ export const ca: Dict = {
     },
     hogarnizer: {
       status: 'En construcció',
-      description: 'App per organitzar una llar compartida: tasques amb punts d’esforç, llista de la compra, despeses i notes.',
+      description: 'App per organitzar una casa compartida: tasques amb punts d’esforç, llista de la compra, despeses i notes.',
       openLabel: 'Obre l’app web',
       tags: ['En construcció', 'Expo', 'React Native', 'TypeScript', 'Supabase', 'Postgres', 'Tasques', 'Compra', 'Despeses', 'Notes', 'IA'],
-      lead: 'L’app per organitzar una llar compartida: les tasques es reparteixen soles segons l’esforç, la compra es fa entre tots, les despeses es reparteixen i els saldos queden clars. Va néixer com el meu Treball Final de Grau (UOC, 2023) i l’he reescrita des de zero; ara la preparo per a les botigues.',
+      lead: 'L’app per organitzar una casa compartida: les tasques es reparteixen soles segons l’esforç, la compra es fa entre tots, les despeses es reparteixen i els saldos queden clars. Va néixer com el meu Treball Final de Grau (UOC, 2023) i l’he reescrita des de zero; ara la preparo per a les botigues.',
       facts: [
         { title: 'Tasques que es reparteixen soles', text: 'Cada dilluns les diàries i setmanals es reparteixen per punts d’esforç (les diàries compten set vegades) a qui en porta menys. Els punts són per a qui fa la tasca i hi ha rànquing.' },
         { title: 'Compra en equip', text: 'Una llista compartida en temps real, agrupada per categoria, amb productes bàsics i puntuals i botigues al mapa. En acabar la compra, un toc l’apunta com a despesa.' },
         { title: 'Despeses i saldos', text: 'Repartiment a parts iguals, diversos pagadors i despeses fixes que es repeteixen soles (lloguer, llum, internet…). Els saldos diuen qui deu a qui i es salden amb un botó.' },
         { title: 'Notes i avisos', text: 'Un tauler en temps real amb una nota fixada i avisos push que tries: compra, despeses, notes noves i un recordatori de tasques a les nou.' },
         { title: 'Assistent amb IA', text: 'Fes una foto d’un tiquet o d’una factura i es converteix en despesa, o escriu en llenguatge normal («he pagat 45 de la llum, a mitges amb la Bea») i t’ensenya el que ha entès. Només apunta el que deixes marcat.' },
-        { title: 'Una llar, diverses persones', text: 'S’hi entra amb un codi o un enllaç d’invitació i el propietari accepta la sol·licitud. Cada llar fa servir la seva zona horària i cada persona, el seu idioma: castellà, anglès o català, amb tema clar o fosc.' },
+        { title: 'Una casa, diverses persones', text: 'S’hi entra amb un codi o un enllaç d’invitació i el propietari accepta la sol·licitud. Cada casa fa servir la seva zona horària i cada persona, el seu idioma: castellà, anglès o català, amb tema clar o fosc.' },
         { title: 'Seguretat des del disseny', text: 'Cada taula té regles d’accés (RLS) i la lògica crítica (rotació, punts, saldos) viu en funcions de la base de dades, amb proves automàtiques. Hi ha còpia de seguretat setmanal, descàrrega de les teves dades i esborrat del compte.' },
       ],
       linksTitle: 'Legal',
@@ -149,11 +149,11 @@ export const ca: Dict = {
       ],
       links: ['Dades d’Open-Meteo'],
       webAlt: 'DuoMeteo comparant el temps a Barcelona (17 °C) i Reykjavík (4 °C), amb les seves diferències de temperatura, humitat i distància',
-      clipAlt: 'Vídeo de DuoMeteo: la portada amb les icones animades del cel, una comparació de Buenos Aires i Sydney i el recorregut per la seva previsió, el globus i el gràfic de vent',
+      clipAlt: 'Vídeo de DuoMeteo: la portada amb les icones animades del cel, una comparació de Buenos Aires i Sydney i el recorregut pel seu pronòstic, el globus i el gràfic de vent',
       webAlts: [
         'DuoMeteo: portada amb una icona animada de pluja; n’hi ha una per a cada condició del cel',
         'DuoMeteo comparant Buenos Aires (17 °C) i Sydney (18 °C): sensació, humitat, vent, precipitació, índex UV i hores de sol',
-        'DuoMeteo: previsió de sis dies de les dues ciutats, amb màxima, mínima i probabilitat de pluja, i a sota un globus amb la seva distància i el gràfic de temperatura del dia',
+        'DuoMeteo: pronòstic de sis dies de les dues ciutats, amb màxima, mínima i probabilitat de pluja, i a sota un globus amb la seva distància i el gràfic de temperatura del dia',
       ],
     },
     trasteo: {
@@ -161,11 +161,11 @@ export const ca: Dict = {
       description: 'Saber on deses cada cosa a casa i trobar-la en segons, amb fotos i cerca.',
       openLabel: '',
       tags: ['En construcció', 'Expo', 'React Native', 'Supabase', 'Inventari', 'Fotos'],
-      lead: 'Una app per saber on deses cada cosa a casa i trobar-la en segons, entre tots els de la llar. Encara s’està construint.',
+      lead: 'Una app per saber on deses cada cosa a casa i trobar-la en segons, entre tots els de casa. Encara s’està construint.',
       facts: [
         { title: 'Tot al seu lloc', text: 'Ubicacions dins d’ubicacions —casa, habitació, moble, caixa— i objectes amb foto.' },
         { title: 'Fàcil de trobar', text: 'Una cerca que et diu on és cada cosa, també amb una foto.' },
-        { title: 'Per a tota la casa', text: 'Una llar compartida: un guarda i l’altre busca.' },
+        { title: 'Per a tota la casa', text: 'Una casa compartida: un guarda i l’altre busca.' },
       ],
     },
     storia: {
@@ -197,7 +197,7 @@ export const ca: Dict = {
     achievements: {
       hola: { title: 'Primer contacte', how: 'Li vas fer un clic.', say: 'Hola! Sóc l’avatar del Daniel.' },
       orden: { title: 'Ordre a casa', how: 'Li vas arrossegar «Hogarnizer».', say: 'Tasques, compra, despeses… tot en ordre!' },
-      tiempo: { title: 'Previsió', how: 'Li vas arrossegar «DuoMeteo».', say: 'Sol aquí, pluja allà. Ho sabia.' },
+      tiempo: { title: 'Pronòstic', how: 'Li vas arrossegar «DuoMeteo».', say: 'Sol aquí, pluja allà. Ho sabia.' },
       trastero: { title: 'On era?', how: 'Li vas arrossegar «Trasteo».', say: 'On vaig deixar el cable USB-C?' },
       mareo: { title: 'Massa cafè', how: 'Li vas fer clic moltes vegades seguides.', say: 'Para, que em marejo!' },
       sueno: { title: 'Becaina', how: 'Et vas quedar quiet una estona.', say: 'Zzz…' },
@@ -205,7 +205,7 @@ export const ca: Dict = {
       tema: { title: 'Llums i ombres', how: 'Vas canviar diverses vegades de tema.', say: 'Clar o fosc? Decideix-te.' },
       agitar: { title: 'Terratrèmol', how: 'Vas sacsejar el mòbil.', say: 'Ei! Que em cauré de la taula!' },
       konami: { title: 'Codi secret', how: 'Vas teclejar el codi clàssic.', say: '+30 vides. Codi desbloquejat.' },
-      poliglota: { title: 'Políglota', how: 'Vas visitar el web en els tres idiomes.', say: 'Hola! Bon dia! Hi!' },
+      poliglota: { title: 'Políglota', how: 'Vas visitar la web en els tres idiomes.', say: 'Hola! Bon dia! Hi!' },
       planta: { title: 'Mà verda', how: 'Li vas tocar la planta.', say: 'Ja la rego, ja la rego…' },
       cafe: { title: 'Cafeïna', how: 'Li vas tocar la tassa.', say: 'Cafè número… he perdut el compte.' },
       portatil: { title: 'Codi en directe', how: 'Li vas tocar el portàtil.', say: 'Xxt, que estic enmig d’un deploy.' },

@@ -24,6 +24,7 @@ export const ca: Dict = {
     links: 'Enllaços',
     viewDetail: 'Veure el detall',
     email: 'Correu',
+    newTab: 's’obre en una pestanya nova',
   },
   theme: {
     group: 'Tema del web',

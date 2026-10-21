@@ -492,7 +492,7 @@ nav.pill .theme:hover, nav.pill.scrolled .theme:hover { background: var(--card);
 .btn:hover { box-shadow: 0 8px 24px rgba(var(--glow), 0.35); }
 .btn:hover::after { transform: translateX(4px); }
 .btn:active { transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(0.97); }
-.btn.secondary { border-color: var(--line); }
+.btn.secondary { border-color: color-mix(in srgb, var(--text) 40%, transparent); }
 .btn.secondary:hover { background: var(--card); border-color: var(--accent); color: var(--text); box-shadow: none; }
 
 /* Tarjetas de proyecto: foco que sigue al cursor, elevación y flecha */

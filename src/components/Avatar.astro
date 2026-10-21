@@ -258,9 +258,17 @@ const total = ACHIEVEMENT_IDS.length;
     });
 
     // Panel: lista de interacciones; las ya descubiertas se pueden repetir.
+    // Sube desde el avatar: si la pantalla es baja, el panel se limita al hueco que hay arriba y se desplaza por dentro.
+    const fitPanel = () => {
+      if (panel.hidden) return;
+      panel.style.maxHeight = '';
+      panel.style.maxHeight = `${Math.max(120, Math.floor(panel.getBoundingClientRect().bottom - 12))}px`;
+    };
+    addEventListener('resize', fitPanel);
     const setPanel = (open: boolean) => {
       panel.hidden = !open;
       counter.setAttribute('aria-expanded', String(open));
+      fitPanel();
     };
     counter.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -509,6 +517,8 @@ const total = ACHIEVEMENT_IDS.length;
     padding: 16px;
     border: 1px solid var(--glass-line);
     border-radius: 18px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--glass-bg);
     color: var(--text);
     backdrop-filter: blur(28px) saturate(1.6);

@@ -251,10 +251,21 @@ footer a { text-decoration: none; }
 /* En escritorio el selector de tema va fijo abajo a la izquierda (≈70 px): el pie deja sitio para que nunca lo tape. */
 @media (min-width: 1000px) { footer { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
 
+/* Ficha «de un vistazo» de la presentación. */
+.glance { margin-top: 36px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); }
+.glance-title { margin: 0 0 12px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.glance dl { margin: 0; display: grid; gap: 14px; }
+.glance dt { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-text); margin-bottom: 2px; }
+.glance dd { margin: 0; font-size: 14.5px; line-height: 1.4; }
+
 /* ---- Pantallas grandes: el contenido en una columna, el avatar a la derecha ---- */
 @media (min-width: 1000px) {
   main > .col, footer { max-width: 760px; }
   .intro { padding-top: 70px; }
+  /* El texto de presentación a la izquierda y la ficha a la derecha: sin el hueco vacío en pantallas anchas. */
+  main > .col.intro { max-width: none; display: grid; grid-template-columns: minmax(0, 700px) minmax(280px, 340px); justify-content: space-between; column-gap: 48px; align-items: start; }
+  .intro > * { grid-column: 1; }
+  .intro > .glance { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
 }
 
 /* ---- Móvil ---- */

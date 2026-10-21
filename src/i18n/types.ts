@@ -30,7 +30,14 @@ export type Dict = {
   hero: { hi: string; role: string };
   nav: { label: string; index: string; projects: string; experience: string; contact: string };
   sections: { projects: string; experience: string; studies: string; contact: string };
-  intro: { big: string; text: string; viewProjects: string; contact: string };
+  intro: {
+    big: string;
+    text: string;
+    viewProjects: string;
+    contact: string;
+    /** Ficha de un vistazo (a la derecha del texto en pantallas anchas). */
+    glance: { label: string; items: { k: string; v: string }[] };
+  };
   marquee: string[];
   common: {
     personalProject: string;

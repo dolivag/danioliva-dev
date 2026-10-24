@@ -34,6 +34,7 @@ const total = ACHIEVEMENT_IDS.length;
     </ul>
     <p class="done" hidden>
       {g.done} <a href={`mailto:${site.email}`}>{site.email}</a>
+      <button type="button" class="skin" id="avatar-skin"></button>
     </p>
   </div>
   <button class="counter" id="avatar-counter" type="button" aria-expanded="false" aria-controls="avatar-panel">
@@ -97,6 +98,49 @@ const total = ACHIEVEMENT_IDS.length;
       toast.classList.add('show');
       clearTimeout(toastTimer);
       toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3800);
+    };
+
+    // Las gafas de sol del premio final: se quedan puestas en las visitas siguientes, salvo que se las quite.
+    const skinBtn = $<HTMLButtonElement>('avatar-skin');
+    const readSkin = () => {
+      try {
+        return localStorage.getItem('avatar-skin') !== '0';
+      } catch {
+        return true;
+      }
+    };
+    let skinOn = false;
+    const setSkin = (on: boolean, remember = true) => {
+      skinOn = on;
+      avatar.setSkin(on);
+      skinBtn.textContent = on ? g.skinOff : g.skinOn;
+      if (!remember) return;
+      try {
+        localStorage.setItem('avatar-skin', on ? '1' : '0');
+      } catch {}
+    };
+    setSkin(unlocked.has('completista') && readSkin(), false);
+    skinBtn.addEventListener('click', () => setSkin(!skinOn));
+
+    // Confeti (el premio de completarlo todo): papelitos que caen desde el avatar. Con «reducir movimiento», nada.
+    const confetti = () => {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const r = stage.getBoundingClientRect();
+      const colors = ['#e8a627', '#2fbcc6', '#e05a8a', '#6d5bd0', '#f4efe6'];
+      for (let i = 0; i < 46; i++) {
+        const bit = document.createElement('i');
+        bit.className = 'confetti';
+        bit.style.left = `${r.left + r.width / 2}px`;
+        bit.style.top = `${r.top + r.height * 0.3}px`;
+        bit.style.background = colors[i % colors.length];
+        bit.style.setProperty('--dx', `${(Math.random() - 0.5) * Math.min(innerWidth, 640)}px`);
+        bit.style.setProperty('--rise', `${80 + Math.random() * 180}px`);
+        bit.style.setProperty('--fall', `${innerHeight - r.top + 40}px`);
+        bit.style.setProperty('--rot', `${Math.round(Math.random() * 720 - 360)}deg`);
+        bit.style.animationDelay = `${Math.random() * 0.25}s`;
+        document.body.append(bit);
+        setTimeout(() => bit.remove(), 3200);
+      }
     };
 
     // La planta que ya se ha regado se queda crecida (también en las visitas siguientes).
@@ -182,6 +226,10 @@ const total = ACHIEVEMENT_IDS.length;
         announce(n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
         // Tener todos los demás es, en sí, un logro.
         if (id !== 'completista' && n === total - 1) later('completista');
+      }
+      if (id === 'completista') {
+        setSkin(true);
+        confetti();
       }
       avatar.react(id, say ?? a.say, id === 'sueno' ? 0 : ms);
       return isNew;
@@ -871,6 +919,43 @@ const total = ACHIEVEMENT_IDS.length;
   }
   .done a {
     color: var(--accent-text);
+  }
+  .skin {
+    appearance: none;
+    display: block;
+    margin-top: 10px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: none;
+    color: inherit;
+    font: 500 12px/1 var(--font);
+    cursor: pointer;
+  }
+  .skin:hover {
+    border-color: var(--accent);
+  }
+  /* Confeti: elementos que crea el script (fuera del alcance del CSS de este componente). */
+  :global(.confetti) {
+    position: fixed;
+    z-index: 80;
+    width: 8px;
+    height: 12px;
+    pointer-events: none;
+    animation: confetti 2.6s cubic-bezier(0.2, 0.7, 0.4, 1) both;
+  }
+  @keyframes confetti {
+    0% {
+      transform: translate(0, 0) rotate(0);
+      opacity: 1;
+    }
+    25% {
+      transform: translate(calc(var(--dx) * 0.6), calc(var(--rise) * -1)) rotate(calc(var(--rot) * 0.4));
+    }
+    100% {
+      transform: translate(var(--dx), var(--fall)) rotate(var(--rot));
+      opacity: 0;
+    }
   }
 
   /* Aviso de logro: abajo y centrado (fuera del contenedor del avatar, que lleva `translate`). */

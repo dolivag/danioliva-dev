@@ -230,7 +230,7 @@ export const en: Dict = {
       charla: { title: 'Small talk', how: 'You said hello with the keyboard.', say: 'Hi there!' },
       mundo: { title: 'Hello, world', how: 'You typed “echo hello”.', say: 'Hello, world → Hola, món.' },
       tab: { title: 'Tabbed in', how: 'You reached it with the Tab key.', say: 'Nice taste in accessibility.' },
-      completista: { title: 'Completionist', how: 'You got all the others.', say: 'Full collection. You’re one of mine.' },
+      completista: { title: 'Completionist', how: 'You got all the others.', say: 'Collection complete. Shades on: you’ve earned it.' },
     },
     words: {
       'qr city': 'Scanning… it’s a whole city!',
@@ -241,6 +241,8 @@ export const en: Dict = {
     },
     jokes: ['Compiling…', 'Works on my machine.', 'git push --force (just kidding).', 'Hey! You’re distracting me.'],
     commands: { sudo: 'Permission denied.', 'npm install': 'added 1 avatar in 0.3s' },
+    skinOn: 'Put the sunglasses on',
+    skinOff: 'Take the sunglasses off',
     hellos: ['hello', 'hi there', 'hey', 'hola', 'bon dia'],
   },
 };

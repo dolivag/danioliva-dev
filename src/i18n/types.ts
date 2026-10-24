@@ -103,5 +103,8 @@ export type Dict = {
     commands: Record<string, string>;
     /** Saludos que, tecleados fuera de un campo, dan el logro «charla» (en minúsculas). */
     hellos: string[];
+    /** Botón del panel al completar todo: ponerle o quitarle las gafas de sol al avatar. */
+    skinOn: string;
+    skinOff: string;
   };
 };

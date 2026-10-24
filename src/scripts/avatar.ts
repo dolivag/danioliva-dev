@@ -12,7 +12,7 @@ const TICK_MS = 110;
 /** Piezas de los gestos del juego: se cargan después de las de las poses de cada sección (ver `startAvatar`). */
 const LATER = [
   'ojos-felices', 'boca-ahh', 'ojos-somnolientos', 'ojos-bostezo', 'boca-bostezo', 'mano-boca',
-  'taza-sube', 'taza-cerca', 'taza-boca', 'regadera', 'planta-feliz',
+  'taza-sube', 'taza-cerca', 'taza-boca', 'regadera', 'planta-feliz', 'gafas-sol',
 ];
 
 type PieceMeta = { x: number; y: number; head: boolean; erase?: { x: number; y: number } };
@@ -292,6 +292,8 @@ export type AvatarApi = {
   removeFrame: () => void;
   /** La planta regada se queda crecida (con sus guindillas). */
   setGrown: (grown: boolean) => void;
+  /** Las gafas de sol (el premio de completar todos los logros; pieza `gafas-sol`): se ven en todas las poses. */
+  setSkin: (on: boolean) => void;
 };
 
 /**
@@ -366,6 +368,7 @@ export async function startAvatar(
   let blinkUntil = -1;
   let nextBlink = 25;
   let reaction: { key: string; start: number; end: number } | null = null;
+  let skin = false; // lleva las gafas de sol puestas
   let grown = false; // la planta ya está regada y se queda crecida
 
   function draw(t: number) {
@@ -404,6 +407,8 @@ export async function startAvatar(
     if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) {
       on = on.includes('regadera') ? ['planta-feliz', ...on] : [...on, 'planta-feliz'];
     }
+    // Gafas de sol: encima de los ojos de cualquier pose.
+    if (skin && !on.includes('gafas-sol')) on = [...on, 'gafas-sol'];
     on = on.filter((p) => piece[p]); // (la planta crecida se añade arriba: puede no haber llegado aún)
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
@@ -506,6 +511,10 @@ export async function startAvatar(
     },
     removeFrame() {
       frameFrom = -1;
+      draw(tick);
+    },
+    setSkin(on: boolean) {
+      skin = on;
       draw(tick);
     },
     setGrown(v: boolean) {

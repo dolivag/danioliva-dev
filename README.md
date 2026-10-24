@@ -142,6 +142,9 @@ el CV: la página del CV anota `papel` en `localStorage` y el avatar lo concede 
 **lector** (la sección de experiencia a la vista y 14 s sin tocar nada), **habitual** (dos días distintos, `avatar-days`),
 **lunes**, **viernes** (a partir de las 15 h) y **comida** (14–15 h) por la hora local, **charla** (`game.hellos`), **mundo**
 (`SECRETS` en `game.ts`: `echo hola`), **tab** (el foco del teclado llega al avatar) y **completista** (tener los otros 35).
+El premio de tener los 36: al conseguir **completista**, el avatar se pone unas gafas de sol (pieza `gafas-sol`, imagen
+`art/avatar/gafas-sol.jpg`; se quedan en las visitas siguientes y el panel tiene un botón para quitarlas: `avatar-skin` en `localStorage`) y
+cae confeti (`confetti()` en `Avatar.astro`; no sale con «reducir movimiento»).
 Los que llegan de golpe se encolan (`later`) para no pisarse. Sus gestos reutilizan los de `avatar.ts` (alias al final de
 `REACTIONS`); solo `detective`, `zoom` y `viernes` tienen pose propia.. Una pieza solo añade píxeles; las que se llevan algo de la escena (la taza de la mesa) llevan su
 máscara de borrado (`*.borra.webp`, se pinta con `destination-out`; el rectángulo está en `PIECES` como tercer

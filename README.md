@@ -145,6 +145,10 @@ el CV: la página del CV anota `papel` en `localStorage` y el avatar lo concede 
 El premio de tener los 36: al conseguir **completista**, el avatar se pone unas gafas de sol (pieza `gafas-sol`, imagen
 `art/avatar/gafas-sol.jpg`; se quedan en las visitas siguientes y el panel tiene un botón para quitarlas: `avatar-skin` en `localStorage`) y
 cae confeti (`confetti()` en `Avatar.astro`; no sale con «reducir movimiento»).
+**Pistas** del panel: cada logro pendiente muestra una etiqueta de tipo (`HINT_META` en `game.ts`, textos en `game.categories`) y,
+si solo se puede en móvil o en ordenador, una insignia (`game.devices`). El botón «Pista» enseña primero un acertijo con humor
+(`riddle`) y a la segunda pulsación la instrucción directa (`tip`), ambos en `game.achievements` de cada idioma. Lo pedido se
+guarda en `localStorage` (`avatar-hints`). Un logro nuevo necesita esos dos textos y su entrada en `HINT_META`.
 Los que llegan de golpe se encolan (`later`) para no pisarse. Sus gestos reutilizan los de `avatar.ts` (alias al final de
 `REACTIONS`); solo `detective`, `zoom` y `viernes` tienen pose propia.. Una pieza solo añade píxeles; las que se llevan algo de la escena (la taza de la mesa) llevan su
 máscara de borrado (`*.borra.webp`, se pinta con `destination-out`; el rectángulo está en `PIECES` como tercer

@@ -1,4 +1,4 @@
-import type { AchievementId } from '../scripts/game';
+import type { AchievementId, HintCategory } from '../scripts/game';
 
 export type Fact = { title: string; text: string };
 
@@ -95,7 +95,16 @@ export type Dict = {
     complete: string;
     done: string;
     woke: string;
-    achievements: Record<AchievementId, { title: string; how: string; say: string }>;
+    /** `riddle`: pista en clave de humor; `tip`: la instrucción directa (se enseñan al pedir pista en el panel). */
+    achievements: Record<AchievementId, { title: string; how: string; say: string; riddle: string; tip: string }>;
+    /** Etiqueta de cada logro pendiente en el panel (tipo de gesto). */
+    categories: Record<HintCategory, string>;
+    /** Insignia de los logros que solo se pueden conseguir en un tipo de dispositivo. */
+    devices: { mobile: string; desktop: string };
+    hint: string;
+    hintMore: string;
+    /** Etiqueta accesible del botón de pista. */
+    hintAria: string;
     /** Lo que dice el avatar al arrastrarle una palabra que no da logro. */
     words: Record<string, string>;
     jokes: string[];

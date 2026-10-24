@@ -1,5 +1,5 @@
 ---
-import { ACHIEVEMENT_IDS } from '../scripts/game';
+import { ACHIEVEMENT_IDS, HINT_META } from '../scripts/game';
 import { useDict, fmt } from '../i18n';
 import type { Lang } from '../i18n';
 import { site, getProjects } from '../data/site';
@@ -26,7 +26,12 @@ const total = ACHIEVEMENT_IDS.length;
             <span class="text">
               <b>???</b>
               <small>{g.toDiscover}</small>
+              <span class="tags">
+                <span class="tag">{g.categories[HINT_META[id].category]}</span>
+                {HINT_META[id].device && <span class="tag dev">{g.devices[HINT_META[id].device!]}</span>}
+              </span>
             </span>
+            <button type="button" class="hint" aria-label={g.hintAria}>{g.hint}</button>
             <button type="button" class="try" aria-label={fmt(g.repeatAria, { title: g.achievements[id].title })}>{g.repeat}</button>
           </li>
         ))
@@ -49,7 +54,7 @@ const total = ACHIEVEMENT_IDS.length;
 
 <script>
   import { startAvatar } from '../scripts/avatar';
-  import { ACHIEVEMENT_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadUnlocked, saveUnlocked, takePending } from '../scripts/game';
+  import { ACHIEVEMENT_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadHints, loadUnlocked, saveHints, saveUnlocked, takePending } from '../scripts/game';
   import type { AchievementId } from '../scripts/game';
   import type { Dict } from '../i18n/types';
 
@@ -67,6 +72,7 @@ const total = ACHIEVEMENT_IDS.length;
   const toast = $('avatar-toast');
   const total = ACHIEVEMENT_IDS.length;
   const unlocked = loadUnlocked();
+  const hints = loadHints();
 
   const render = () => {
     const n = ACHIEVEMENT_IDS.filter((id) => unlocked.has(id)).length;
@@ -81,7 +87,12 @@ const total = ACHIEVEMENT_IDS.length;
       const on = unlocked.has(id);
       li.classList.toggle('on', on);
       li.querySelector('b')!.textContent = on ? a.title : '???';
-      li.querySelector('small')!.textContent = on ? a.how : g.toDiscover;
+      const level = hints[id] ?? 0;
+      li.querySelector('small')!.textContent = on ? a.how : level >= 2 ? a.tip : level === 1 ? a.riddle : g.toDiscover;
+      li.dataset.hint = on ? '' : String(level);
+      const btn = li.querySelector<HTMLButtonElement>('.hint')!;
+      btn.hidden = on || level >= 2;
+      btn.textContent = level === 0 ? g.hint : g.hintMore;
     });
     panel.querySelector<HTMLElement>('.done')!.hidden = n < total;
   };
@@ -568,6 +579,13 @@ const total = ACHIEVEMENT_IDS.length;
     panel.addEventListener('click', (e) => {
       const li = (e.target as Element).closest<HTMLElement>('li');
       if (li && (e.target as Element).closest('.try')) trigger(li.dataset.id as AchievementId);
+      if (li && (e.target as Element).closest('.hint')) {
+        const id = li.dataset.id!;
+        hints[id] = Math.min(2, (hints[id] ?? 0) + 1);
+        saveHints(hints);
+        render();
+        fitPanel();
+      }
     });
     addEventListener('click', (e) => {
       if (!panel.hidden && !root.contains(e.target as Node)) setPanel(false);
@@ -888,6 +906,52 @@ const total = ACHIEVEMENT_IDS.length;
     color: var(--accent-text);
   }
   li:not(:global(.on)) .try {
+    display: none;
+  }
+  li:global(.on) .tags,
+  li:global(.on) .hint {
+    display: none;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 3px;
+  }
+  .tag {
+    padding: 2px 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font: 500 10px/1.2 var(--font);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .tag.dev {
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+  .hint {
+    appearance: none;
+    flex: none;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: 500 11px/1 var(--font);
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .hint:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+  .hint[hidden] {
     display: none;
   }
   .try {

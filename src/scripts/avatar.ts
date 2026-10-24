@@ -231,6 +231,27 @@ const REACTIONS: Record<string, (k: number) => Pose> = {
   asiente: (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-sonrisa-cerrada'], head: bob(k, 6, 4) }),
 };
 
+// Los logros nuevos reutilizan gestos que ya existen; los que piden uno propio van debajo.
+REACTIONS.papel = REACTIONS.konami;
+REACTIONS.mundo = REACTIONS.konami;
+for (const id of ['buzon', 'explorador', 'habitual', 'charla', 'tab', 'completista']) REACTIONS[id] = REACTIONS.hola;
+REACTIONS.lector = REACTIONS.trastero;
+REACTIONS.rebote = REACTIONS.mareo;
+REACTIONS.responsive = REACTIONS.agitar;
+REACTIONS.pegar = REACTIONS.terminal;
+REACTIONS.codigo = REACTIONS.terminal;
+REACTIONS.lunes = REACTIONS.noctambulo;
+REACTIONS.comida = REACTIONS.tiempo;
+// Detective: mira de reojo, con el ceño fruncido.
+REACTIONS.detective = (k) => ({
+  pieces: [...steam(k), k % 16 < 8 ? 'ojos-izq' : 'ojos-arriba-izq', 'cejas-fruncidas', 'boca-seria'],
+  head: [k % 16 < 8 ? -8 : -4, 0],
+});
+// Zoom: se acerca a la pantalla.
+REACTIONS.zoom = (k) => ({ pieces: [...steam(k), 'ojos-pantalla', 'cejas-fruncidas', 'boca-o'], head: [0, 12 + (k % 2) * 2] });
+// Viernes: niega con la cabeza.
+REACTIONS.viernes = (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-seria'], head: [k % 10 < 5 ? -8 : 8, 0] });
+
 /** El bostezo de antes de dormirse: el del noctámbulo, sin las «z». */
 REACTIONS.bostezo = (k) => ({ ...REACTIONS.noctambulo(k), rects: undefined });
 

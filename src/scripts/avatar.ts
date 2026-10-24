@@ -12,7 +12,7 @@ const TICK_MS = 110;
 /** Piezas de los gestos del juego: se cargan después de las de las poses de cada sección (ver `startAvatar`). */
 const LATER = [
   'ojos-felices', 'boca-ahh', 'ojos-somnolientos', 'ojos-bostezo', 'boca-bostezo', 'mano-boca',
-  'taza-sube', 'taza-cerca', 'taza-boca', 'regadera', 'planta-feliz',
+  'taza-sube', 'taza-cerca', 'taza-boca', 'regadera', 'planta-feliz', 'gafas-sol',
 ];
 
 type PieceMeta = { x: number; y: number; head: boolean; erase?: { x: number; y: number } };
@@ -65,18 +65,6 @@ const waterDrops = (k: number): Rect[] => {
   }
   return out;
 };
-/** Las gafas de sol, en coordenadas del lienzo con la cabeza en su sitio (se desplazan con ella). */
-const SHADES: Rect[] = [
-  [496, 296, 144, 8, '#0d0f14'], // montura de arriba
-  [496, 304, 56, 32, '#0d0f14'], // cristal izquierdo
-  [576, 304, 56, 32, '#0d0f14'],
-  [552, 304, 24, 8, '#0d0f14'], // puente
-  [632, 304, 64, 8, '#0d0f14'], // patilla hacia la oreja
-  [504, 312, 16, 8, '#4a5568'], // reflejos
-  [584, 312, 16, 8, '#4a5568'],
-  [520, 320, 8, 8, '#2b3240'],
-  [600, 320, 8, 8, '#2b3240'],
-];
 /** La cabeza sube y baja `px` píxeles con un periodo de `period` fotogramas. */
 const bob = (t: number, period: number, px = 3): [number, number] => [
   0,
@@ -304,7 +292,7 @@ export type AvatarApi = {
   removeFrame: () => void;
   /** La planta regada se queda crecida (con sus guindillas). */
   setGrown: (grown: boolean) => void;
-  /** Las gafas de sol (el premio de completar todos los logros): se ven en todas las poses. */
+  /** Las gafas de sol (el premio de completar todos los logros; pieza `gafas-sol`): se ven en todas las poses. */
   setSkin: (on: boolean) => void;
 };
 
@@ -419,6 +407,8 @@ export async function startAvatar(
     if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) {
       on = on.includes('regadera') ? ['planta-feliz', ...on] : [...on, 'planta-feliz'];
     }
+    // Gafas de sol: encima de los ojos de cualquier pose.
+    if (skin && !on.includes('gafas-sol')) on = [...on, 'gafas-sol'];
     on = on.filter((p) => piece[p]); // (la planta crecida se añade arriba: puede no haber llegado aún)
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
@@ -455,13 +445,6 @@ export async function startAvatar(
     for (const p of on) {
       const m = meta.pieces[p];
       if (m.head) draw1(p, hx, hy);
-    }
-    // Gafas de sol: píxeles de la ilustración (8 px) pegados a la cabeza.
-    if (skin) {
-      for (const [x, y, w, h, color] of SHADES) {
-        c.fillStyle = color;
-        c.fillRect(x + hx, y + hy, w, h);
-      }
     }
     // Lo dibujado a mano (gotas, «z»…): rectángulos del tamaño de un píxel de la ilustración.
     if (pose.rects) {

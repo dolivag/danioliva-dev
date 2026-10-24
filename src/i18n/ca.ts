@@ -86,7 +86,7 @@ export const ca: Dict = {
     'qr-city': {
       status: '',
       description:
-        'Genera una ciutat en 3D isomètric els terrats de la qual formen un codi QR llegible. Cinc estils (paper, moderna, costanera, nevada i cyberpunk), tot personalitzable i paquets npm per a Angular, React i Vue.',
+        'Una ciutat en 3D isomètric els terrats de la qual formen un codi QR que es pot escanejar. Cinc estils i paquets npm per a Angular, React i Vue.',
       openLabel: 'Obre la demo',
       tags: ['Three.js', 'TypeScript', 'Vite', 'Web Component', 'Angular', 'React', 'Vue', 'npm', 'Isomètric', 'Codi QR'],
       lead: 'Una ciutat en 3D isomètric els terrats de la qual formen un codi QR que es pot escanejar des de dalt: cada mòdul fosc és un edifici i els clars són carrers. És una demo i, a més, una llibreria amb paquets npm per integrar-la a Angular, React i Vue.',

@@ -86,7 +86,7 @@ export const en: Dict = {
     'qr-city': {
       status: '',
       description:
-        'Generate an isometric 3D city whose rooftops form a scannable QR code. Five styles (paper, modern, coastal, snowy and cyberpunk), fully customisable, and npm packages for Angular, React and Vue.',
+        'An isometric 3D city whose rooftops form a scannable QR code. Five styles and npm packages for Angular, React and Vue.',
       openLabel: 'Open the demo',
       tags: ['Three.js', 'TypeScript', 'Vite', 'Web Component', 'Angular', 'React', 'Vue', 'npm', 'Isometric', 'QR code'],
       lead: 'An isometric 3D city whose rooftops form a QR code you can scan from above: each dark module is a building and the light ones are streets. It is a demo and also a library, with npm packages to drop it into Angular, React and Vue.',

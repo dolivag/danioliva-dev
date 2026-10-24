@@ -71,7 +71,7 @@ PIECES = {
     "boca-bostezo": ((480, 345, 660, 510), True),
     "mano-boca": ((320, 250, 700, 640), True),
     # Gafas de sol (el premio de completar todos los logros): encima de los ojos, con la patilla hasta la oreja.
-    "gafas-sol": ((470, 240, 730, 360), True),
+    "gafas-sol": ((470, 240, 730, 360), True, None, None, True),
     "manos": ((420, 640, 700, 880), False),
     "vapor-2": ((100, 590, 230, 790), False),
     "vapor-3": ((100, 590, 230, 790), False),

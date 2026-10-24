@@ -49,7 +49,7 @@ export const ca: Dict = {
       role: 'Fullstack engineer',
       period: 'Des de gener de 2024',
       description:
-        'Responsable (owner) del frontend d’un producte de gestió d’edificis, amb feina full-stack: Angular + PrimeNG al frontend i NestJS + TypeScript amb PostgreSQL/TimescaleDB al backend, dins d’un monorepo Nx. Referent de l’equip en qualitat del codi, CI/CD i automatització, i qui ha portat la IA al dia a dia de l’equip.',
+        'Responsable (owner) del frontend d’un producte de gestió d’edificis, amb feina full-stack: Angular + PrimeNG al frontend i NestJS + TypeScript amb PostgreSQL/TimescaleDB al backend, dins d’un monorepo Nx. Referent de l’equip en qualitat del codi, CI/CD i automatització.',
       bullets: [
         'Ownership del frontend del producte (Angular + PrimeNG): arquitectura de funcionalitats, qualitat i evolució. Actualitzacions d’Angular de la 13 a la 22.',
         'Desenvolupament end-to-end quan cal: model de dades, API (NestJS, TypeScript, Sequelize, PostgreSQL/TimescaleDB), interfície i proves (Jest, Cypress).',

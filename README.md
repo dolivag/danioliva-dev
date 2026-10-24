@@ -119,6 +119,8 @@ datos y el arrastre de palabras están en `src/scripts/game.ts`; las poses de ca
 con el foco en una palabra o en el enlace de un proyecto (para quien no usa ratón). Hay un enlace «saltar al contenido»
 (`.skip`) y las etiquetas accesibles de botones y enlaces salen de `src/i18n/`.
 
+Para no cargar de golpe unas 60 imágenes, `avatar.ts` solo pide al arrancar la escena, la cabeza y las piezas de las poses de cada sección; las de los gestos del juego (`LATER`: taza, regadera, bostezo…) llegan a los 2,5 s, una a una cuando el navegador está libre, y una pose que lleve una pieza que aún no ha llegado simplemente la salta. Los pósters de los vídeos (`data-poster`) se piden al acercarse a la pantalla (`clips.ts`). Las tarjetas para compartir van sin grano (menos de 300 KB, que es lo que prefiere WhatsApp).
+
 Las interacciones son secretas: el panel solo enseña «???» hasta que se descubren (y entonces
 permite repetirlas). Sin pistas visuales a propósito.
 

@@ -9,6 +9,12 @@
 
 const TICK_MS = 110;
 
+/** Piezas de los gestos del juego: se cargan después de las de las poses de cada sección (ver `startAvatar`). */
+const LATER = [
+  'ojos-felices', 'boca-ahh', 'ojos-somnolientos', 'ojos-bostezo', 'boca-bostezo', 'mano-boca',
+  'taza-sube', 'taza-cerca', 'taza-boca', 'regadera', 'planta-feliz',
+];
+
 type PieceMeta = { x: number; y: number; head: boolean; erase?: { x: number; y: number } };
 type Meta = { size: number; pieces: Record<string, PieceMeta> };
 /** Un rectángulo suelto (x, y, ancho, alto, color) en coordenadas del lienzo: gotas, «z»… */
@@ -286,22 +292,36 @@ export async function startAvatar(
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const meta: Meta = await (await fetch('/avatar/avatar.json')).json();
+  // Al arrancar solo se cargan la escena, la cabeza y las piezas de las poses de cada sección; las de los gestos del
+  // juego (taza, regadera, bostezo…, que son las más pesadas) se piden después, una a una, cuando el navegador está libre.
   const names = Object.keys(meta.pieces);
+  const later = new Set(LATER);
+  const now = names.filter((n) => !later.has(n));
   const [scene, head, ...images] = await Promise.all([
     load('/avatar/escena.webp'),
     load('/avatar/cabeza.webp'),
-    ...names.map((n) => load(`/avatar/piezas/${n}.webp`)),
+    ...now.map((n) => load(`/avatar/piezas/${n}.webp`)),
   ]);
-  const piece = Object.fromEntries(names.map((n, i) => [n, images[i]]));
+  const piece: Record<string, HTMLImageElement> = Object.fromEntries(now.map((n, i) => [n, images[i]]));
   // Máscaras de borrado: las piezas solo añaden píxeles; las que se llevan algo de la escena (la taza) traen su máscara.
-  const erased = names.filter((n) => meta.pieces[n].erase);
-  const erasers = Object.fromEntries(
-    await Promise.all(erased.map(async (n) => [n, await load(`/avatar/piezas/${n}.borra.webp`)] as const)),
-  );
+  const erasers: Record<string, HTMLImageElement> = {};
   const frameImg = frameName ? await load(`/avatar/marcos/${frameName}.png`).catch(() => null) : null;
   let frameFrom = -1; // fotograma en que se puso el marco (-1: sin marco)
   canvas.width = meta.size;
   canvas.height = meta.size;
+  const idleWait = () =>
+    new Promise<void>((resolve) => ('requestIdleCallback' in window ? requestIdleCallback(() => resolve(), { timeout: 3000 }) : setTimeout(resolve, 200)));
+  const loadLater = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 2500)); // primero lo que ve quien llega
+    for (const n of names.filter((x) => later.has(x))) {
+      await idleWait();
+      try {
+        piece[n] = await load(`/avatar/piezas/${n}.webp`);
+        if (meta.pieces[n].erase) erasers[n] = await load(`/avatar/piezas/${n}.borra.webp`);
+      } catch {}
+    }
+    draw(tick); // por si la pose actual lleva una pieza que acaba de llegar (la planta crecida)
+  };
 
   // Cursor: normalizado respecto a la cabeza (de -1 a 1) mientras se mueve.
   const gazes = Object.entries(GAZES).filter(([n]) => n in meta.pieces);
@@ -338,7 +358,7 @@ export async function startAvatar(
       : reduced
         ? STATES[state](0, -100, false)
         : STATES[state](t, since, t <= blinkUntil);
-    let on = pose.pieces;
+    let on = pose.pieces.filter((p) => piece[p]); // las que aún no han llegado se saltan
     let [hx, hy] = pose.head;
     // Si el cursor se ha movido hace poco, la cabeza se vuelve un poco hacia él y los ojos lo miran.
     if (!reduced && !reaction && performance.now() - cursor.at < FOLLOW_MS) {
@@ -363,12 +383,13 @@ export async function startAvatar(
     if (grown && !on.includes('planta-feliz') && 'planta-feliz' in meta.pieces) {
       on = on.includes('regadera') ? ['planta-feliz', ...on] : [...on, 'planta-feliz'];
     }
+    on = on.filter((p) => piece[p]); // (la planta crecida se añade arriba: puede no haber llegado aún)
     const c = ctx!;
     c.clearRect(0, 0, meta.size, meta.size);
     c.drawImage(scene, 0, 0);
     for (const p of on) {
       const e = meta.pieces[p].erase;
-      if (!e) continue;
+      if (!e || !erasers[p]) continue;
       c.globalCompositeOperation = 'destination-out';
       c.globalAlpha = pose.alpha?.[p] ?? 1;
       c.drawImage(erasers[p], e.x, e.y);
@@ -474,6 +495,7 @@ export async function startAvatar(
 
   draw(0);
   root?.classList.add('ready');
+  void loadLater();
   if (reduced) return api;
   setInterval(() => {
     if (document.hidden) return; // pestaña oculta: nada que dibujar

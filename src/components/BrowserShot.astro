@@ -18,7 +18,7 @@ const { shot, host, full = false } = Astro.props;
   <div class="shot-screen screen">
     {
       shot.clip ? (
-        <video class="clip" data-clip muted loop playsinline preload="none" width="960" height="600" poster={`${shot.clip}.jpg`} role="img" aria-label={shot.clipAlt ?? shot.alt}>
+        <video class="clip" data-clip muted loop playsinline preload="none" width="960" height="600" data-poster={`${shot.clip}.jpg`} aria-label={shot.clipAlt ?? shot.alt}>
           <source src={`${shot.clip}.mp4`} type="video/mp4" />
           <source src={`${shot.clip}.webm`} type="video/webm" />
         </video>

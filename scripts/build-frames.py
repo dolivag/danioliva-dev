@@ -52,6 +52,30 @@ def qr_icon() -> Image.Image:
     return im
 
 
+def storia_icon() -> Image.Image:
+    """Una «S» y un destello, como el logo de Storia (cuyo rótulo manuscrito no se lee a 10x10 píxeles)."""
+    ink, spark = (58, 40, 72, 255), (240, 181, 46, 255)
+    rows = [
+        "........Y.",
+        ".PPPPP.YYY",
+        "PPP..PP.Y.",
+        "PP........",
+        "PPPPP.....",
+        ".PPPPPP...",
+        ".....PPP..",
+        "......PP..",
+        "PP...PPP..",
+        ".PPPPPP...",
+    ]
+    im = Image.new("RGBA", (PIC, PIC), MAT)
+    px = im.load()
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch != ".":
+                px[x, y] = ink if ch == "P" else spark
+    return im
+
+
 def logo_pixels(logo: Image.Image, cfg: dict) -> Image.Image:
     """El logo recortado a su contenido, sobre el paspartú, reducido a PIC x PIC y con pocos colores."""
     if "crop" in cfg:
@@ -112,7 +136,7 @@ def frame(logo: Image.Image, slug: str = "") -> Image.Image:
         ip[i, 0] = MAT_SHADE
     for j in range(H - 2 * B):
         ip[0, j] = MAT_SHADE
-    pic = qr_icon() if slug == "qr-city" else logo_pixels(logo, cfg)
+    pic = qr_icon() if slug == "qr-city" else storia_icon() if slug == "storia" else logo_pixels(logo, cfg)
     inner.paste(pic, (0, (H - 2 * B - PIC) // 2))
     out.paste(inner, (B, B + dy(W // 2)))
     return out

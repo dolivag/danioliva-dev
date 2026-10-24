@@ -5,6 +5,24 @@
  */
 const clips = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-clip]'));
 
+// El póster (`data-poster`) se pide al acercarse el vídeo a la pantalla: con `poster=` el navegador descargaría todos al cargar la página.
+if ('IntersectionObserver' in window) {
+  const near = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        const v = e.target as HTMLVideoElement;
+        if (v.dataset.poster) v.poster = v.dataset.poster;
+        near.unobserve(v);
+      }
+    },
+    { rootMargin: '900px 0px' },
+  );
+  clips.forEach((v) => near.observe(v));
+} else {
+  clips.forEach((v) => v.dataset.poster && (v.poster = v.dataset.poster));
+}
+
 if (clips.length) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     for (const v of clips) {

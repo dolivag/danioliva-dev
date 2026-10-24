@@ -49,7 +49,7 @@ export const en: Dict = {
       role: 'Fullstack engineer',
       period: 'Since January 2024',
       description:
-        'Owner of the frontend of a building management product, with full-stack work: Angular + PrimeNG on the frontend and NestJS + TypeScript with PostgreSQL/TimescaleDB on the backend, in an Nx monorepo. The team’s reference for code quality, CI/CD and automation.',
+        'Owner of the frontend of a building management product, with full-stack work: Angular + PrimeNG on the frontend and NestJS + TypeScript with PostgreSQL/TimescaleDB on the backend, in an Nx monorepo. In charge of code quality, CI/CD and automation for the team.',
       bullets: [
         'Frontend ownership of the product (Angular + PrimeNG): feature architecture, quality and evolution. Angular upgrades from 13 to 22.',
         'End-to-end development when needed: data model, API (NestJS, TypeScript, Sequelize, PostgreSQL/TimescaleDB), UI and tests (Jest, Cypress).',

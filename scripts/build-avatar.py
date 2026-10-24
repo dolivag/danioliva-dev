@@ -71,7 +71,7 @@ PIECES = {
     "boca-bostezo": ((480, 345, 660, 510), True),
     "mano-boca": ((320, 250, 700, 640), True),
     # Gafas de sol (el premio de completar todos los logros): encima de los ojos, con la patilla hasta la oreja.
-    "gafas-sol": ((470, 240, 730, 360), True, None, None, True),
+    "gafas-sol": ((446, 240, 730, 372), True, None, None, "medio"),
     "manos": ((420, 640, 700, 880), False),
     "vapor-2": ((100, 590, 230, 790), False),
     "vapor-3": ((100, 590, 230, 790), False),
@@ -180,7 +180,11 @@ def main():
             ex0, ey0, ex1, ey1 = exclude
             diff[ey0:ey1, ex0:ex1] = False
         # Fuera ruido del JPG (motas sueltas) y ensanchado para llevarse el borde del cambio.
-        if tight:
+        if tight == "medio":
+            # Pieza grande y oscura sobre la cara (gafas): recorte duro, pero con 3 px de margen para no perder el contorno negro.
+            diff = grow(shrink(grow(diff, 2), 2), 3) & region
+            alpha = feather(diff, 0.7) * pink_alpha(var)
+        elif tight:
             diff = shrink(grow(diff, 1), 1) & region
             alpha = feather(diff, 0.7) * pink_alpha(var)
         else:

@@ -64,7 +64,7 @@ const es: CvCopy = {
           'Ownership del frontend del producto (Angular, PrimeNG) y full-stack (NestJS). Angular: de la 13 a la 22.',
           'Estándares de calidad (linting, formato, hooks pre-commit, SonarQube) y CHANGELOG.md automático: plugin propio de VS Code (ramas desde develop con sus PBIs) y CI que rellena las entradas.',
           'Referente de CI/CD en GitLab: bots de code review en las MR, de la pipeline diaria (propone cambios y crea su MR) y de autodespliegue; evidencias SBOM, SCA, DAST y SAST en cada tag.',
-          'Impulsor de la adopción de IA: skills, MCPs e integración en el flujo de trabajo.',
+          'IA en el día a día del equipo: skills, MCPs e integración en el flujo de trabajo.',
         ],
       },
       {
@@ -146,7 +146,7 @@ const ca: CvCopy = {
           'Estàndards de qualitat: linting, format, hooks de pre-commit i escaneigs de SonarQube.',
           'CHANGELOG.md automàtic: plugin propi de VS Code (branques des de develop amb els seus PBIs) i CI que omple les entrades en fusionar.',
           'Referent de CI/CD a GitLab: bots de code review a les merge requests, de la pipeline diària (proposa canvis i en crea la MR) i d’autodesplegament; evidències SBOM, SCA, DAST i SAST en generar tags.',
-          'Impulsor de l’adopció d’IA: skills, MCPs i integració en el flux de treball.',
+          'IA al dia a dia de l’equip: skills, MCPs i integració en el flux de treball.',
         ],
       },
       {
@@ -228,7 +228,7 @@ const en: CvCopy = {
           'Team quality standards: linting, formatting, pre-commit hooks and SonarQube scans.',
           'Automated CHANGELOG.md: custom VS Code plugin that creates branches from develop knowing which PBIs they cover, and CI that fills in the entries on merge.',
           'CI/CD reference on GitLab: code-review bots on merge requests, a daily-pipeline bot (proposes fixes and opens its MR) and auto-deploy; SBOM, SCA, DAST and SAST evidence on every tag.',
-          'Driver of AI adoption in the team: skills, MCPs and integration into the development workflow.',
+          'AI in the team’s day-to-day work: skills, MCPs and integration into the development workflow.',
         ],
       },
       {

@@ -23,7 +23,7 @@ const es: CvCopy = {
   role: 'Software engineer · Fullstack & CI/CD',
   about: {
     title: 'Sobre mí',
-    text: 'Software Engineer fullstack (Angular, NestJS) con foco en CI/CD y automatización de pipelines en GitLab. Actualmente en Zennio, combinando desarrollo de producto end-to-end con el rol de referente CI/CD y automatizaciones del equipo.',
+    text: 'Software Engineer fullstack (Angular, NestJS) con foco en CI/CD y automatización de pipelines en GitLab. Actualmente en Zennio, combinando desarrollo de producto end-to-end con el CI/CD y las automatizaciones del equipo.',
   },
   contact: { title: 'Contacto', email: 'Email', linkedin: 'LinkedIn', github: 'GitHub' },
   skills: {
@@ -63,8 +63,8 @@ const es: CvCopy = {
         bullets: [
           'Ownership del frontend del producto (Angular, PrimeNG) y full-stack (NestJS). Angular: de la 13 a la 22.',
           'Estándares de calidad (linting, formato, hooks pre-commit, SonarQube) y CHANGELOG.md automático: plugin propio de VS Code (ramas desde develop con sus PBIs) y CI que rellena las entradas.',
-          'Referente de CI/CD en GitLab: bots de code review en las MR, de la pipeline diaria (propone cambios y crea su MR) y de autodespliegue; evidencias SBOM, SCA, DAST y SAST en cada tag.',
-          'Impulsor de la adopción de IA: skills, MCPs e integración en el flujo de trabajo.',
+          'CI/CD en GitLab: bots de code review en las MR, de la pipeline diaria (propone cambios y crea su MR) y de autodespliegue; evidencias SBOM, SCA, DAST y SAST en cada tag.',
+          'IA en el día a día del equipo: skills, MCPs e integración en el flujo de trabajo.',
         ],
       },
       {
@@ -104,7 +104,7 @@ const ca: CvCopy = {
   role: 'Software engineer · Fullstack & CI/CD',
   about: {
     title: 'Sobre mi',
-    text: 'Software Engineer fullstack (Angular, NestJS) amb focus en CI/CD i automatització de pipelines a GitLab. Actualment a Zennio, combinant desenvolupament de producte end-to-end amb el rol de referent de CI/CD i automatitzacions de l’equip.',
+    text: 'Software Engineer fullstack (Angular, NestJS) amb focus en CI/CD i automatització de pipelines a GitLab. Actualment a Zennio, combinant desenvolupament de producte end-to-end amb el CI/CD i les automatitzacions de l’equip.',
   },
   contact: { title: 'Contacte', email: 'Email', linkedin: 'LinkedIn', github: 'GitHub' },
   skills: {
@@ -145,8 +145,8 @@ const ca: CvCopy = {
           'Ownership del frontend del producte (Angular, PrimeNG) i feina full-stack (NestJS). Actualitzacions d’Angular de la 13 a la 22.',
           'Estàndards de qualitat: linting, format, hooks de pre-commit i escaneigs de SonarQube.',
           'CHANGELOG.md automàtic: plugin propi de VS Code (branques des de develop amb els seus PBIs) i CI que omple les entrades en fusionar.',
-          'Referent de CI/CD a GitLab: bots de code review a les merge requests, de la pipeline diària (proposa canvis i en crea la MR) i d’autodesplegament; evidències SBOM, SCA, DAST i SAST en generar tags.',
-          'Impulsor de l’adopció d’IA: skills, MCPs i integració en el flux de treball.',
+          'CI/CD a GitLab: bots de code review a les merge requests, de la pipeline diària (proposa canvis i en crea la MR) i d’autodesplegament; evidències SBOM, SCA, DAST i SAST en generar tags.',
+          'IA al dia a dia de l’equip: skills, MCPs i integració en el flux de treball.',
         ],
       },
       {
@@ -186,7 +186,7 @@ const en: CvCopy = {
   role: 'Software engineer · Fullstack & CI/CD',
   about: {
     title: 'About me',
-    text: 'Fullstack software engineer (Angular, NestJS) focused on CI/CD and GitLab pipeline automation. Currently at Zennio, combining end-to-end product development with the role of CI/CD and automation lead for the team.',
+    text: 'Fullstack software engineer (Angular, NestJS) focused on CI/CD and GitLab pipeline automation. Currently at Zennio, combining end-to-end product development with CI/CD and automation for the team.',
   },
   contact: { title: 'Contact', email: 'Email', linkedin: 'LinkedIn', github: 'GitHub' },
   skills: {
@@ -227,8 +227,8 @@ const en: CvCopy = {
           'Frontend ownership of the product (Angular, PrimeNG) and full-stack work (NestJS). Angular upgrades from 13 to 22.',
           'Team quality standards: linting, formatting, pre-commit hooks and SonarQube scans.',
           'Automated CHANGELOG.md: custom VS Code plugin that creates branches from develop knowing which PBIs they cover, and CI that fills in the entries on merge.',
-          'CI/CD reference on GitLab: code-review bots on merge requests, a daily-pipeline bot (proposes fixes and opens its MR) and auto-deploy; SBOM, SCA, DAST and SAST evidence on every tag.',
-          'Driver of AI adoption in the team: skills, MCPs and integration into the development workflow.',
+          'CI/CD on GitLab: code-review bots on merge requests, a daily-pipeline bot (proposes fixes and opens its MR) and auto-deploy; SBOM, SCA, DAST and SAST evidence on every tag.',
+          'AI in the team’s day-to-day work: skills, MCPs and integration into the development workflow.',
         ],
       },
       {

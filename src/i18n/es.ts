@@ -49,7 +49,7 @@ export const es: Dict = {
       role: 'Fullstack engineer',
       period: 'Desde enero de 2024',
       description:
-        'Responsable (owner) del frontend de un producto de gestión de edificios, con trabajo full-stack: Angular + PrimeNG en frontend y NestJS + TypeScript con PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. Referente del equipo en calidad de código, CI/CD y automatización, e impulsor de la adopción de IA.',
+        'Responsable (owner) del frontend de un producto de gestión de edificios, con trabajo full-stack: Angular + PrimeNG en frontend y NestJS + TypeScript con PostgreSQL/TimescaleDB en backend, dentro de un monorepo Nx. A cargo de la calidad de código, el CI/CD y la automatización del equipo.',
       bullets: [
         'Ownership del frontend del producto (Angular + PrimeNG): arquitectura de funcionalidades, calidad y evolución. Actualizaciones de Angular de la 13 a la 22.',
         'Desarrollo end-to-end cuando hace falta: modelo de datos, API (NestJS, TypeScript, Sequelize, PostgreSQL/TimescaleDB), interfaz y pruebas (Jest, Cypress).',
@@ -58,7 +58,7 @@ export const es: Dict = {
         'CHANGELOG.md automático: un plugin propio de VS Code que crea ramas desde develop sabiendo qué PBIs trata cada una, y una automatización en el CI que rellena sus entradas al mergear las ramas a develop.',
         'Bots en el CI de GitLab: revisión de código en las merge requests, un bot de la pipeline diaria que busca issues pequeñas, propone un cambio y crea su merge request, y otro que despliega automáticamente al entorno elegido.',
         'Seguridad: evidencias de SBOM, SCA, DAST y SAST guardadas automáticamente al generar cada tag.',
-        'Adopción de IA en el equipo: creación de skills, configuración de MCPs e integración de herramientas de IA en el flujo de desarrollo.',
+        'IA en el día a día del equipo: skills, MCPs y herramientas de IA integradas en el flujo de desarrollo.',
         'Monorepo Nx con pnpm: build, lint, test y documentación (Docusaurus) unificados.',
       ],
     },

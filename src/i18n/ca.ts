@@ -49,7 +49,7 @@ export const ca: Dict = {
       role: 'Fullstack engineer',
       period: 'Des de gener de 2024',
       description:
-        'Responsable (owner) del frontend d’un producte de gestió d’edificis, amb feina full-stack: Angular + PrimeNG al frontend i NestJS + TypeScript amb PostgreSQL/TimescaleDB al backend, dins d’un monorepo Nx. Referent de l’equip en qualitat del codi, CI/CD i automatització, i impulsor de l’adopció d’IA.',
+        'Responsable (owner) del frontend d’un producte de gestió d’edificis, amb feina full-stack: Angular + PrimeNG al frontend i NestJS + TypeScript amb PostgreSQL/TimescaleDB al backend, dins d’un monorepo Nx. A càrrec de la qualitat del codi, el CI/CD i l’automatització de l’equip.',
       bullets: [
         'Ownership del frontend del producte (Angular + PrimeNG): arquitectura de funcionalitats, qualitat i evolució. Actualitzacions d’Angular de la 13 a la 22.',
         'Desenvolupament end-to-end quan cal: model de dades, API (NestJS, TypeScript, Sequelize, PostgreSQL/TimescaleDB), interfície i proves (Jest, Cypress).',
@@ -58,7 +58,7 @@ export const ca: Dict = {
         'CHANGELOG.md automàtic: un plugin propi de VS Code que crea branques des de develop sabent quins PBIs tracta cadascuna, i una automatització al CI que n’omple les entrades en fusionar les branques a develop.',
         'Bots al CI de GitLab: revisió de codi a les merge requests, un bot de la pipeline diària que busca issues petites, proposa un canvi i en crea la merge request, i un altre que desplega automàticament a l’entorn triat.',
         'Seguretat: evidències de SBOM, SCA, DAST i SAST desades automàticament en generar cada tag.',
-        'Adopció d’IA a l’equip: creació de skills, configuració de MCPs i integració d’eines d’IA en el flux de desenvolupament.',
+        'IA al dia a dia de l’equip: skills, MCPs i eines d’IA integrades en el flux de desenvolupament.',
         'Monorepo Nx amb pnpm: build, lint, test i documentació (Docusaurus) unificats.',
       ],
     },

@@ -49,7 +49,7 @@ export const en: Dict = {
       role: 'Fullstack engineer',
       period: 'Since January 2024',
       description:
-        'Owner of the frontend of a building management product, with full-stack work: Angular + PrimeNG on the frontend and NestJS + TypeScript with PostgreSQL/TimescaleDB on the backend, in an Nx monorepo. The team’s reference for code quality, CI/CD and automation, and a driver of AI adoption.',
+        'Owner of the frontend of a building management product, with full-stack work: Angular + PrimeNG on the frontend and NestJS + TypeScript with PostgreSQL/TimescaleDB on the backend, in an Nx monorepo. In charge of code quality, CI/CD and automation for the team.',
       bullets: [
         'Frontend ownership of the product (Angular + PrimeNG): feature architecture, quality and evolution. Angular upgrades from 13 to 22.',
         'End-to-end development when needed: data model, API (NestJS, TypeScript, Sequelize, PostgreSQL/TimescaleDB), UI and tests (Jest, Cypress).',
@@ -58,7 +58,7 @@ export const en: Dict = {
         'Automated CHANGELOG.md: a custom VS Code plugin that creates branches from develop knowing which PBIs each one covers, and a CI automation that fills in the entries when branches are merged into develop.',
         'Bots in the GitLab CI: code review on merge requests, a daily-pipeline bot that finds small issues, proposes a fix and opens its merge request, and another that auto-deploys to the chosen environment.',
         'Security: SBOM, SCA, DAST and SAST evidence saved automatically whenever a tag is created.',
-        'AI adoption in the team: building skills, configuring MCPs and integrating AI tools into the development workflow.',
+        'AI in the team’s day-to-day work: skills, MCPs and AI tools built into the development workflow.',
         'Nx monorepo with pnpm: unified build, lint, test and documentation (Docusaurus).',
       ],
     },

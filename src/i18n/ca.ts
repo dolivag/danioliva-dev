@@ -230,7 +230,7 @@ export const ca: Dict = {
       charla: { title: 'Xerrada', how: 'Vas saludar amb el teclat.', say: 'Hola!' },
       mundo: { title: 'Hola, món', how: 'Vas escriure «echo hola».', say: 'Hello, world → Hola, món.' },
       tab: { title: 'Tabulador', how: 'Hi vas arribar amb la tecla Tab.', say: 'Quin bon gust amb l’accessibilitat.' },
-      completista: { title: 'Completista', how: 'Vas aconseguir tots els altres.', say: 'Col·lecció completa. Ets dels meus.' },
+      completista: { title: 'Completista', how: 'Vas aconseguir tots els altres.', say: 'Col·lecció completa. Em poso les ulleres: t’ho has guanyat.' },
     },
     words: {
       'qr city': 'Escanejant… és una ciutat sencera!',
@@ -241,6 +241,8 @@ export const ca: Dict = {
     },
     jokes: ['Compilant…', 'A la meva màquina funciona.', 'git push --force (és broma).', 'Ei! Que em desconcentres.'],
     commands: { sudo: 'Permission denied.', 'npm install': 'added 1 avatar in 0.3s' },
+    skinOn: 'Posar-li les ulleres de sol',
+    skinOff: 'Treure-li les ulleres de sol',
     hellos: ['hola', 'bon dia', 'ei', 'hello', 'buenas'],
   },
 };

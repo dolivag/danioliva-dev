@@ -65,6 +65,18 @@ const waterDrops = (k: number): Rect[] => {
   }
   return out;
 };
+/** Las gafas de sol, en coordenadas del lienzo con la cabeza en su sitio (se desplazan con ella). */
+const SHADES: Rect[] = [
+  [496, 296, 144, 8, '#0d0f14'], // montura de arriba
+  [496, 304, 56, 32, '#0d0f14'], // cristal izquierdo
+  [576, 304, 56, 32, '#0d0f14'],
+  [552, 304, 24, 8, '#0d0f14'], // puente
+  [632, 304, 64, 8, '#0d0f14'], // patilla hacia la oreja
+  [504, 312, 16, 8, '#4a5568'], // reflejos
+  [584, 312, 16, 8, '#4a5568'],
+  [520, 320, 8, 8, '#2b3240'],
+  [600, 320, 8, 8, '#2b3240'],
+];
 /** La cabeza sube y baja `px` píxeles con un periodo de `period` fotogramas. */
 const bob = (t: number, period: number, px = 3): [number, number] => [
   0,
@@ -292,6 +304,8 @@ export type AvatarApi = {
   removeFrame: () => void;
   /** La planta regada se queda crecida (con sus guindillas). */
   setGrown: (grown: boolean) => void;
+  /** Las gafas de sol (el premio de completar todos los logros): se ven en todas las poses. */
+  setSkin: (on: boolean) => void;
 };
 
 /**
@@ -366,6 +380,7 @@ export async function startAvatar(
   let blinkUntil = -1;
   let nextBlink = 25;
   let reaction: { key: string; start: number; end: number } | null = null;
+  let skin = false; // lleva las gafas de sol puestas
   let grown = false; // la planta ya está regada y se queda crecida
 
   function draw(t: number) {
@@ -441,6 +456,13 @@ export async function startAvatar(
       const m = meta.pieces[p];
       if (m.head) draw1(p, hx, hy);
     }
+    // Gafas de sol: píxeles de la ilustración (8 px) pegados a la cabeza.
+    if (skin) {
+      for (const [x, y, w, h, color] of SHADES) {
+        c.fillStyle = color;
+        c.fillRect(x + hx, y + hy, w, h);
+      }
+    }
     // Lo dibujado a mano (gotas, «z»…): rectángulos del tamaño de un píxel de la ilustración.
     if (pose.rects) {
       for (const [x, y, w, h, color] of pose.rects) {
@@ -506,6 +528,10 @@ export async function startAvatar(
     },
     removeFrame() {
       frameFrom = -1;
+      draw(tick);
+    },
+    setSkin(on: boolean) {
+      skin = on;
       draw(tick);
     },
     setGrown(v: boolean) {

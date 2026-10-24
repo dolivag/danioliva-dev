@@ -61,10 +61,10 @@ const es: CvCopy = {
         place: 'Toledo (remoto desde Barcelona)',
         period: 'Enero 2024 – actualidad',
         bullets: [
-          'Desarrollo full-stack de aplicación web: frontend con Angular y PrimeNG y backend con NestJS.',
-          'Referente del equipo en CI/CD: diseño de pipelines, automatización de releases y creación de bots.',
-          'Impulsor de la adopción de IA en el equipo: creación de skills, configuración de MCPs e integración de herramientas de IA en el flujo de desarrollo.',
-          'Colaboración en la estandarización de calidad de código a nivel transversal: adopción de merge requests, herramientas como Prettier, Linter o scans de SonarQube.',
+          'Ownership del frontend del producto (Angular, PrimeNG) y full-stack (NestJS). Angular: de la 13 a la 22.',
+          'Estándares de calidad (linting, formato, hooks pre-commit, SonarQube) y CHANGELOG.md automático: plugin propio de VS Code (ramas desde develop con sus PBIs) y CI que rellena las entradas.',
+          'Referente de CI/CD en GitLab: bots de code review en las MR, de la pipeline diaria (propone cambios y crea su MR) y de autodespliegue; evidencias SBOM, SCA, DAST y SAST en cada tag.',
+          'Impulsor de la adopción de IA: skills, MCPs e integración en el flujo de trabajo.',
         ],
       },
       {
@@ -142,10 +142,11 @@ const ca: CvCopy = {
         place: 'Toledo (en remot des de Barcelona)',
         period: 'Gener 2024 – actualitat',
         bullets: [
-          'Desenvolupament full-stack d’aplicació web: frontend amb Angular i PrimeNG i backend amb NestJS.',
-          'Referent de l’equip en CI/CD: disseny de pipelines, automatització de releases i creació de bots.',
-          'Impulsor de l’adopció d’IA a l’equip: creació de skills, configuració de MCPs i integració d’eines d’IA en el flux de desenvolupament.',
-          'Col·laboració en l’estandardització de la qualitat del codi de manera transversal: adopció de merge requests, eines com Prettier, Linter o escaneigs de SonarQube.',
+          'Ownership del frontend del producte (Angular, PrimeNG) i feina full-stack (NestJS). Actualitzacions d’Angular de la 13 a la 22.',
+          'Estàndards de qualitat: linting, format, hooks de pre-commit i escaneigs de SonarQube.',
+          'CHANGELOG.md automàtic: plugin propi de VS Code (branques des de develop amb els seus PBIs) i CI que omple les entrades en fusionar.',
+          'Referent de CI/CD a GitLab: bots de code review a les merge requests, de la pipeline diària (proposa canvis i en crea la MR) i d’autodesplegament; evidències SBOM, SCA, DAST i SAST en generar tags.',
+          'Impulsor de l’adopció d’IA: skills, MCPs i integració en el flux de treball.',
         ],
       },
       {
@@ -223,10 +224,11 @@ const en: CvCopy = {
         place: 'Toledo (remote from Barcelona)',
         period: 'January 2024 – present',
         bullets: [
-          'Full-stack development of a web application: frontend with Angular and PrimeNG and backend with NestJS.',
-          'Team reference for CI/CD: pipeline design, release automation and bot creation.',
-          'Driving AI adoption in the team: building skills, configuring MCPs and integrating AI tools into the development workflow.',
-          'Helping standardise code quality across teams: adoption of merge requests, tools such as Prettier and linters, and SonarQube scans.',
+          'Frontend ownership of the product (Angular, PrimeNG) and full-stack work (NestJS). Angular upgrades from 13 to 22.',
+          'Team quality standards: linting, formatting, pre-commit hooks and SonarQube scans.',
+          'Automated CHANGELOG.md: custom VS Code plugin that creates branches from develop knowing which PBIs they cover, and CI that fills in the entries on merge.',
+          'CI/CD reference on GitLab: code-review bots on merge requests, a daily-pipeline bot (proposes fixes and opens its MR) and auto-deploy; SBOM, SCA, DAST and SAST evidence on every tag.',
+          'Driver of AI adoption in the team: skills, MCPs and integration into the development workflow.',
         ],
       },
       {

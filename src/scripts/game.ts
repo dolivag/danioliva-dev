@@ -44,7 +44,65 @@ export const WORDS: Record<string, { achievement?: AchievementId }> = {
 /** Frases que, tecleadas fuera de un campo, dan un logro concreto (se miran antes que los comandos de `game.commands`). */
 export const SECRETS: Record<string, AchievementId> = { 'echo hola': 'mundo', 'echo hello': 'mundo', 'echo hola món': 'mundo' };
 
+export type HintCategory = 'avatar' | 'arrastrar' | 'escritorio' | 'teclado' | 'pagina' | 'hora' | 'dispositivo';
+
+/** Para las pistas del panel: de qué tipo es cada logro y, si solo se puede en móvil o en ordenador, cuál. */
+export const HINT_META: Record<AchievementId, { category: HintCategory; device?: 'mobile' | 'desktop' }> = {
+  hola: { category: 'avatar' },
+  orden: { category: 'arrastrar' },
+  tiempo: { category: 'arrastrar' },
+  trastero: { category: 'arrastrar' },
+  mareo: { category: 'avatar' },
+  sueno: { category: 'avatar' },
+  final: { category: 'pagina' },
+  tema: { category: 'pagina' },
+  agitar: { category: 'dispositivo', device: 'mobile' },
+  konami: { category: 'teclado', device: 'desktop' },
+  poliglota: { category: 'pagina' },
+  planta: { category: 'escritorio' },
+  cafe: { category: 'escritorio' },
+  portatil: { category: 'escritorio' },
+  noctambulo: { category: 'hora' },
+  cuento: { category: 'arrastrar' },
+  terminal: { category: 'teclado', device: 'desktop' },
+  curioso: { category: 'pagina' },
+  papel: { category: 'pagina' },
+  buzon: { category: 'pagina' },
+  explorador: { category: 'pagina' },
+  lector: { category: 'pagina' },
+  detective: { category: 'teclado', device: 'desktop' },
+  habitual: { category: 'hora' },
+  rebote: { category: 'pagina' },
+  zoom: { category: 'dispositivo' },
+  pegar: { category: 'teclado' },
+  responsive: { category: 'dispositivo', device: 'desktop' },
+  codigo: { category: 'teclado', device: 'desktop' },
+  lunes: { category: 'hora' },
+  viernes: { category: 'hora' },
+  comida: { category: 'hora' },
+  charla: { category: 'teclado', device: 'desktop' },
+  mundo: { category: 'teclado', device: 'desktop' },
+  tab: { category: 'teclado', device: 'desktop' },
+  completista: { category: 'avatar' },
+};
+
 const KEY = 'avatar-unlocked';
+const HINTS = 'avatar-hints';
+
+/** Cuántas pistas ha pedido el visitante de cada logro (0: ninguna, 1: el acertijo, 2: la instrucción). */
+export function loadHints(): Record<string, number> {
+  try {
+    return JSON.parse(localStorage.getItem(HINTS) ?? '{}');
+  } catch {
+    return {};
+  }
+}
+
+export function saveHints(hints: Record<string, number>) {
+  try {
+    localStorage.setItem(HINTS, JSON.stringify(hints));
+  } catch {}
+}
 const PENDING = 'avatar-pending';
 
 /**

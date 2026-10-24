@@ -4,10 +4,29 @@
  * de palabras; las poses de cada reacción están en avatar.ts.
  */
 
-export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami' | 'agitar' | 'poliglota' | 'planta' | 'cafe' | 'portatil' | 'noctambulo' | 'cuento' | 'terminal' | 'curioso';
+export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' | 'sueno' | 'final' | 'tema' | 'konami' | 'agitar' | 'poliglota' | 'planta' | 'cafe' | 'portatil' | 'noctambulo' | 'cuento' | 'terminal' | 'curioso'
+  | 'papel'
+  | 'buzon'
+  | 'explorador'
+  | 'lector'
+  | 'detective'
+  | 'habitual'
+  | 'rebote'
+  | 'zoom'
+  | 'pegar'
+  | 'responsive'
+  | 'codigo'
+  | 'lunes'
+  | 'viernes'
+  | 'comida'
+  | 'charla'
+  | 'mundo'
+  | 'tab'
+  | 'completista';
 
 /** Los logros, en el orden del panel. Sus textos (título, pista y frase) están en `src/i18n/<idioma>.ts`. */
-export const ACHIEVEMENT_IDS: AchievementId[] = ['hola', 'orden', 'tiempo', 'trastero', 'mareo', 'sueno', 'final', 'tema', 'agitar', 'konami', 'poliglota', 'planta', 'cafe', 'portatil', 'noctambulo', 'cuento', 'terminal', 'curioso'];
+export const ACHIEVEMENT_IDS: AchievementId[] = ['hola', 'orden', 'tiempo', 'trastero', 'mareo', 'sueno', 'final', 'tema', 'agitar', 'konami', 'poliglota', 'planta', 'cafe', 'portatil', 'noctambulo', 'cuento', 'terminal', 'curioso',
+  'papel', 'buzon', 'explorador', 'lector', 'detective', 'habitual', 'rebote', 'zoom', 'pegar', 'responsive', 'codigo', 'lunes', 'viernes', 'comida', 'charla', 'mundo', 'tab', 'completista'];
 
 /** Palabras que se pueden arrastrar (`data-drag` en el HTML). Las que no dan logro solo reaccionan (frase en `game.words`). */
 export const WORDS: Record<string, { achievement?: AchievementId }> = {
@@ -22,7 +41,32 @@ export const WORDS: Record<string, { achievement?: AchievementId }> = {
   supabase: {},
 };
 
+/** Frases que, tecleadas fuera de un campo, dan un logro concreto (se miran antes que los comandos de `game.commands`). */
+export const SECRETS: Record<string, AchievementId> = { 'echo hola': 'mundo', 'echo hello': 'mundo', 'echo hola món': 'mundo' };
+
 const KEY = 'avatar-unlocked';
+const PENDING = 'avatar-pending';
+
+/**
+ * Logros que se consiguen fuera de la portada (imprimir el CV) o al salir de ella (un enlace externo): se anotan
+ * y el avatar los concede la próxima vez que carga. Sin el avatar, solo se guardan.
+ */
+export function addPending(id: AchievementId) {
+  try {
+    const list: string[] = JSON.parse(localStorage.getItem(PENDING) ?? '[]');
+    if (!list.includes(id)) localStorage.setItem(PENDING, JSON.stringify([...list, id]));
+  } catch {}
+}
+
+export function takePending(): AchievementId[] {
+  try {
+    const list: AchievementId[] = JSON.parse(localStorage.getItem(PENDING) ?? '[]');
+    localStorage.removeItem(PENDING);
+    return list.filter((id) => ACHIEVEMENT_IDS.includes(id));
+  } catch {
+    return [];
+  }
+}
 
 export function loadUnlocked(): Set<string> {
   try {

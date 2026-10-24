@@ -101,5 +101,7 @@ export type Dict = {
     jokes: string[];
     /** Lo que responde al escribir un comando con el teclado (`sudo`, `npm install`). */
     commands: Record<string, string>;
+    /** Saludos que, tecleados fuera de un campo, dan el logro «charla» (en minúsculas). */
+    hellos: string[];
   };
 };

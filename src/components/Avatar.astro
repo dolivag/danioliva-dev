@@ -48,7 +48,7 @@ const total = ACHIEVEMENT_IDS.length;
 
 <script>
   import { startAvatar } from '../scripts/avatar';
-  import { ACHIEVEMENT_IDS, WORDS, enableWordDrag, loadUnlocked, saveUnlocked } from '../scripts/game';
+  import { ACHIEVEMENT_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadUnlocked, saveUnlocked, takePending } from '../scripts/game';
   import type { AchievementId } from '../scripts/game';
   import type { Dict } from '../i18n/types';
 
@@ -156,9 +156,19 @@ const total = ACHIEVEMENT_IDS.length;
     }
 
     // Lo que dura cada reacción (las de varias poses necesitan más que las de un gesto).
-    const DURATION: Partial<Record<AchievementId, number>> = { cafe: 4100, planta: 3800, noctambulo: 4000 };
+    const DURATION: Partial<Record<AchievementId, number>> = { cafe: 4100, planta: 3800, noctambulo: 4000, lunes: 4000, completista: 4500 };
+    // Los logros que llegan de golpe (al cargar la página) esperan su turno, uno tras otro.
+    const queue: AchievementId[] = [];
+    const later = (id: AchievementId) => {
+      if (!unlocked.has(id) && !queue.includes(id)) queue.push(id);
+    };
+    setInterval(() => {
+      if (queue.length && !document.hidden && performance.now() > busyUntil) trigger(queue.shift()!);
+    }, 1000);
+    let busyUntil = 0; // hasta cuándo está ocupado con una reacción (para no pisar la anterior con las de la cola)
     const trigger = (id: AchievementId, ms?: number, say?: string) => {
       ms ??= DURATION[id] ?? 3200;
+      busyUntil = performance.now() + ms + 600;
       const a = g.achievements[id];
       const isNew = !unlocked.has(id);
       if (isNew) {
@@ -170,6 +180,8 @@ const total = ACHIEVEMENT_IDS.length;
         root.classList.add('burst');
         const n = unlocked.size;
         announce(n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
+        // Tener todos los demás es, en sí, un logro.
+        if (id !== 'completista' && n === total - 1) later('completista');
       }
       avatar.react(id, say ?? a.say, id === 'sueno' ? 0 : ms);
       return isNew;
@@ -243,18 +255,30 @@ const total = ACHIEVEMENT_IDS.length;
     // Entrar de madrugada (hora local).
     if (!unlocked.has('noctambulo') && new Date().getHours() < 6) setTimeout(() => trigger('noctambulo', 4500), 4000);
 
-    // Escribir un comando con el teclado (fuera de los campos de texto).
+    // Escribir un comando o un saludo con el teclado (fuera de los campos de texto).
     let keys = '';
     addEventListener('keydown', (e) => {
       if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
       if ((e.target as Element).closest('input, textarea, select, [contenteditable]')) return;
-      keys = (keys + e.key.toLowerCase()).slice(-12);
+      keys = (keys + e.key.toLowerCase()).slice(-20);
+      const secret = Object.keys(SECRETS).find((s) => keys.endsWith(s));
+      if (secret) {
+        keys = '';
+        trigger(SECRETS[secret], 3600);
+        return;
+      }
       for (const cmd of Object.keys(g.commands)) {
         if (keys.endsWith(cmd)) {
           keys = '';
           trigger('terminal', 3200, g.commands[cmd]);
-          break;
+          return;
         }
+      }
+      // Un saludo solo cuenta si es una palabra entera («hola», no «ahola»).
+      const hello = g.hellos.find((h) => keys.endsWith(h) && !/[\p{L}]/u.test(keys.charAt(keys.length - h.length - 1)));
+      if (hello) {
+        keys = '';
+        trigger('charla');
       }
     });
 
@@ -351,6 +375,126 @@ const total = ACHIEVEMENT_IDS.length;
         trigger('konami');
       }
     });
+
+    // Logros anotados fuera de la portada (el CV impreso, un enlace que sacó al visitante de la web).
+    for (const id of takePending()) later(id);
+    const mark = (id: AchievementId) => {
+      if (unlocked.has(id)) return;
+      addPending(id);
+      // Si la página sigue ahí (enlace en otra pestaña), se concede ya; si no, será al volver.
+      setTimeout(() => {
+        for (const p of takePending()) later(p);
+      }, 900);
+    };
+
+    // Copiar el correo.
+    document.addEventListener('copy', () => {
+      if ((getSelection()?.toString() ?? '').includes('@')) later('buzon');
+    });
+    // Pegar texto en la web.
+    document.addEventListener('paste', () => later('pegar'));
+    // Seguir un enlace externo.
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element).closest<HTMLAnchorElement>('a[href]');
+      if (a && /^https?:/.test(a.href) && new URL(a.href).origin !== location.origin) mark('explorador');
+    });
+
+    // Volver otro día.
+    if (!unlocked.has('habitual')) {
+      const today = new Date().toDateString();
+      if (seen('avatar-days', today).length >= 2) setTimeout(() => later('habitual'), 5000);
+    }
+    // Entrar un lunes, un viernes por la tarde o a la hora de comer (hora local).
+    const now = new Date();
+    const [day, hour] = [now.getDay(), now.getHours()];
+    if (day === 1) setTimeout(() => later('lunes'), 6000);
+    if (day === 5 && hour >= 15) setTimeout(() => later('viernes'), 6000);
+    if (hour === 14) setTimeout(() => later('comida'), 6000);
+
+    // Leer la experiencia con calma: la sección a la vista y sin mover nada (antes de que bostece).
+    const exp = document.getElementById('experiencia');
+    let expVisible = false;
+    if (exp && !unlocked.has('lector'))
+      new IntersectionObserver(([en]) => (expVisible = en.intersectionRatio > 0.4), { threshold: [0, 0.4] }).observe(exp);
+    setInterval(() => {
+      if (expVisible && !asleep && !document.hidden && !unlocked.has('lector') && performance.now() - lastActive > 14000) later('lector');
+    }, 2000);
+
+    // Subir y bajar la página sin parar: cambios de sentido con trecho recorrido, varios en pocos segundos.
+    const flips: number[] = [];
+    let dir = 0;
+    let peak = scrollY; // hasta dónde ha llegado en el sentido actual
+    addEventListener(
+      'scroll',
+      () => {
+        const y = scrollY;
+        if (!dir) {
+          if (Math.abs(y - peak) > 120) {
+            dir = Math.sign(y - peak);
+            peak = y;
+          }
+          return;
+        }
+        if ((y - peak) * dir > 0) peak = y;
+        else if (Math.abs(y - peak) > 120) {
+          dir = -dir;
+          peak = y;
+          const t = performance.now();
+          flips.push(t);
+          while (flips.length && t - flips[0] > 6000) flips.shift();
+          if (flips.length >= 5) {
+            flips.length = 0;
+            later('rebote');
+          }
+        }
+      },
+      { passive: true },
+    );
+
+    // Zoom (Ctrl +, Ctrl y rueda, o pellizco en el móvil) y cambios de tamaño de la ventana.
+    const zooms: number[] = [];
+    const zoomed = () => {
+      const t = performance.now();
+      zooms.push(t);
+      while (zooms.length && t - zooms[0] > 6000) zooms.shift();
+      if (zooms.length >= 4) {
+        zooms.length = 0;
+        later('zoom');
+      }
+    };
+    addEventListener('wheel', (e) => e.ctrlKey && zoomed(), { passive: true });
+    addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '=', '-', '_'].includes(e.key)) zoomed();
+      // Ver el código fuente / abrir las herramientas de desarrollo.
+      const k = e.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && k === 'u') later('codigo');
+      if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(k)) || (e.metaKey && e.altKey && ['i', 'j', 'c'].includes(k)))
+        later('detective');
+    });
+    if (visualViewport) visualViewport.addEventListener('resize', () => visualViewport!.scale > 1.6 && later('zoom'));
+    const widths: number[] = [];
+    let w0 = innerWidth;
+    let wdir = 0;
+    addEventListener('resize', () => {
+      // Con las herramientas de desarrollo ancladas, la ventana por fuera es bastante mayor que por dentro.
+      if (!touchDevice && (outerWidth - innerWidth > 200 || outerHeight - innerHeight > 260)) later('detective');
+      const d = Math.sign(innerWidth - w0);
+      if (!d || Math.abs(innerWidth - w0) < 80) return;
+      w0 = innerWidth;
+      if (wdir && d !== wdir) {
+        const t = performance.now();
+        widths.push(t);
+        while (widths.length && t - widths[0] > 8000) widths.shift();
+        if (widths.length >= 3) {
+          widths.length = 0;
+          later('responsive');
+        }
+      }
+      wdir = d;
+    });
+
+    // Llegar hasta el avatar con el tabulador.
+    stage.addEventListener('focus', () => stage.matches(':focus-visible') && later('tab'));
 
     // Panel: lista de interacciones; las ya descubiertas se pueden repetir.
     // Sube desde el avatar: si la pantalla es baja, el panel se limita al hueco que hay arriba y se desplaza por dentro.

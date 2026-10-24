@@ -133,6 +133,13 @@ const linkedinText = site.linkedin.replace('https://www.linkedin.com/in/', '').r
 
     <script>
       document.getElementById('cv-print')?.addEventListener('click', () => window.print());
+      // Imprimir (con el botón o con Ctrl+P) es un logro del avatar de la portada: se anota y lo concede al volver.
+      addEventListener('beforeprint', () => {
+        try {
+          const list: string[] = JSON.parse(localStorage.getItem('avatar-pending') ?? '[]');
+          if (!list.includes('papel')) localStorage.setItem('avatar-pending', JSON.stringify([...list, 'papel']));
+        } catch {}
+      });
     </script>
   </body>
 </html>

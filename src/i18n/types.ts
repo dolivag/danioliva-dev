@@ -84,6 +84,10 @@ export type Dict = {
     panelTitle: string;
     panelAria: string;
     toDiscover: string;
+    /** Rótulo que separa en el panel los extras (hora y día), que no cuentan para el total. */
+    extras: string;
+    /** `{title}`: aviso al desbloquear un extra. */
+    unlockedExtra: string;
     repeat: string;
     /** `{title}` */
     repeatAria: string;

@@ -86,6 +86,13 @@ export const HINT_META: Record<AchievementId, { category: HintCategory; device?:
   completista: { category: 'avatar' },
 };
 
+/**
+ * Los de hora y día (madrugada, volver otro día, lunes, viernes por la tarde, hora de comer) son extras: nadie va a
+ * visitar la web a otra hora o en otro día solo para completar la colección. No cuentan para el total ni para «completista».
+ */
+export const BONUS_IDS: AchievementId[] = ACHIEVEMENT_IDS.filter((id) => HINT_META[id].category === 'hora');
+export const REQUIRED_IDS: AchievementId[] = ACHIEVEMENT_IDS.filter((id) => !BONUS_IDS.includes(id));
+
 const KEY = 'avatar-unlocked';
 const HINTS = 'avatar-hints';
 

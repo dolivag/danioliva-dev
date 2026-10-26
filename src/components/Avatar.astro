@@ -98,7 +98,7 @@ const total = ACHIEVEMENT_IDS.length;
   };
   render();
 
-  // En pantallas muy anchas (portada): el avatar empieza grande, en el hueco `.avatar-slot` junto al texto de presentación,
+  // En pantallas muy anchas (portada): el avatar empieza grande, en el hueco `.avatar-slot` a la derecha de la ficha,
   // y al desplazarse se encoge y baja a su esquina. Todo con dos variables del propio avatar: su tamaño (`--size`) y un
   // desplazamiento desde su esquina; el bocadillo, el contador y el panel van con él. En móvil y portátiles, nada de esto.
   const slot = document.querySelector<HTMLElement>('.avatar-slot');
@@ -128,7 +128,7 @@ const total = ACHIEVEMENT_IDS.length;
     // Primero baja y luego va hacia la derecha: así no cruza la ficha de «De un vistazo».
     const ty = smooth(Math.min(1, k * 1.5));
     const tx = smooth(Math.max(0, (k - 0.25) / 0.75));
-    const x = r.left + r.width / 2 + big / 2;
+    const x = r.right; // pegado al borde derecho de la columna
     const y = r.bottom;
     root.style.setProperty('--size', `${big + (SMALL - big) * t}px`);
     root.style.transform = `translate(${x + (R - x) * tx - R}px, ${y + (B - y) * ty - B}px)`;

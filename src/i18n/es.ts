@@ -8,7 +8,7 @@ export const es: Dict = {
   nav: { label: 'Principal', index: 'Índice', projects: 'Proyectos', experience: 'Experiencia', contact: 'Contacto' },
   sections: { projects: 'Proyectos', experience: 'Experiencia', studies: 'Estudios', contact: 'Contacto' },
   intro: {
-    big: 'Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y herramientas pequeñas que hacen el día a día un poco más fácil.',
+    big: 'Programando desde 2021 y fullstack engineer en Zennio. Me gusta construir aplicaciones y herramientas pequeñas que hacen el día a día un poco más fácil.',
     text: 'Trabajo con Angular, Node.js, NestJS, React y React Native, y me encargo también de herramientas de automatización y CI/CD. Fuera del trabajo construyo mis propios proyectos.',
     viewProjects: 'Ver proyectos',
     contact: 'Contacto',

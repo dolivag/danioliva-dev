@@ -8,7 +8,7 @@ export const ca: Dict = {
   nav: { label: 'Principal', index: 'Inici', projects: 'Projectes', experience: 'Experiència', contact: 'Contacte' },
   sections: { projects: 'Projectes', experience: 'Experiència', studies: 'Estudis', contact: 'Contacte' },
   intro: {
-    big: 'Graduat el 2024 i fullstack engineer a Zennio. M’agrada construir aplicacions i eines petites que fan el dia a dia una mica més fàcil.',
+    big: 'Programant des del 2021 i fullstack engineer a Zennio. M’agrada construir aplicacions i eines petites que fan el dia a dia una mica més fàcil.',
     text: 'Treballo amb Angular, Node.js, NestJS, React i React Native, i m’encarrego també d’eines d’automatització i CI/CD. Fora de la feina construeixo els meus propis projectes.',
     viewProjects: 'Veure projectes',
     contact: 'Contacte',

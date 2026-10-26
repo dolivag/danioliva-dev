@@ -279,7 +279,7 @@ const total = REQUIRED_IDS.length;
     }
 
     // Lo que dura cada reacción (las de varias poses necesitan más que las de un gesto).
-    const DURATION: Partial<Record<AchievementId, number>> = { cafe: 4100, planta: 3800, noctambulo: 4000, lunes: 4000, completista: 4500 };
+    const DURATION: Partial<Record<AchievementId, number>> = { cafe: 4100, planta: 3800, noctambulo: 4000, lunes: 4000, completista: 4500, cafeina: 6500 };
     // Los logros que llegan de golpe (al cargar la página) esperan su turno, uno tras otro.
     const queue: AchievementId[] = [];
     const later = (id: AchievementId) => {
@@ -288,7 +288,11 @@ const total = REQUIRED_IDS.length;
     setInterval(() => {
       if (queue.length && !document.hidden && performance.now() > busyUntil) trigger(queue.shift()!);
     }, 1000);
-    let busyUntil = 0; // hasta cuándo está ocupado con una reacción (para no pisar la anterior con las de la cola)
+    let busyUntil = 0;
+    // Cafés dados en esta visita (solo cuenta el que se deja terminar): el quinto, «cafeína a tope».
+    let cafes = 0;
+    let lastCafe = -Infinity;
+    let buzzTimer: number | undefined; // hasta cuándo está ocupado con una reacción (para no pisar la anterior con las de la cola)
     const trigger = (id: AchievementId, ms?: number, say?: string) => {
       ms ??= DURATION[id] ?? 3200;
       busyUntil = performance.now() + ms + 600;
@@ -310,6 +314,18 @@ const total = REQUIRED_IDS.length;
       if (id === 'completista') {
         setSkin(true);
         confetti();
+      }
+      if (id === 'cafe') {
+        const t = performance.now();
+        if (t - lastCafe > 3800) {
+          lastCafe = t;
+          if (++cafes >= 5 && !unlocked.has('cafeina')) later('cafeina');
+        }
+      }
+      if (id === 'cafeina') {
+        stage.classList.add('buzz');
+        clearTimeout(buzzTimer);
+        buzzTimer = window.setTimeout(() => stage.classList.remove('buzz'), ms);
       }
       avatar.react(id, say ?? a.say, id === 'sueno' ? 0 : ms);
       return isNew;
@@ -731,6 +747,26 @@ const total = REQUIRED_IDS.length;
     cursor: pointer;
     transition: transform 0.5s var(--ease);
     -webkit-tap-highlight-color: transparent;
+  }
+  /* Cafeína a tope: todo el avatar tiembla un poco mientras dura la reacción. */
+  @media (prefers-reduced-motion: no-preference) {
+    .stage:global(.buzz) {
+      animation: buzz 0.09s linear infinite;
+    }
+  }
+  @keyframes buzz {
+    0% {
+      translate: 0 0;
+    }
+    25% {
+      translate: 3px -2px;
+    }
+    50% {
+      translate: -2px 2px;
+    }
+    75% {
+      translate: 2px 1px;
+    }
   }
   .stage:hover {
     transform: translateY(-3px) scale(1.03);

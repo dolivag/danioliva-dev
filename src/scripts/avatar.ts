@@ -252,6 +252,34 @@ REACTIONS.zoom = (k) => ({ pieces: [...steam(k), 'ojos-pantalla', 'cejas-fruncid
 // Viernes: niega con la cabeza.
 REACTIONS.viernes = (k) => ({ pieces: [...steam(k), 'ojos-camara', 'boca-seria'], head: [k % 10 < 5 ? -8 : 8, 0] });
 
+// Cafeína a tope (cinco cafés): vibra de arriba abajo, los ojos saltan de un lado a otro, teclea a toda velocidad y salen
+// rayas de vibración y chispas alrededor de la cabeza. El temblor del conjunto lo pone el CSS (`.buzz`).
+const rush = (k: number): Rect[] => {
+  const out: Rect[] = [];
+  const spark = k % 2 ? '#ffe9a8' : '#e8a627';
+  // Rayas a los lados de la cabeza, que alternan largo y altura.
+  for (const [i, y] of [200, 270, 340, 410].entries()) {
+    const len = 16 + (((k + i) % 3) * 12);
+    out.push([478 - len, y + ((k + i) % 2) * 8, len, 6, spark], [782, y + ((k + i + 1) % 2) * 8, len, 6, spark]);
+  }
+  // Chispas que saltan por encima.
+  for (const [i, x] of [520, 600, 690].entries()) {
+    const s = (k * 5 + i * 3) % 7;
+    out.push([x + (s % 3) * 10, 120 - s * 4, 10, 10, spark], [x + 12, 130 - s * 4, 6, 6, '#fff7dc']);
+  }
+  return out;
+};
+REACTIONS.cafeina = (k) => {
+  const dir = k % 2 ? 1 : -1;
+  const amp = k < 50 ? 12 : 5; // se va calmando al final
+  const eyes = ['ojos-izq', 'ojos-arriba-izq', 'ojos-camara', 'ojos-arriba', 'ojos-pantalla'][k % 5];
+  return {
+    pieces: [...steam(k), ...typing(k, 1), eyes, k % 4 < 2 ? 'boca-o' : 'boca-sonrisa-cerrada', ...(k % 3 ? [] : ['cejas-fruncidas'])],
+    head: [dir * amp + ((k * 7) % 5) - 2, ((k * 5) % 7) - 3],
+    rects: rush(k),
+  };
+};
+
 /** El bostezo de antes de dormirse: el del noctámbulo, sin las «z». */
 REACTIONS.bostezo = (k) => ({ ...REACTIONS.noctambulo(k), rects: undefined });
 

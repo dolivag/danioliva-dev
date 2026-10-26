@@ -22,11 +22,12 @@ export type AchievementId = 'hola' | 'orden' | 'tiempo' | 'trastero' | 'mareo' |
   | 'charla'
   | 'mundo'
   | 'tab'
+  | 'cafeina'
   | 'completista';
 
 /** Los logros, en el orden del panel. Sus textos (título, pista y frase) están en `src/i18n/<idioma>.ts`. */
 export const ACHIEVEMENT_IDS: AchievementId[] = ['hola', 'orden', 'tiempo', 'trastero', 'mareo', 'sueno', 'final', 'tema', 'agitar', 'konami', 'poliglota', 'planta', 'cafe', 'portatil', 'noctambulo', 'cuento', 'terminal', 'curioso',
-  'papel', 'buzon', 'explorador', 'lector', 'detective', 'habitual', 'rebote', 'zoom', 'pegar', 'responsive', 'codigo', 'lunes', 'viernes', 'comida', 'charla', 'mundo', 'tab', 'completista'];
+  'papel', 'buzon', 'explorador', 'lector', 'detective', 'habitual', 'rebote', 'zoom', 'pegar', 'responsive', 'codigo', 'lunes', 'viernes', 'comida', 'charla', 'mundo', 'tab', 'cafeina', 'completista'];
 
 /** Palabras que se pueden arrastrar (`data-drag` en el HTML). Las que no dan logro solo reaccionan (frase en `game.words`). */
 export const WORDS: Record<string, { achievement?: AchievementId }> = {
@@ -83,6 +84,7 @@ export const HINT_META: Record<AchievementId, { category: HintCategory; device?:
   charla: { category: 'teclado', device: 'desktop' },
   mundo: { category: 'teclado', device: 'desktop' },
   tab: { category: 'teclado', device: 'desktop' },
+  cafeina: { category: 'escritorio' },
   completista: { category: 'avatar' },
 };
 

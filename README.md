@@ -148,6 +148,9 @@ se puede completar la colección en cualquiera de los dos.
 El premio de tener los 31 obligatorios: al conseguir **completista**, el avatar se pone unas gafas de sol (pieza `gafas-sol`, imagen
 `art/avatar/gafas-sol.jpg`; se quedan en las visitas siguientes y el panel tiene un botón para quitarlas: `avatar-skin` en `localStorage`) y
 cae confeti (`confetti()` en `Avatar.astro`; no sale con «reducir movimiento»).
+**Cafeína a tope** (`cafeina`): el quinto café de la visita (solo cuenta el que se deja terminar, ~4 s) dispara una reacción larga
+(`REACTIONS.cafeina`, `rush()` en `avatar.ts`): la cabeza vibra, la mirada salta, teclea a toda velocidad y salen rayas y chispas;
+el CSS (`.buzz` en `Avatar.astro`) hace temblar todo el avatar (sin «reducir movimiento»). Sin arte nuevo.
 **Pistas** del panel: cada logro pendiente muestra una etiqueta de tipo (`HINT_META` en `game.ts`, textos en `game.categories`) y,
 si solo se puede en móvil o en ordenador, una insignia (`game.devices`). El botón «Pista» enseña primero un acertijo con humor
 (`riddle`) y a la segunda pulsación la instrucción directa (`tip`), ambos en `game.achievements` de cada idioma. Lo pedido se

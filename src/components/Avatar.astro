@@ -121,8 +121,10 @@ const total = REQUIRED_IDS.length;
   let docked = 0; // desplazamiento (px) al que el avatar ya ha llegado a su esquina
   let roof = 0; // el borde de abajo del hueco (en la página) menos lo que mide la cinta de arriba: tope de altura del avatar
   let frame = 0;
+  let panelOpen = false; // con el panel de logros abierto el avatar se queda donde está (el panel sube desde él)
   const place = () => {
     frame = 0;
+    if (panelOpen) return;
     if (!slot || !wide.matches) {
       root.style.removeProperty('--size');
       root.style.transform = '';
@@ -637,6 +639,8 @@ const total = REQUIRED_IDS.length;
     addEventListener('resize', fitPanel);
     const setPanel = (open: boolean) => {
       panel.hidden = !open;
+      panelOpen = open;
+      if (!open) schedule(); // al cerrarlo, el avatar vuelve al sitio que le toca según el desplazamiento
       counter.setAttribute('aria-expanded', String(open));
       if (open) {
         lift(0);

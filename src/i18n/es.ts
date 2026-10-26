@@ -8,11 +8,11 @@ export const es: Dict = {
   nav: { label: 'Principal', index: 'Índice', projects: 'Proyectos', experience: 'Experiencia', contact: 'Contacto' },
   sections: { projects: 'Proyectos', experience: 'Experiencia', studies: 'Estudios', contact: 'Contacto' },
   intro: {
-    big: 'Graduado en 2024 y fullstack engineer en Zennio. Me gusta construir aplicaciones y herramientas pequeñas que hacen el día a día un poco más fácil.',
+    big: 'Programando desde 2021 y fullstack engineer en Zennio. Me gusta construir aplicaciones y herramientas pequeñas que hacen el día a día un poco más fácil.',
     text: 'Trabajo con Angular, Node.js, NestJS, React y React Native, y me encargo también de herramientas de automatización y CI/CD. Fuera del trabajo construyo mis propios proyectos.',
     viewProjects: 'Ver proyectos',
     contact: 'Contacto',
-    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL · GitLab CI/CD' }, { k: 'Idiomas', v: 'Castellano, català, English' }] },
+    glance: { label: 'De un vistazo', items: [{ k: 'Ahora', v: 'Zennio · frontend, backend y CI/CD' }, { k: 'Stack', v: 'Angular · NestJS · React Native · PostgreSQL · GitLab CI/CD' }, { k: 'Idiomas', v: 'English, castellano, català' }] },
   },
   marquee: ['Software engineer', 'Fullstack', 'Angular', 'NestJS', 'React Native', 'Automatización', 'CI/CD', 'Apps pequeñas'],
   common: {

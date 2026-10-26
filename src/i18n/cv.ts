@@ -46,8 +46,8 @@ const es: CvCopy = {
   languages: {
     title: 'Idiomas',
     items: [
-      { name: 'Castellano', level: 'Nativo' },
       { name: 'Inglés', level: 'Avanzado (B2 - C1)' },
+      { name: 'Castellano', level: 'Nativo' },
       { name: 'Francés', level: 'Medio' },
       { name: 'Catalán', level: 'Avanzado' },
     ],
@@ -127,8 +127,8 @@ const ca: CvCopy = {
   languages: {
     title: 'Idiomes',
     items: [
-      { name: 'Castellà', level: 'Natiu' },
       { name: 'Anglès', level: 'Avançat (B2 - C1)' },
+      { name: 'Castellà', level: 'Natiu' },
       { name: 'Francès', level: 'Mitjà' },
       { name: 'Català', level: 'Avançat' },
     ],
@@ -209,8 +209,8 @@ const en: CvCopy = {
   languages: {
     title: 'Languages',
     items: [
-      { name: 'Spanish', level: 'Native' },
       { name: 'English', level: 'Advanced (B2 - C1)' },
+      { name: 'Spanish', level: 'Native' },
       { name: 'French', level: 'Intermediate' },
       { name: 'Catalan', level: 'Advanced' },
     ],

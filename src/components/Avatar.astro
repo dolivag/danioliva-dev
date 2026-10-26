@@ -559,8 +559,11 @@ const total = ACHIEVEMENT_IDS.length;
     // Sube desde el avatar: si la pantalla es baja, el panel se limita al hueco que hay arriba y se desplaza por dentro.
     const fitPanel = () => {
       if (panel.hidden) return;
+      // Quitar el tope un momento hace que el panel crezca y el navegador reinicie su desplazamiento: se recuerda y se restituye.
+      const top = panel.scrollTop;
       panel.style.maxHeight = '';
       panel.style.maxHeight = `${Math.max(120, Math.floor(panel.getBoundingClientRect().bottom - 12))}px`;
+      panel.scrollTop = top;
     };
     addEventListener('resize', fitPanel);
     const setPanel = (open: boolean) => {

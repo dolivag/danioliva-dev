@@ -268,6 +268,14 @@ footer a { text-decoration: none; }
   .intro > .glance { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
 }
 
+/* En pantallas muy anchas, el avatar empieza grande en el hueco entre el texto y la ficha (`.avatar-slot`) y baja a su esquina al desplazarse. */
+.avatar-slot { display: none; }
+@media (min-width: 1360px) {
+  main > .col.intro { grid-template-columns: minmax(0, 700px) minmax(0, 1fr) minmax(280px, 340px); }
+  .intro > .avatar-slot { display: block; grid-column: 2; grid-row: 1 / span 3; align-self: stretch; min-height: 300px; }
+  .intro > .glance { grid-column: 3; }
+}
+
 /* Proyecto anterior y siguiente, al pie de la página de un proyecto. */
 .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding-top: 40px; }
 .pn a { display: grid; gap: 6px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-decoration: none; color: var(--text); transition: border-color 0.3s ease, background-color 0.3s ease, translate 0.5s var(--ease); }

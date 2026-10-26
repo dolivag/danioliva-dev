@@ -142,6 +142,9 @@ el CV: la página del CV anota `papel` en `localStorage` y el avatar lo concede 
 **lector** (la sección de experiencia a la vista y 14 s sin tocar nada), **habitual** (dos días distintos, `avatar-days`),
 **lunes**, **viernes** (a partir de las 15 h) y **comida** (14–15 h) por la hora local, **charla** (`game.hellos`), **mundo**
 (`SECRETS` en `game.ts`: `echo hola`), **tab** (el foco del teclado llega al avatar) y **completista** (tener los otros 30 obligatorios; los extras de hora y día —`BONUS_IDS` en `game.ts`— no hacen falta).
+Los que dependen del dispositivo (`device` en `HINT_META`: agitar solo en móvil; teclado, ventana y devtools solo en ordenador)
+pasan a extra en el dispositivo que no puede hacerlos (`pointer: coarse` = móvil): el total es 30 en ordenador y 23 en móvil, y
+se puede completar la colección en cualquiera de los dos.
 El premio de tener los 31 obligatorios: al conseguir **completista**, el avatar se pone unas gafas de sol (pieza `gafas-sol`, imagen
 `art/avatar/gafas-sol.jpg`; se quedan en las visitas siguientes y el panel tiene un botón para quitarlas: `avatar-skin` en `localStorage`) y
 cae confeti (`confetti()` en `Avatar.astro`; no sale con «reducir movimiento»).

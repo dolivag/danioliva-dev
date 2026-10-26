@@ -56,7 +56,7 @@ const total = REQUIRED_IDS.length;
 
 <script>
   import { startAvatar } from '../scripts/avatar';
-  import { BONUS_IDS, REQUIRED_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadHints, loadUnlocked, saveHints, saveUnlocked, takePending } from '../scripts/game';
+  import { ACHIEVEMENT_IDS, HINT_META, REQUIRED_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadHints, loadUnlocked, saveHints, saveUnlocked, takePending } from '../scripts/game';
   import type { AchievementId } from '../scripts/game';
   import type { Dict } from '../i18n/types';
 
@@ -72,12 +72,24 @@ const total = REQUIRED_IDS.length;
   const counter = $('avatar-counter');
   const panel = $('avatar-panel');
   const toast = $('avatar-toast');
-  const total = REQUIRED_IDS.length; // los extras (hora y día) no cuentan
+  // Lo que se puede conseguir depende del dispositivo: agitar solo en móvil; teclado, ventana y herramientas solo en
+  // ordenador. Lo que este dispositivo no puede hacer pasa a extra (si hubiera forma, se desbloquea igual) y no cuenta
+  // para el total ni para «completista»: así se puede completar la colección en el móvil y en el PC.
+  const mobileDevice = matchMedia('(pointer: coarse)').matches;
+  const requiredIds = REQUIRED_IDS.filter((id) => {
+    const d = HINT_META[id].device;
+    return !d || d === (mobileDevice ? 'mobile' : 'desktop');
+  });
+  const BONUS_IDS = ACHIEVEMENT_IDS.filter((id) => !requiredIds.includes(id));
+  const total = requiredIds.length;
+  // En el panel, esos pasan debajo del rótulo de extras.
+  for (const id of REQUIRED_IDS.filter((x) => !requiredIds.includes(x)))
+    panel.querySelector('ul')!.append(panel.querySelector(`li[data-id="${id}"]`)!);
   const unlocked = loadUnlocked();
   const hints = loadHints();
 
   const render = () => {
-    const n = REQUIRED_IDS.filter((id) => unlocked.has(id)).length;
+    const n = requiredIds.filter((id) => unlocked.has(id)).length;
     $('avatar-count').textContent = `${n}/${total}`;
     $('avatar-score').textContent = `${n}/${total}`;
     counter.toggleAttribute('data-new', n === 0);
@@ -287,7 +299,7 @@ const total = REQUIRED_IDS.length;
         root.classList.remove('burst');
         void root.offsetWidth;
         root.classList.add('burst');
-        const n = REQUIRED_IDS.filter((x) => unlocked.has(x)).length;
+        const n = requiredIds.filter((x) => unlocked.has(x)).length;
         const extra = BONUS_IDS.includes(id);
         announce(extra ? fmt(g.unlockedExtra, { title: a.title }) : n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
         // Tener todos los demás (menos los extras) es, en sí, un logro.
@@ -367,7 +379,7 @@ const total = REQUIRED_IDS.length;
       if (slugs.length && slugs.every((s) => visited.includes(s))) setTimeout(() => trigger('curioso', 4000), 2500);
     }
     // Quien ya tenía todos los obligatorios menos «completista» (por faltarle los extras) lo recibe ahora.
-    if (!unlocked.has('completista') && REQUIRED_IDS.every((x) => x === 'completista' || unlocked.has(x))) setTimeout(() => later('completista'), 4500);
+    if (!unlocked.has('completista') && requiredIds.every((x) => x === 'completista' || unlocked.has(x))) setTimeout(() => later('completista'), 4500);
     // Entrar de madrugada (hora local).
     if (!unlocked.has('noctambulo') && new Date().getHours() < 6) setTimeout(() => trigger('noctambulo', 4500), 4000);
 
@@ -447,7 +459,7 @@ const total = REQUIRED_IDS.length;
     });
 
     // Agitar el móvil (en iOS el navegador pide permiso: se pide con el primer toque al avatar).
-    const touchDevice = matchMedia('(pointer: coarse)').matches;
+    const touchDevice = mobileDevice;
     let lastShake = 0;
     let shakes = 0;
     let [lx, ly, lz] = [0, 0, 0];

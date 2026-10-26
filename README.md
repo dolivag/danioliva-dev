@@ -149,6 +149,9 @@ cae confeti (`confetti()` en `Avatar.astro`; no sale con «reducir movimiento»)
 si solo se puede en móvil o en ordenador, una insignia (`game.devices`). El botón «Pista» enseña primero un acertijo con humor
 (`riddle`) y a la segunda pulsación la instrucción directa (`tip`), ambos en `game.achievements` de cada idioma. Lo pedido se
 guarda en `localStorage` (`avatar-hints`). Un logro nuevo necesita esos dos textos y su entrada en `HINT_META`.
+**Avatar grande en la portada** (solo ≥ 1360 px de ancho): empieza en el hueco `.avatar-slot` (a la derecha de la ficha, que queda en el medio) y,
+al desplazarse, se encoge y baja a su esquina. Lo hace `place()` en `Avatar.astro` con la variable `--size` del avatar y un
+`translate` desde su esquina; en móvil y portátiles pequeños no hace nada (comportamiento de siempre).
 Los que llegan de golpe se encolan (`later`) para no pisarse. Sus gestos reutilizan los de `avatar.ts` (alias al final de
 `REACTIONS`); solo `detective`, `zoom` y `viernes` tienen pose propia.. Una pieza solo añade píxeles; las que se llevan algo de la escena (la taza de la mesa) llevan su
 máscara de borrado (`*.borra.webp`, se pinta con `destination-out`; el rectángulo está en `PIECES` como tercer

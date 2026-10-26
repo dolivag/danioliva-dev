@@ -98,6 +98,58 @@ const total = ACHIEVEMENT_IDS.length;
   };
   render();
 
+  // En pantallas muy anchas (portada): el avatar empieza grande, en el hueco `.avatar-slot` a la derecha de la ficha,
+  // y al desplazarse se encoge y baja a su esquina. Todo con dos variables del propio avatar: su tamaño (`--size`) y un
+  // desplazamiento desde su esquina; el bocadillo, el contador y el panel van con él. En móvil y portátiles, nada de esto.
+  const slot = document.querySelector<HTMLElement>('.avatar-slot');
+  const wide = matchMedia('(min-width: 1360px)');
+  const SMALL = 210; // el tamaño de siempre en escritorio (ver `--size` abajo)
+  let docked = 0; // desplazamiento (px) al que el avatar ya ha llegado a su esquina
+  let roof = 0; // el borde de abajo del hueco (en la página) menos lo que mide la cinta de arriba: tope de altura del avatar
+  let frame = 0;
+  const place = () => {
+    frame = 0;
+    if (!slot || !wide.matches) {
+      root.style.removeProperty('--size');
+      root.style.transform = '';
+      return;
+    }
+    const w = document.documentElement.clientWidth;
+    const h = document.documentElement.clientHeight;
+    const cs = getComputedStyle(root);
+    const R = w - parseFloat(cs.right);
+    const B = h - parseFloat(cs.bottom);
+    const r = slot.getBoundingClientRect();
+    // Entra en el hueco (sin pisar la ficha) y sin subir hasta la cinta de arriba (el contador va en su esquina).
+    const big = Math.min(460, roof, Math.max(270, r.width * 1.1));
+    const k = Math.min(1, Math.max(0, scrollY / docked));
+    const smooth = (v: number) => v * v * (3 - 2 * v);
+    const t = smooth(k); // arranque y llegada suaves
+    // Primero baja y luego va hacia la derecha: así no cruza la ficha de «De un vistazo».
+    const ty = smooth(Math.min(1, k * 1.5));
+    const tx = smooth(Math.max(0, (k - 0.25) / 0.75));
+    const x = r.right; // pegado al borde derecho de la columna
+    const y = r.bottom;
+    root.style.setProperty('--size', `${big + (SMALL - big) * t}px`);
+    root.style.transform = `translate(${x + (R - x) * tx - R}px, ${y + (B - y) * ty - B}px)`;
+  };
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(place);
+  };
+  if (slot) {
+    const measure = () => {
+      const r = slot.getBoundingClientRect();
+      docked = Math.max(240, r.top + scrollY);
+      roof = r.bottom + scrollY - 372;
+      schedule();
+    };
+    measure();
+    addEventListener('scroll', schedule, { passive: true });
+    addEventListener('resize', measure);
+    wide.addEventListener('change', measure);
+    document.fonts?.ready.then(measure);
+  }
+
   // El avatar (20 imágenes y un lienzo de 1024 px) arranca cuando el navegador está libre: no compite con el primer pintado.
   const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 300));
   idle(() => startAvatar(canvas, bubble, root.dataset.frame).then((avatar) => {

@@ -185,6 +185,8 @@ export const en: Dict = {
   game: {
     panelTitle: 'Interactions',
     panelAria: 'Interactions with the avatar',
+    extras: 'Extras · not needed for the total',
+    unlockedExtra: 'Extra unlocked · {title}',
     toDiscover: 'To discover',
     repeat: 'Repeat',
     repeatAria: 'Repeat: {title}',
@@ -230,7 +232,7 @@ export const en: Dict = {
       charla: { title: 'Small talk', how: 'You said hello with the keyboard.', say: 'Hi there!', riddle: 'Say hi and I’ll answer.', tip: 'With the page focused (not in a field), type “hello”, “hola” or “bon dia”.' },
       mundo: { title: 'Hello, world', how: 'You typed “echo hello”.', say: 'Hello, world → Hola, món.', riddle: 'Every programmer starts here. In the terminal, echo.', tip: 'Type “echo hello” (or “echo hola”).' },
       tab: { title: 'Tabbed in', how: 'You reached it with the Tab key.', say: 'Nice taste in accessibility.', riddle: 'Some people reach me without a mouse.', tip: 'Press Tab until the focus gets to me.' },
-      completista: { title: 'Completionist', how: 'You got all the others.', say: 'Collection complete. Shades on: you’ve earned it.', riddle: 'Once you have all the others, it comes by itself.', tip: 'Get the other 35.' },
+      completista: { title: 'Completionist', how: 'You got all the others, except the extras.', say: 'Collection complete. Shades on: you’ve earned it.', riddle: 'Once you have all the others, it comes by itself.', tip: 'Get the other 30 (the time-and-day extras aren’t needed).' },
     },
     words: {
       'qr city': 'Scanning… it’s a whole city!',

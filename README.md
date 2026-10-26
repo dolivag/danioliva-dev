@@ -124,7 +124,7 @@ Para no cargar de golpe unas 60 imágenes, `avatar.ts` solo pide al arrancar la 
 Las interacciones son secretas: el panel solo enseña «???» hasta que se descubren (y entonces
 permite repetirlas). Sin pistas visuales a propósito.
 
-Hay 36 logros (los 18 primeros y los de la lista de abajo). Los que no son de arrastrar ni de clic suelto: **taza, planta y portátil** (clic en esa zona del
+Hay 36 logros (los 18 primeros y los de la lista de abajo); 5 son extras (los de hora y día) y no cuentan para el total (31). Los que no son de arrastrar ni de clic suelto: **taza, planta y portátil** (clic en esa zona del
 escritorio; las zonas, en coordenadas del lienzo de 1024, están en `ZONES` de `Avatar.astro`), **políglota** y **curioso**
 (se recuerdan en `localStorage` los idiomas y las páginas de proyecto visitados: `avatar-langs`, `avatar-projects`),
 **noctámbulo** (entrar entre las 00:00 y las 06:00, hora local), **terminal** (escribir `sudo` o `npm install` fuera de
@@ -141,8 +141,8 @@ el CV: la página del CV anota `papel` en `localStorage` y el avatar lo concede 
 **código** (`Ctrl+U`), **detective** (`F12`, atajos de las herramientas o ventana con ellas ancladas; no es infalible),
 **lector** (la sección de experiencia a la vista y 14 s sin tocar nada), **habitual** (dos días distintos, `avatar-days`),
 **lunes**, **viernes** (a partir de las 15 h) y **comida** (14–15 h) por la hora local, **charla** (`game.hellos`), **mundo**
-(`SECRETS` en `game.ts`: `echo hola`), **tab** (el foco del teclado llega al avatar) y **completista** (tener los otros 35).
-El premio de tener los 36: al conseguir **completista**, el avatar se pone unas gafas de sol (pieza `gafas-sol`, imagen
+(`SECRETS` en `game.ts`: `echo hola`), **tab** (el foco del teclado llega al avatar) y **completista** (tener los otros 30 obligatorios; los extras de hora y día —`BONUS_IDS` en `game.ts`— no hacen falta).
+El premio de tener los 31 obligatorios: al conseguir **completista**, el avatar se pone unas gafas de sol (pieza `gafas-sol`, imagen
 `art/avatar/gafas-sol.jpg`; se quedan en las visitas siguientes y el panel tiene un botón para quitarlas: `avatar-skin` en `localStorage`) y
 cae confeti (`confetti()` en `Avatar.astro`; no sale con «reducir movimiento»).
 **Pistas** del panel: cada logro pendiente muestra una etiqueta de tipo (`HINT_META` en `game.ts`, textos en `game.categories`) y,

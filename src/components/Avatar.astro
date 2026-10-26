@@ -1,5 +1,5 @@
 ---
-import { ACHIEVEMENT_IDS, HINT_META } from '../scripts/game';
+import { BONUS_IDS, HINT_META, REQUIRED_IDS } from '../scripts/game';
 import { useDict, fmt } from '../i18n';
 import type { Lang } from '../i18n';
 import { site, getProjects } from '../data/site';
@@ -12,7 +12,7 @@ interface Props {
 }
 const { frame, lang } = Astro.props;
 const g = useDict(lang).game;
-const total = ACHIEVEMENT_IDS.length;
+const total = REQUIRED_IDS.length;
 ---
 <div class="avatar" data-state="hero" data-frame={frame} data-slugs={getProjects(lang).map((p) => p.slug).join(',')}>
   <div class="bubble" id="avatar-bubble" aria-hidden="true"></div>
@@ -20,7 +20,9 @@ const total = ACHIEVEMENT_IDS.length;
     <p class="panel-title">{g.panelTitle} <span id="avatar-score"></span></p>
     <ul>
       {
-        ACHIEVEMENT_IDS.map((id) => (
+        [...REQUIRED_IDS, null, ...BONUS_IDS].map((id) => id === null ? (
+          <li class="extras-title">{g.extras}</li>
+        ) : (
           <li data-id={id}>
             <span class="check" aria-hidden="true"></span>
             <span class="text">
@@ -54,7 +56,7 @@ const total = ACHIEVEMENT_IDS.length;
 
 <script>
   import { startAvatar } from '../scripts/avatar';
-  import { ACHIEVEMENT_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadHints, loadUnlocked, saveHints, saveUnlocked, takePending } from '../scripts/game';
+  import { BONUS_IDS, REQUIRED_IDS, SECRETS, WORDS, addPending, enableWordDrag, loadHints, loadUnlocked, saveHints, saveUnlocked, takePending } from '../scripts/game';
   import type { AchievementId } from '../scripts/game';
   import type { Dict } from '../i18n/types';
 
@@ -70,18 +72,18 @@ const total = ACHIEVEMENT_IDS.length;
   const counter = $('avatar-counter');
   const panel = $('avatar-panel');
   const toast = $('avatar-toast');
-  const total = ACHIEVEMENT_IDS.length;
+  const total = REQUIRED_IDS.length; // los extras (hora y día) no cuentan
   const unlocked = loadUnlocked();
   const hints = loadHints();
 
   const render = () => {
-    const n = ACHIEVEMENT_IDS.filter((id) => unlocked.has(id)).length;
+    const n = REQUIRED_IDS.filter((id) => unlocked.has(id)).length;
     $('avatar-count').textContent = `${n}/${total}`;
     $('avatar-score').textContent = `${n}/${total}`;
     counter.toggleAttribute('data-new', n === 0);
     counter.classList.toggle('complete', n === total);
     counter.setAttribute('aria-label', fmt(g.counterAria, { n, total }));
-    panel.querySelectorAll<HTMLElement>('li').forEach((li) => {
+    panel.querySelectorAll<HTMLElement>('li[data-id]').forEach((li) => {
       const id = li.dataset.id as AchievementId;
       const a = g.achievements[id];
       const on = unlocked.has(id);
@@ -285,10 +287,11 @@ const total = ACHIEVEMENT_IDS.length;
         root.classList.remove('burst');
         void root.offsetWidth;
         root.classList.add('burst');
-        const n = unlocked.size;
-        announce(n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
-        // Tener todos los demás es, en sí, un logro.
-        if (id !== 'completista' && n === total - 1) later('completista');
+        const n = REQUIRED_IDS.filter((x) => unlocked.has(x)).length;
+        const extra = BONUS_IDS.includes(id);
+        announce(extra ? fmt(g.unlockedExtra, { title: a.title }) : n === total ? g.complete : fmt(g.unlocked, { title: a.title, n, total }));
+        // Tener todos los demás (menos los extras) es, en sí, un logro.
+        if (!extra && id !== 'completista' && n === total - 1) later('completista');
       }
       if (id === 'completista') {
         setSkin(true);
@@ -363,6 +366,8 @@ const total = ACHIEVEMENT_IDS.length;
       const visited = seen('avatar-projects', root.dataset.frame);
       if (slugs.length && slugs.every((s) => visited.includes(s))) setTimeout(() => trigger('curioso', 4000), 2500);
     }
+    // Quien ya tenía todos los obligatorios menos «completista» (por faltarle los extras) lo recibe ahora.
+    if (!unlocked.has('completista') && REQUIRED_IDS.every((x) => x === 'completista' || unlocked.has(x))) setTimeout(() => later('completista'), 4500);
     // Entrar de madrugada (hora local).
     if (!unlocked.has('noctambulo') && new Date().getHours() < 6) setTimeout(() => trigger('noctambulo', 4500), 4000);
 
@@ -910,6 +915,14 @@ const total = ACHIEVEMENT_IDS.length;
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+  .extras-title {
+    display: block;
+    padding: 12px 0 4px;
+    font: 500 10px/1.3 var(--font);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
   li {
     display: flex;

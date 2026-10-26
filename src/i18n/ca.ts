@@ -185,6 +185,8 @@ export const ca: Dict = {
   game: {
     panelTitle: 'Interaccions',
     panelAria: 'Interaccions amb l’avatar',
+    extras: 'Extres · no calen per al total',
+    unlockedExtra: 'Extra desbloquejat · {title}',
     toDiscover: 'Per descobrir',
     repeat: 'Repeteix',
     repeatAria: 'Repeteix: {title}',
@@ -230,7 +232,7 @@ export const ca: Dict = {
       charla: { title: 'Xerrada', how: 'Vas saludar amb el teclat.', say: 'Hola!', riddle: 'Si em saludes, et contesto.', tip: 'Amb la web enfocada (sense clicar cap camp), escriu «hola», «hello» o «bon dia».' },
       mundo: { title: 'Hola, món', how: 'Vas escriure «echo hola».', say: 'Hello, world → Hola, món.', riddle: 'Tot programador comença per aquí. Al terminal, eco.', tip: 'Escriu «echo hola» (o «echo hello»).' },
       tab: { title: 'Tabulador', how: 'Hi vas arribar amb la tecla Tab.', say: 'Quin bon gust amb l’accessibilitat.', riddle: 'Hi ha qui arriba fins a mi sense ratolí.', tip: 'Prem la tecla Tab fins que el focus arribi a mi.' },
-      completista: { title: 'Completista', how: 'Vas aconseguir tots els altres.', say: 'Col·lecció completa. Em poso les ulleres: t’ho has guanyat.', riddle: 'Quan tinguis tots els altres, vindrà sol.', tip: 'Aconsegueix els altres 35.' },
+      completista: { title: 'Completista', how: 'Vas aconseguir tots els altres, tret dels extres.', say: 'Col·lecció completa. Em poso les ulleres: t’ho has guanyat.', riddle: 'Quan tinguis tots els altres, vindrà sol.', tip: 'Aconsegueix els altres 30 (els extres d’hora i dia no calen).' },
     },
     words: {
       'qr city': 'Escanejant… és una ciutat sencera!',

@@ -232,7 +232,8 @@ export const en: Dict = {
       charla: { title: 'Small talk', how: 'You said hello with the keyboard.', say: 'Hi there!', riddle: 'Say hi and I’ll answer.', tip: 'With the page focused (not in a field), type “hello”, “hola” or “bon dia”.' },
       mundo: { title: 'Hello, world', how: 'You typed “echo hello”.', say: 'Hello, world → Hola, món.', riddle: 'Every programmer starts here. In the terminal, echo.', tip: 'Type “echo hello” (or “echo hola”).' },
       tab: { title: 'Tabbed in', how: 'You reached it with the Tab key.', say: 'Nice taste in accessibility.', riddle: 'Some people reach me without a mouse.', tip: 'Press Tab until the focus gets to me.' },
-      completista: { title: 'Completionist', how: 'You got all the others, except the extras.', say: 'Collection complete. Shades on: you’ve earned it.', riddle: 'Once you have all the others, it comes by itself.', tip: 'Get the other 30 (the time-and-day extras aren’t needed).' },
+      cafeina: { title: 'Caffeine overload', how: 'You gave it five coffees.', say: 'I can see the code in 4K! I can compile with my mind!', riddle: 'One coffee is fine. How about five?', tip: 'Tap the mug five times (let each coffee finish).' },
+      completista: { title: 'Completionist', how: 'You got all the others, except the extras.', say: 'Collection complete. Shades on: you’ve earned it.', riddle: 'Once you have all the others, it comes by itself.', tip: 'Get all the others (the extras aren’t needed).' },
     },
     words: {
       'qr city': 'Scanning… it’s a whole city!',

@@ -232,7 +232,8 @@ export const es: Dict = {
       charla: { title: 'Charla', how: 'Saludaste con el teclado.', say: '¡Hola!', riddle: 'Si me saludas, te contesto.', tip: 'Con la web enfocada (sin pulsar en un campo), teclea «hola», «hello» o «bon dia».' },
       mundo: { title: 'Hola, mundo', how: 'Escribiste «echo hola».', say: 'Hello, world → Hola, món.', riddle: 'Todo programador empieza por aquí. En la terminal, eco.', tip: 'Teclea «echo hola» (o «echo hello»).' },
       tab: { title: 'Tabulador', how: 'Llegaste hasta él con la tecla Tab.', say: 'Qué buen gusto con la accesibilidad.', riddle: 'Hay quien llega hasta mí sin ratón.', tip: 'Pulsa la tecla Tab hasta que el foco llegue a mí.' },
-      completista: { title: 'Completista', how: 'Conseguiste todos los demás, salvo los extras.', say: 'Colección completa. Me pongo las gafas: lo has merecido.', riddle: 'Cuando tengas todos los demás, vendrá solo.', tip: 'Consigue los otros 30 (los extras de hora y día no hacen falta).' },
+      cafeina: { title: 'Cafeína a tope', how: 'Le diste cinco cafés.', say: '¡Veo el código en 4K! ¡Puedo compilar con la mente!', riddle: 'Un café está bien. ¿Y cinco?', tip: 'Toca la taza cinco veces (deja que acabe cada café).' },
+      completista: { title: 'Completista', how: 'Conseguiste todos los demás, salvo los extras.', say: 'Colección completa. Me pongo las gafas: lo has merecido.', riddle: 'Cuando tengas todos los demás, vendrá solo.', tip: 'Consigue todos los demás (los extras no hacen falta).' },
     },
     words: {
       'qr city': 'Escaneando… ¡es una ciudad entera!',

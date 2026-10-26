@@ -57,8 +57,9 @@ PIECES = {
     "saludo-2": ((200, 330, 540, 640), False),
     # Café: la taza sale de la mesa (`MUG`: se borra de la escena) y sube a la boca. Las de la cara van con la cabeza.
     "taza-sube": ((90, 300, 520, 830), False, MUG),
-    "taza-cerca": ((90, 260, 700, 830), True, MUG),
-    "taza-boca": ((90, 260, 700, 830), True, MUG),
+    # Sin la zona de la planta (560-710, 700-840): si no, estas piezas llevan la planta pequeña y tapan la crecida.
+    "taza-cerca": ((90, 260, 700, 830), True, MUG, (560, 700, 710, 840)),
+    "taza-boca": ((90, 260, 700, 830), True, MUG, (560, 700, 710, 840)),
     "ojos-felices": ((470, 240, 650, 345), True),
     "boca-ahh": ((480, 345, 650, 480), True),
     # Riego: la regadera sobre la planta y la planta ya crecida, con guindillas.
